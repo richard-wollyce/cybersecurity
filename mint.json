@@ -36,13 +36,22 @@
       "group": "Essentials",
       "pages": [
         "essentials/welcome",
-        "essentials/cybersecurity-intro"
+        "essentials/cybersecurity-intro",
+        "essentials/threats-and-attacks",
+        "essentials/password-security",
+        "essentials/safe-browsing",
+        "essentials/device-hygiene",
+        "essentials/what-to-do-if-hacked"
       ]
     },
     {
       "group": "Advanced Topics",
       "pages": [
-        "advanced/placeholder"
+        "advanced/network-security",
+        "advanced/cryptography",
+        "advanced/web-vulnerabilities",
+        "advanced/secure-coding-practices",
+        "advanced/penetration-testing"
       ]
     }
   ]
