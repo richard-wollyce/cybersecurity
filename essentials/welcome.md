@@ -1,3 +1,8 @@
+---
+title: "Cybersecurity Essentials"
+description: "Welcome to the essentials path of the cybersecurity course."
+---
+
 # Cybersecurity Essentials
 
 Welcome to **Cybersecurity Essentials**.
