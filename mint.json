@@ -43,6 +43,10 @@
         "advanced/secure-coding-practices",
         "advanced/penetration-testing"
       ]
+    },
+    {
+      "group": "GitHub",
+      "href": "https://github.com/richard-wollyce/cybersecurity"
     }
   ]
 }
