@@ -9,10 +9,6 @@
     "anchors": {
       "from": "#1E40AF",
       "to": "#3B82F6"
-    },
-    "background": {
-      "light": "#FFFFFF",
-      "dark": "#000000"
     }
   },
 
