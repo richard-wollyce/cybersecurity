@@ -1,7 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
   "name": "Cybersecurity",
-  "favicon": "/favicon.svg",
   "colors": {
     "primary": "#1E40AF",
     "light": "#3B82F6",

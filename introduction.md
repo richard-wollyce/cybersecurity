@@ -16,7 +16,7 @@ Welcome to the Cybersecurity course. We offer two main paths depending on your e
   <Card
     title="Advanced"
     icon="user-secret"
-    href="/advanced/placeholder"
+    href="/advanced/network-security"
   >
     Go deeper into technical subjects, analysis, architecture, defense strategies, and specialized security topics.
   </Card>
