@@ -15,16 +15,7 @@
       "dark": "#000000"
     }
   },
-  "tabs": [
-    {
-      "name": "Essentials",
-      "url": "essentials"
-    },
-    {
-      "name": "Advanced",
-      "url": "advanced"
-    }
-  ],
+
   "navigation": [
     {
       "group": "Welcome",
