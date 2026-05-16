@@ -15,6 +15,13 @@
     "default": "dark"
   },
 
+  "anchors": [
+    {
+      "name": "GitHub",
+      "icon": "github",
+      "url": "https://github.com/richard-wollyce/cybersecurity"
+    }
+  ],
   "navigation": [
     {
       "group": "Welcome",
@@ -43,10 +50,6 @@
         "advanced/secure-coding-practices",
         "advanced/penetration-testing"
       ]
-    },
-    {
-      "group": "GitHub",
-      "href": "https://github.com/richard-wollyce/cybersecurity"
     }
   ]
 }
