@@ -23,12 +23,6 @@
   ],
   "navigation": [
     {
-      "group": "Welcome",
-      "pages": [
-        "essentials/welcome"
-      ]
-    },
-    {
       "group": "Essentials",
       "pages": [
         "essentials/welcome",

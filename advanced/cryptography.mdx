@@ -1,38 +1,154 @@
 ---
 title: "Cryptography"
-description: "Encryption, Hashing, and Digital Signatures."
+description: "Encryption, hashing, digital signatures, TLS handshakes, key exchange, certificate chains, and post-quantum cryptography."
 ---
 
 # Cryptography
 
-Cryptography is the mathematical foundation of data security. It provides confidentiality, integrity, authentication, and non-repudiation.
+Cryptography is the mathematical foundation that makes digital security possible. Every time you visit a website over HTTPS, send an encrypted message, or log in with a password, cryptography is working behind the scenes.
 
-## Symmetric vs. Asymmetric Encryption
+## Symmetric Encryption
 
-### Symmetric Encryption
-In symmetric encryption, the **same key** is used for both encrypting and decrypting the data.
-- **Pros:** Very fast and efficient for large amounts of data.
-- **Cons:** The key distribution problem. How do you securely share the key with the recipient?
-- **Examples:** AES (Advanced Encryption Standard), ChaCha20.
+In symmetric encryption, the **same key** is used for both encrypting and decrypting data.
 
-### Asymmetric Encryption (Public Key Cryptography)
-Asymmetric encryption uses a **pair of keys**: a Public Key (which can be shared with anyone) and a Private Key (which must be kept secret). Data encrypted with the public key can only be decrypted with the private key.
-- **Pros:** Solves the key distribution problem.
-- **Cons:** Computationally expensive and slow.
-- **Examples:** RSA, Elliptic Curve Cryptography (ECC).
+| Algorithm | Key Size | Status | Use Case |
+|-----------|----------|--------|----------|
+| **AES-256** | 256 bits | Industry standard | File/disk encryption, VPNs, TLS |
+| **ChaCha20-Poly1305** | 256 bits | Modern alternative | Mobile/IoT (faster in software) |
+| **3DES** | 168 bits | Deprecated | Legacy systems only |
+| **DES** | 56 bits | Broken | Never use |
 
-*Note: Modern systems (like TLS) use asymmetric encryption to securely exchange a symmetric key, then use that symmetric key for the rest of the session.*
+### The Key Distribution Problem
+
+Symmetric encryption is fast, but has a fundamental challenge: **how do you securely share the key?** If you send it over the same channel as the data, an attacker who intercepts the channel gets both. This is why asymmetric encryption was invented.
+
+## Asymmetric Encryption (Public Key Cryptography)
+
+Uses a **mathematically linked pair of keys** — a Public Key (shared openly) and a Private Key (kept secret). Data encrypted with the public key can only be decrypted with the private key.
+
+| Algorithm | Based On | Key Size | Status |
+|-----------|----------|----------|--------|
+| **RSA** | Integer factorization | 2048-4096 bits | Widely used, being phased out |
+| **ECDSA/ECDH** | Elliptic Curve math | 256-384 bits | Preferred — same security, smaller keys |
+| **Ed25519** | Edwards-curve | 256 bits | Modern, fast — used in SSH, Signal, WireGuard |
+
+### The Hybrid Approach
+
+In practice, modern systems use **both**: asymmetric encryption to securely exchange a symmetric session key, then symmetric encryption (AES/ChaCha20) for the actual data. Best of both worlds.
+
+## The TLS 1.3 Handshake
+
+TLS powers HTTPS. The TLS 1.3 handshake completes in a **single round trip**:
+
+<Steps>
+  <Step title="Client Hello">
+    Browser sends supported cipher suites, TLS version, random number, and its Diffie-Hellman key share.
+  </Step>
+  <Step title="Server Hello">
+    Server selects cipher suite, sends its key share and digital certificate (signed by a Certificate Authority).
+  </Step>
+  <Step title="Key Derivation">
+    Both sides independently compute the same shared secret via Diffie-Hellman — without transmitting it.
+  </Step>
+  <Step title="Encrypted Communication">
+    All subsequent data encrypted with derived symmetric keys (AES-256-GCM or ChaCha20-Poly1305).
+  </Step>
+</Steps>
+
+<Note>
+TLS 1.3 removed insecure cipher suites (RSA key exchange, CBC mode, SHA-1) and introduced 0-RTT resumption for repeat connections. If your server still supports TLS 1.0/1.1, it is vulnerable to known attacks.
+</Note>
+
+## Diffie-Hellman Key Exchange
+
+Allows two parties to establish a shared secret over an insecure channel without transmitting the secret itself.
+
+**Simplified analogy**: Alice and Bob each pick a private color, agree on a shared base color, each mix their private color with the base and exchange results. Each mixes the received color with their private color — arriving at the same final color. An eavesdropper cannot reverse-engineer the private colors from the intermediate mixtures.
+
+In practice, this uses modular exponentiation (classic DH) or elliptic curve point multiplication (ECDH).
 
 ## Hashing
-Hashing is a **one-way** mathematical function that takes an input of any size and produces a fixed-size string of characters.
-- You cannot reverse a hash to get the original data.
-- A tiny change in the input produces a completely different hash (the avalanche effect).
-- **Use cases:** Verifying file integrity, storing passwords securely.
-- **Examples:** SHA-256, Argon2, bcrypt. (Never use MD5 or SHA-1).
+
+A **one-way** function that produces a fixed-size output from any input.
+
+### Properties of Secure Hash Functions
+
+1. **Deterministic**: Same input → same hash
+2. **One-way**: Cannot reverse hash to recover input
+3. **Avalanche effect**: Tiny input change → completely different hash
+4. **Collision resistant**: Infeasible to find two inputs producing the same hash
+
+### Algorithm Comparison
+
+| Algorithm | Output | Status | Use Case |
+|-----------|--------|--------|----------|
+| **MD5** | 128 bits | **Broken** | Never use for security |
+| **SHA-1** | 160 bits | **Broken** | Never use for security |
+| **SHA-256** | 256 bits | Secure | File integrity, blockchain, signatures |
+| **bcrypt** | 184 bits | Secure | Password storage |
+| **Argon2** | Variable | **Best for passwords** | Winner of Password Hashing Competition (2015) |
+
+### Password Hashing
+
+Passwords must be hashed with a **slow, salted algorithm**:
+
+- **Salt**: Random value added before hashing — ensures identical passwords produce different hashes.
+- **Work factor**: Deliberately slow (~100ms per hash), making brute-force impractical.
+
+```
+password = "hunter2"
+salt = random_bytes(16)
+hash = argon2id(password, salt, time_cost=3, memory_cost=65536)
+stored = salt + hash
+```
+
+<Warning>
+If a database stores passwords as unsalted MD5 or SHA-256, the system is critically vulnerable. Attackers can crack most passwords in minutes using rainbow tables or GPU brute force.
+</Warning>
 
 ## Digital Signatures
-Digital signatures combine hashing and asymmetric encryption to provide authentication and integrity.
-1. The sender hashes the document.
-2. The sender encrypts the hash using their **Private Key**.
-3. The recipient decrypts the hash using the sender's **Public Key** and compares it to their own hash of the document.
-If they match, the recipient knows the sender actually sent it and that it hasn't been altered.
+
+Combine hashing + asymmetric encryption for **authentication** and **integrity**.
+
+<Steps>
+  <Step title="Sign">
+    Sender hashes the document (SHA-256), encrypts the hash with their Private Key. The encrypted hash = digital signature.
+  </Step>
+  <Step title="Verify">
+    Recipient decrypts the signature with the sender's Public Key, independently hashes the document. If both hashes match → authentic and unaltered.
+  </Step>
+</Steps>
+
+### Certificate Chains
+
+Digital certificates are signed by Certificate Authorities (CAs). Your browser trusts a website because it traces a chain of trust back to a Root CA pre-installed in the OS/browser.
+
+```
+Root CA (self-signed, in your OS)
+  └── Intermediate CA (signed by Root)
+       └── Website Certificate (signed by Intermediate)
+```
+
+## Post-Quantum Cryptography
+
+Quantum computers will eventually break RSA and Elliptic Curve cryptography using Shor's algorithm. Data captured today could be decrypted later ("harvest now, decrypt later").
+
+### NIST Post-Quantum Standards (2024)
+
+| Algorithm | Type | Purpose |
+|-----------|------|---------|
+| **ML-KEM (Kyber)** | Lattice-based | Key exchange |
+| **ML-DSA (Dilithium)** | Lattice-based | Digital signatures |
+| **SLH-DSA (SPHINCS+)** | Hash-based | Signatures (stateless) |
+
+<Note>
+The quantum threat is not imminent (breaking RSA-2048 requires ~4,000+ stable qubits; current quantum computers have ~1,000), but migration takes years. Organizations with sensitive data should plan now.
+</Note>
+
+## Key Takeaways
+
+1. **Symmetric = fast, asymmetric = solves key distribution**: Modern systems use both.
+2. **TLS 1.3 is the baseline**: Disable TLS 1.0/1.1.
+3. **Never MD5 or SHA-1 for security**: SHA-256 for integrity, Argon2 for passwords.
+4. **Salt + slow hashing for passwords**: Never store plaintext.
+5. **Watch quantum developments**: Post-quantum standards exist — plan migration.

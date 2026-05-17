@@ -1,46 +1,107 @@
 ---
 title: "Introduction to Cybersecurity"
-description: "What cybersecurity is and why it matters."
+description: "What cybersecurity is, why it matters, and the foundational concepts that everything else builds on."
 ---
 
 # What Cybersecurity Is and Why It Matters
 
-Cybersecurity is the practice of protecting systems, devices, networks, applications, and data against unauthorized access, damage, disruption, and abuse.
+Cybersecurity is the practice of protecting systems, devices, networks, applications, and data against unauthorized access, damage, disruption, and abuse. But at its core, it is about one thing: **managing digital risk**.
 
-In simple terms, it is about reducing digital risk. That means protecting information, keeping services available, preventing attacks, and making sure people and organizations can continue operating safely in a connected world.
+In 2023, the average cost of a data breach reached **$4.45 million USD** globally, according to IBM's annual Cost of a Data Breach report. For small and mid-sized businesses, a single breach can be an extinction-level event. For individuals, identity theft can take months or years to resolve.
 
-## What cybersecurity means
+Understanding cybersecurity is no longer optional — it is a professional and personal necessity.
 
-Cybersecurity is not only about hackers, viruses, or technical tools. It also includes processes, decisions, habits, and responsibilities.
+## The CIA Triad
 
-At a basic level, cybersecurity involves:
+The CIA triad is the foundational model of information security. Every security control, policy, and decision maps back to one or more of these three principles:
 
-- Protecting data from being exposed, altered, stolen, or destroyed.
-- Protecting accounts and identities from misuse.
-- Protecting devices, systems, and applications from compromise.
-- Detecting suspicious activity and responding when something goes wrong.
-- Recovering after incidents so operations can continue.
+### Confidentiality
 
-This is why cybersecurity applies to everyone, not only to security professionals. Users, developers, companies, schools, governments, and creators all depend on digital systems, which means all of them are exposed to cyber risk in some form.
+**Confidentiality** ensures that information is accessible only to those authorized to access it. When confidentiality is breached, sensitive data is exposed to unauthorized parties.
 
-## Why it matters
+- **Example**: In 2017, the Equifax breach exposed Social Security numbers, birth dates, and addresses of **147 million people**. The cause? An unpatched vulnerability in a web application framework (Apache Struts).
+- **Controls**: Encryption, access controls, classification labels, need-to-know policies.
 
-Cybersecurity matters because our daily life is digital.
+### Integrity
 
-Messages, bank accounts, work platforms, cloud storage, social media, source code, business systems, customer records, and personal documents all depend on technology. When those systems are poorly protected, the consequences can include data leaks, financial loss, service outages, identity theft, privacy violations, reputational damage, and operational disruption.
+**Integrity** ensures that data has not been altered, tampered with, or corrupted — either in transit or at rest. When integrity is compromised, you cannot trust the data.
 
-A good way to think about it is this: the more connected something becomes, the more important its protection becomes.
+- **Example**: In the 2020 SolarWinds supply chain attack, hackers injected malicious code into a legitimate software update. Over 18,000 organizations — including the US Treasury and Department of Homeland Security — installed the compromised update, believing it was authentic.
+- **Controls**: Hashing, digital signatures, checksums, version control, audit logs.
 
-## Cybersecurity for users and developers
+### Availability
 
-For users, cybersecurity means learning how to stay safe online, avoid common traps, protect accounts, and make better security decisions in everyday life.
+**Availability** ensures that systems, services, and data are accessible when needed by authorized users. When availability is attacked, legitimate users are locked out.
 
-For developers, cybersecurity goes further. It means building systems with security in mind, reducing avoidable weaknesses, protecting user data, using secure defaults, and understanding that every application can become a target if security is ignored.
+- **Example**: In 2021, the Colonial Pipeline ransomware attack shut down the largest fuel pipeline in the US for six days, causing fuel shortages across the eastern seaboard. The ransom was $4.4 million in Bitcoin.
+- **Controls**: Redundancy, backups, failover systems, DDoS protection, disaster recovery plans.
 
-In other words, users need cybersecurity to protect themselves, and developers need cybersecurity to protect both themselves and the people who trust the software they create.
+<Note>
+A strong security posture requires balancing all three principles. Over-prioritizing confidentiality (e.g., encrypting everything with 12-layer access controls) can destroy availability. The goal is proportional, risk-based protection.
+</Note>
 
-## The main idea to keep in mind
+## Threat vs. Vulnerability vs. Risk
 
-Cybersecurity is not just a technical specialty. It is a practical discipline that combines awareness, prevention, protection, detection, response, and recovery.
+These three terms are often confused, but they have precise, distinct meanings:
 
-As you continue through this path, you will see that cybersecurity is not about fear. It is about understanding risk, making better decisions, and building stronger habits as either a user or a developer.
+| Term | Definition | Example |
+|------|-----------|---------|
+| **Threat** | Any potential cause of an unwanted incident | A hacker, a natural disaster, a disgruntled employee |
+| **Vulnerability** | A weakness that can be exploited by a threat | An unpatched server, a weak password, an unlocked door |
+| **Risk** | The probability and impact of a threat exploiting a vulnerability | "There is a 30% chance that our unpatched web server will be compromised in the next 90 days, resulting in ~$500K in damages" |
+
+The relationship is: **Risk = Threat × Vulnerability × Impact**.
+
+You cannot eliminate all threats (hackers will always exist). You cannot eliminate all vulnerabilities (no software is perfect). But you *can* reduce risk by reducing vulnerabilities and minimizing the impact of successful attacks.
+
+## Attack Surface
+
+Your **attack surface** is the total number of points where an attacker could try to enter or extract data from your environment. The larger your attack surface, the more opportunities an attacker has.
+
+**For individuals**, the attack surface includes:
+- Email accounts, social media profiles, messaging apps
+- Every website where you have an account
+- Every device you own (laptop, phone, tablet, smart home devices)
+- Every app installed on those devices
+- Every Wi-Fi network you connect to
+
+**For organizations**, the attack surface also includes:
+- Public-facing web applications and APIs
+- Cloud infrastructure (AWS, Azure, GCP)
+- Employee workstations and mobile devices
+- Third-party vendors and supply chain integrations
+- Physical access points (offices, data centers)
+
+<Warning>
+Every new service you sign up for, every app you install, and every device you connect expands your attack surface. This does not mean you should avoid technology — it means you should be deliberate about what you expose and how you protect it.
+</Warning>
+
+## Cybersecurity for Users vs. Developers
+
+**For users**, cybersecurity means:
+- Learning how to stay safe online and avoid common traps
+- Protecting accounts with strong credentials and MFA
+- Recognizing phishing and social engineering attempts
+- Making informed security decisions in everyday life
+
+**For developers**, cybersecurity goes further:
+- Building systems with security designed into the architecture (not bolted on later)
+- Validating and sanitizing all input, encoding all output
+- Managing secrets, credentials, and API keys securely
+- Understanding that **every application you build becomes part of someone else's attack surface**
+- Knowing the OWASP Top 10 and applying defensive coding practices
+
+In other words: users need cybersecurity to protect themselves. Developers need cybersecurity to protect themselves **and** everyone who trusts the software they create.
+
+## The Security Mindset
+
+Cybersecurity is not just a set of tools or a checklist. It is a **way of thinking**:
+
+- **Assume breach**: Operate as if your systems will eventually be compromised, and design your defenses accordingly (defense in depth).
+- **Trust, but verify**: Do not blindly trust input, users, devices, or even internal systems.
+- **Least privilege**: Give every user, process, and application only the minimum access they need — nothing more.
+- **Defense in depth**: Layer your defenses so that no single point of failure can compromise the entire system.
+
+As you continue through this path, you will see these principles applied repeatedly across every topic — from passwords and browsing habits to incident response and device management.
+
+Cybersecurity is not about fear. It is about understanding risk, making better decisions, and building stronger habits.

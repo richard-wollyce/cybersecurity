@@ -1,29 +1,149 @@
 ---
 title: "Network Security"
-description: "Advanced concepts in securing network infrastructure."
+description: "Firewalls, network segmentation, IDS/IPS, VPNs, Zero Trust Architecture, DNS security, and SOC operations."
 ---
 
 # Network Security
 
-Network security is the practice of preventing and protecting against unauthorized intrusion into corporate networks. As a technical professional, understanding the layers of network defense is critical.
+Network security is the discipline of protecting the communication infrastructure that connects systems, users, and data. It encompasses everything from physical cabling and hardware to software-defined perimeters and cloud-native security models.
+
+As organizations move to hybrid and cloud environments, network security has evolved far beyond traditional perimeter-based firewalls. Modern network defense requires understanding how traffic flows, where trust boundaries exist, and how to detect anomalies in real time.
+
+## The OSI Model and Security
+
+Understanding the OSI (Open Systems Interconnection) model is fundamental to network security, because different attacks target different layers:
+
+| Layer | Name | Security Concern | Example Attack |
+|-------|------|-----------------|---------------|
+| 7 | Application | Web app vulnerabilities, API abuse | SQL Injection, XSS |
+| 6 | Presentation | Encryption/decryption issues | SSL stripping |
+| 5 | Session | Session management flaws | Session hijacking |
+| 4 | Transport | Port scanning, protocol abuse | SYN flood DDoS |
+| 3 | Network | Routing manipulation, IP spoofing | BGP hijacking |
+| 2 | Data Link | ARP spoofing, MAC flooding | Man-in-the-Middle |
+| 1 | Physical | Cable tapping, signal interception | Physical access |
 
 ## Firewalls and Traffic Filtering
-A firewall establishes a barrier between a trusted internal network and an untrusted external network (like the Internet).
-- **Stateless Firewalls:** Inspect individual packets in isolation, usually filtering based on source/destination IP, protocol, and port.
-- **Stateful Firewalls:** Track the state of active connections and make decisions based on the context of the traffic flow.
-- **Next-Generation Firewalls (NGFW):** Combine traditional firewall technology with application-level inspection, intrusion prevention, and deep packet inspection.
+
+A firewall is a network security device that monitors and controls incoming and outgoing traffic based on predefined security rules.
+
+### Firewall Evolution
+
+| Generation | Type | Capabilities |
+|-----------|------|-------------|
+| 1st Gen | **Packet Filter (Stateless)** | Inspects individual packets in isolation. Filters based on source/destination IP, port, and protocol. No context awareness. |
+| 2nd Gen | **Stateful Inspection** | Tracks active connections and makes decisions based on the state of the traffic flow. Can distinguish between new connections and responses to existing ones. |
+| 3rd Gen | **Application Layer (Proxy)** | Inspects the content of traffic at the application layer. Can filter based on URLs, file types, and application protocols. |
+| Current | **Next-Generation (NGFW)** | Combines stateful inspection + deep packet inspection (DPI) + intrusion prevention (IPS) + application awareness + TLS decryption + threat intelligence integration. Examples: Palo Alto, Fortinet, Cisco Firepower. |
+
+### Firewall Rules — Best Practices
+
+- **Default Deny**: Block everything by default, then explicitly allow only necessary traffic. Never default allow.
+- **Least Privilege**: Allow only the minimum ports and protocols required for each service.
+- **Logging**: Log all denied traffic and periodically review logs for suspicious patterns.
+- **Regular Audits**: Review firewall rules quarterly. Remove stale rules. Document the purpose of every rule.
 
 ## Network Segmentation
-Flat networks are dangerous; if an attacker compromises one device, they can move laterally to any other device.
-- **Segmentation** divides a network into smaller, isolated subnetworks (VLANs).
-- Organizations typically separate guest Wi-Fi, user workstations, servers, and sensitive databases into different segments.
-- Communication between segments is strictly controlled by internal firewalls or Access Control Lists (ACLs).
+
+A flat network — where every device can communicate with every other device — is extremely dangerous. If an attacker compromises one workstation, they can move laterally to servers, databases, and critical infrastructure.
+
+### Segmentation Strategies
+
+- **VLANs (Virtual LANs)**: Logically separate devices into broadcast domains. Guest Wi-Fi, employee workstations, servers, and IoT devices should be on different VLANs.
+- **Subnetting**: Divide IP address ranges to create isolated network zones with controlled routing between them.
+- **DMZ (Demilitarized Zone)**: A separate network zone that hosts public-facing services (web servers, email gateways) isolated from the internal network. If the web server is compromised, the attacker is contained in the DMZ.
+- **Micro-segmentation**: Granular segmentation at the workload level (individual VMs, containers, or applications). Common in cloud and data center environments.
+
+<Tip>
+A practical way to think about segmentation: if a device is compromised, what other systems can it reach? The answer should be "as few as possible." Design your network so that a breach in one zone does not cascade to others.
+</Tip>
 
 ## Intrusion Detection and Prevention (IDS/IPS)
-- **IDS (Intrusion Detection System):** Monitors network traffic for suspicious activity and known threats, sending alerts when anomalous behavior is detected. It is passive.
-- **IPS (Intrusion Prevention System):** Sits inline with traffic and can actively drop packets or block connections if malicious activity is identified.
+
+| System | Behavior | Placement |
+|--------|----------|-----------|
+| **IDS** (Intrusion Detection System) | **Passive** — monitors traffic, detects anomalies, and generates alerts. Does not block traffic. | Placed on a SPAN port or network TAP to receive a copy of all traffic. |
+| **IPS** (Intrusion Prevention System) | **Active** — sits inline with traffic and can automatically drop packets, block connections, or reset sessions when malicious activity is detected. | Placed inline between the firewall and the internal network. |
+
+### Detection Methods
+
+- **Signature-based**: Compares traffic against a database of known attack signatures (like antivirus definitions). Very effective against known threats, but blind to zero-day attacks.
+- **Anomaly-based**: Establishes a baseline of "normal" network behavior and alerts on deviations. Can detect novel attacks, but generates more false positives.
+- **Behavioral**: Analyzes patterns of behavior across multiple events and sessions. Detects sophisticated, multi-stage attacks that signature-based systems miss.
+
+## Zero Trust Architecture
+
+The traditional security model was **perimeter-based**: everything inside the corporate network was trusted, and everything outside was untrusted. This model is fundamentally broken in a world of cloud services, remote work, BYOD (Bring Your Own Device), and SaaS applications.
+
+**Zero Trust** replaces this with a simple principle: **"Never trust, always verify."**
+
+### Zero Trust Principles
+
+1. **Verify explicitly**: Authenticate and authorize every access request based on all available data points (identity, device, location, service, data sensitivity).
+2. **Least privilege access**: Grant only the minimum access required for the specific task, for the minimum duration.
+3. **Assume breach**: Design defenses as if the network is already compromised. Segment access, encrypt everything, and monitor continuously.
+
+### Zero Trust Components
+
+- **Identity Provider (IdP)**: Centralized authentication (e.g., Okta, Azure AD, Google Workspace).
+- **Multi-Factor Authentication**: Required for every access request.
+- **Device Posture Check**: Verify that the device meets security requirements (OS patched, endpoint protection running, disk encrypted) before granting access.
+- **Micro-segmentation**: Enforce access policies at the application/workload level.
+- **Continuous Monitoring**: Log and analyze all access in real time. Revoke access immediately if risk score changes.
+
+## DNS Security
+
+DNS is often called "the Achilles' heel of the internet." Most organizations monitor HTTP/HTTPS traffic closely but ignore DNS — which makes it a popular channel for attacks and data exfiltration.
+
+### DNS-based Threats
+
+- **DNS Tunneling**: Attackers encode data within DNS queries and responses to exfiltrate data or establish command-and-control (C2) channels. Because DNS is rarely blocked at the firewall, this technique often evades traditional defenses.
+- **DNS Spoofing/Cache Poisoning**: Injecting false records into DNS caches to redirect users to malicious sites.
+- **Domain Generation Algorithms (DGA)**: Malware generates thousands of pseudo-random domain names to communicate with C2 servers. Defenders cannot block them all because new domains are generated daily.
+
+### DNS Security Solutions
+
+- **DNSSEC**: Digitally signs DNS records to ensure authenticity and integrity.
+- **DNS Filtering**: Block queries to known malicious domains (e.g., Cisco Umbrella, Cloudflare Gateway, Quad9).
+- **DNS Logging and Monitoring**: Analyze DNS query logs for anomalies (unusually long domain names, high query volume to new domains, TXT record queries).
+
+## Security Operations Center (SOC)
+
+A **SOC** is a centralized team responsible for monitoring, detecting, analyzing, and responding to cybersecurity incidents. The SOC is the operational heart of an organization's security program.
+
+### SIEM (Security Information and Event Management)
+
+The SOC's primary tool is a **SIEM** — a platform that collects and correlates log data from across the entire infrastructure (firewalls, IDS/IPS, endpoints, servers, cloud services, applications) to detect threats.
+
+**How a SIEM works:**
+1. **Collect**: Ingest logs from hundreds of data sources.
+2. **Normalize**: Standardize log formats for analysis.
+3. **Correlate**: Apply detection rules and machine learning to identify patterns that indicate an attack.
+4. **Alert**: Generate prioritized alerts for SOC analysts.
+5. **Investigate**: Analysts triage alerts, investigate incidents, and escalate as needed.
+
+**Popular SIEM platforms**: Splunk, Microsoft Sentinel, Elastic SIEM, IBM QRadar, Sumo Logic.
 
 ## Virtual Private Networks (VPNs)
-VPNs extend a private network across a public network, allowing users to send and receive data as if their computing devices were directly connected to the private network.
-- **IPsec:** Operates at the network layer, often used for site-to-site VPNs.
-- **TLS/SSL VPNs:** Operate at the transport layer, commonly used for remote user access.
+
+VPNs extend a private network across a public network, encrypting traffic and protecting it from interception.
+
+### VPN Types
+
+| Type | Use Case | Protocol |
+|------|----------|----------|
+| **Site-to-Site** | Connect two office networks across the internet | IPsec |
+| **Remote Access** | Individual users connecting to a corporate network | TLS/SSL, WireGuard |
+| **Client-to-Site** | Employees working remotely | OpenVPN, WireGuard |
+
+### Modern Alternative: ZTNA
+
+**Zero Trust Network Access (ZTNA)** is replacing traditional VPNs in many organizations. Unlike VPNs (which grant broad network access once connected), ZTNA grants access to specific applications based on identity, device posture, and context — without exposing the underlying network.
+
+## Key Takeaways
+
+1. **Defense in depth**: Layer multiple controls (firewalls, IDS/IPS, segmentation, encryption) — no single control is sufficient.
+2. **Segment your network**: A flat network is a hacker's paradise. Isolate critical systems.
+3. **Adopt Zero Trust**: "Never trust, always verify" is the modern security paradigm.
+4. **Monitor DNS**: DNS is a blind spot for most organizations and a favorite channel for attackers.
+5. **Invest in visibility**: If you cannot see what is happening on your network (SIEM, logging, monitoring), you cannot defend it.

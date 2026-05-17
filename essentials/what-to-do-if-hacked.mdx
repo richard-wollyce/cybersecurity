@@ -1,36 +1,169 @@
 ---
-title: "What to do if hacked"
-description: "An incident response guide for everyday users."
+title: "What to Do If Hacked"
+description: "A complete incident response playbook — isolate, preserve, rotate, notify, and review."
 ---
 
-# What To Do If You Get Hacked
+# What to Do If You Get Hacked
 
-Even with the best precautions, incidents happen. Knowing how to react quickly can minimize the damage and help you regain control.
+Even with strong passwords, MFA, and safe browsing habits — incidents happen. Attackers are persistent, and no defense is perfect. The difference between a minor inconvenience and a catastrophe often comes down to **how quickly and effectively you respond**.
 
-## 1. Disconnect and Isolate
-If you suspect your computer or phone is infected with malware or ransomware:
-- **Disconnect from the network immediately.** Turn off Wi-Fi, unplug the Ethernet cable, and put the device in Airplane mode.
-- Do not plug in any external USB drives, as the malware might infect them.
+This guide provides a structured incident response framework that applies whether you are an individual whose email was compromised or a professional managing a corporate breach.
 
-## 2. Change Passwords (From a Safe Device)
-If an account has been compromised, or if your password was stolen:
-- Use a **different, clean device** to change your passwords.
-- Start with your most critical accounts: Email, Banking, and Password Managers.
-- If you used the stolen password anywhere else, change it there too.
-- Immediately enable Multi-Factor Authentication (MFA) on the compromised accounts.
+## The Incident Response Framework
 
-## 3. Monitor Your Finances
-If financial information or identity details were exposed:
-- Check your bank and credit card statements for unauthorized transactions.
-- Contact your bank to cancel compromised cards.
-- Consider placing a "fraud alert" or a "credit freeze" with credit reporting bureaus to prevent attackers from opening loans in your name.
+Professional incident response follows a structured lifecycle defined by NIST (National Institute of Standards and Technology):
 
-## 4. Warn Your Contacts
-Attackers often use compromised email or social media accounts to send phishing links to the victim's friends and family.
-- Let your contacts know that your account was compromised and they should ignore recent messages from you.
+<Steps>
+  <Step title="1. Identification">
+    Detect and confirm that an incident has occurred. Signs include: unexpected account lockouts, unfamiliar login locations, unauthorized transactions, files encrypted with ransom notes, or contacts reporting suspicious messages from your accounts.
+  </Step>
+  <Step title="2. Containment">
+    Stop the bleeding. Limit the attacker's access to prevent further damage.
+  </Step>
+  <Step title="3. Eradication">
+    Remove the attacker's foothold — malware, backdoors, compromised credentials.
+  </Step>
+  <Step title="4. Recovery">
+    Restore systems and data to normal operation from clean backups.
+  </Step>
+  <Step title="5. Lessons Learned">
+    Analyze what happened, how it happened, and what can be improved to prevent recurrence.
+  </Step>
+</Steps>
 
-## 5. Scan and Rebuild
-If a device was compromised:
-- Run a full scan using reputable antivirus software.
-- In severe cases (like persistent malware or ransomware), the only safe option is to completely wipe the device (factory reset) and reinstall the operating system.
-- Restore your files from a clean, pre-infection backup.
+## Step 1: Disconnect and Isolate
+
+If you suspect your device is infected with malware or ransomware:
+
+- **Disconnect from the network immediately.** Turn off Wi-Fi, unplug the Ethernet cable, and enable Airplane mode.
+- **Do NOT power off the device** (unless it is actively encrypting files in front of you). Forensic evidence in RAM (memory) is lost when the device is turned off. If possible, keep it on but isolated.
+- **Do not plug in external USB drives** — malware may spread to removable media.
+- **Quarantine the device**: Physically move it away from other devices on the same network.
+
+<Warning>
+For ransomware: if you see files being actively encrypted in real-time, immediately power off the device to stop the encryption process. The trade-off of losing forensic RAM data is worth saving your remaining files.
+</Warning>
+
+## Step 2: Preserve Evidence
+
+Before you start changing passwords and running scans, **document everything**:
+
+- **Screenshot error messages, ransom notes, and suspicious emails.** These are critical evidence for incident investigation and potential law enforcement.
+- **Record timestamps**: When did you first notice the problem? When did you last access the account normally?
+- **Check login history**: Most services (Google, Microsoft, Facebook, Apple) let you review recent sign-in locations and devices. Screenshot any unfamiliar entries.
+- **Save email headers**: If the incident started with a phishing email, save the full email headers (not just the visible sender) for analysis.
+- **Photograph physical evidence**: If a device was physically tampered with (broken seals, unfamiliar USB devices), photograph it before touching anything.
+
+<Note>
+In a corporate environment, evidence preservation is legally critical. If the incident may result in litigation, regulatory investigation, or law enforcement involvement, do NOT modify any systems until your legal team and/or a digital forensics professional has been consulted.
+</Note>
+
+## Step 3: Change Passwords (From a Clean Device)
+
+If an account has been compromised:
+
+1. Use a **different, verified clean device** (not the compromised one) to change your passwords.
+2. Start with the **highest-priority accounts**, in this order:
+
+| Priority | Account Type | Why |
+|----------|-------------|-----|
+| 1 | **Email** | Password resets for everything go here |
+| 2 | **Password Manager** | Contains all your other credentials |
+| 3 | **Banking / Financial** | Direct financial impact |
+| 4 | **Cloud Storage** | May contain sensitive documents |
+| 5 | **Social Media** | Used for impersonation and phishing contacts |
+| 6 | **All other accounts** | Especially any that shared the compromised password |
+
+3. Generate new, unique passwords for each account using your password manager.
+4. **Enable MFA** on every account immediately — preferably using an authenticator app or hardware key (not SMS).
+5. **Revoke active sessions**: Most services allow you to "Sign out of all devices." Do this after changing the password to force any attacker sessions to expire.
+
+## Step 4: Monitor Financial Accounts
+
+If financial information, identity documents, or credit card details were potentially exposed:
+
+- **Check bank and credit card statements** for unauthorized transactions going back at least 30 days.
+- **Contact your bank immediately** to cancel compromised cards and issue replacements.
+- **Set up transaction alerts**: Enable real-time notifications for all transactions above $0 (most banking apps support this).
+- **Place a fraud alert**: Contact credit bureaus (in Brazil: Serasa, SPC/SCPC; in the US: Equifax, Experian, TransUnion) to place a fraud alert on your credit file.
+- **Consider a credit freeze**: A credit freeze prevents anyone from opening new credit accounts in your name. This is the strongest protection against identity theft.
+
+## Step 5: Warn Your Contacts
+
+Attackers frequently use compromised email and social media accounts to send phishing messages to the victim's contacts — exploiting the trust relationship.
+
+**Actions to take:**
+- Notify your contacts (via a *different* communication channel) that your account was compromised.
+- Advise them to **ignore** any recent messages, links, or requests from your compromised account.
+- If possible, post a public notice on social media (from a clean account) warning contacts about the compromise.
+
+**Communication template:**
+
+> "My [email/social media] account was recently compromised. If you received any unusual messages, links, or requests from me in the past [X days], please do not click on them. I am working on securing my account. Sorry for any inconvenience."
+
+## Step 6: Scan and Rebuild
+
+### For Malware/Virus Infections
+
+1. **Run a full system scan** using reputable antivirus software (Malwarebytes, Windows Defender, Bitdefender).
+2. **Boot into Safe Mode** for the scan if possible — this prevents most malware from running and hiding.
+3. **Scan with multiple tools**: No single antivirus catches everything. Use a primary AV + a second-opinion scanner (like Malwarebytes or ESET Online Scanner).
+
+### For Severe Compromises (Ransomware, Rootkits, Persistent Malware)
+
+In cases of serious infection, the **only truly safe option** is to wipe and rebuild:
+
+1. **Factory reset** the device (or reinstall the operating system from official media).
+2. **Restore data from a clean backup** — one that predates the infection.
+3. **Do not restore executable files** from backup — only documents, photos, and data files. Executables from the infected period may contain malware.
+4. **Reinstall applications** from official sources (vendor websites, official app stores).
+
+<Warning>
+If you were hit by ransomware, do NOT pay the ransom. According to the FBI, paying does not guarantee you will get your files back, and it funds criminal organizations. Check **nomoreransom.org** — a project by Europol and security companies that provides free decryption tools for many ransomware families.
+</Warning>
+
+## Step 7: Post-Incident Review
+
+After the immediate crisis is resolved, conduct a structured review:
+
+### Questions to Answer
+
+1. **How did the attacker get in?** (Phishing email? Reused password? Unpatched vulnerability? Social engineering?)
+2. **What was the blast radius?** (Which accounts, devices, or data were affected?)
+3. **How long was the attacker present?** (Days? Weeks? Months?)
+4. **What was the response time?** (How quickly was the incident detected and contained?)
+5. **What worked well in the response?** (What should we keep doing?)
+6. **What failed or was too slow?** (What should we change?)
+
+### Preventive Actions
+
+Based on the review, implement changes to prevent recurrence:
+
+- [ ] Enable MFA on all critical accounts
+- [ ] Migrate to a password manager with unique passwords for every account
+- [ ] Set up automated backups with versioning
+- [ ] Update and patch all software and firmware
+- [ ] Review and reduce browser extensions
+- [ ] Educate family members or colleagues about the specific attack vector used
+
+## Legal and Regulatory Considerations
+
+Depending on the nature and scope of the incident, you may have legal obligations:
+
+- **LGPD (Brazil)**: Organizations must report data breaches involving personal data to the ANPD (Autoridade Nacional de Proteção de Dados) and affected individuals within a "reasonable" timeframe.
+- **GDPR (Europe)**: Organizations must report breaches to the supervisory authority within **72 hours** and notify affected individuals without undue delay.
+- **State-level laws (US)**: Most US states have breach notification laws with varying requirements.
+
+For individuals, consider filing a report with:
+- **Brazil**: CERT.br (cert.br) — the Brazilian national CSIRT.
+- **US**: IC3 (Internet Crime Complaint Center — ic3.gov).
+- **EU**: Your national data protection authority.
+
+## Key Takeaways
+
+1. **Speed matters**: The faster you detect and respond, the less damage an attacker can do.
+2. **Preserve evidence before fixing**: Screenshots, timestamps, and login history are critical.
+3. **Change passwords from a clean device**: Never use the compromised device for credential rotation.
+4. **Warn your contacts**: Prevent the attack from spreading through your trust network.
+5. **Wipe if in doubt**: For serious infections, a factory reset is safer than trying to clean the infection.
+6. **Review and improve**: Every incident is a learning opportunity. Use it to strengthen your defenses.

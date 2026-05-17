@@ -1,29 +1,145 @@
 ---
 title: "Device Hygiene"
-description: "Keeping your computers, phones, and networks healthy and secure."
+description: "Patch management, public Wi-Fi risks, VPNs, backups, USB attack vectors, encryption, and physical security."
 ---
 
 # Device Hygiene
 
-Cybersecurity isn't just about what you do online; it's also about how you maintain your physical devices and the networks they connect to.
+Cybersecurity is not only about what you do online — it extends to how you maintain, configure, and physically protect every device you own. A single unpatched laptop, an unencrypted phone, or a careless moment on public Wi-Fi can undo every other security measure you have in place.
 
-## Software Updates
-Software updates do more than add new features—they patch security vulnerabilities.
-- **Enable Automatic Updates:** Whenever possible, set your Operating System, web browser, and applications to update automatically.
-- **Don't Delay:** When an update requires a restart, do it promptly. Attackers reverse-engineer patches to attack people who haven't updated yet.
+## Software Updates and Patch Management
+
+Software updates are not just about new features. They are about fixing **known vulnerabilities** that attackers actively exploit.
+
+### The Patch Gap
+
+When a software vendor discovers and patches a vulnerability, attackers immediately reverse-engineer the patch to understand the flaw. They then build exploits targeting users who have not yet updated. This creates a dangerous window called the **patch gap**.
+
+**Real-world example**: The WannaCry ransomware (2017) exploited a Windows vulnerability called **EternalBlue**. Microsoft had released a patch (MS17-010) **two months** before the attack. Every system that was infected had simply failed to apply the update. Over 230,000 computers in 150 countries were compromised.
+
+### Patch Management Best Practices
+
+<Steps>
+  <Step title="Enable Automatic Updates">
+    Set your operating system, web browser, and critical applications to update automatically. This eliminates the human tendency to procrastinate.
+  </Step>
+  <Step title="Don't Delay Restarts">
+    When an update requires a restart, do it promptly. "Remind me tomorrow" is a security risk.
+  </Step>
+  <Step title="Prioritize Critical Patches">
+    For organizations, prioritize patches rated **Critical** or **High** by CVSS (Common Vulnerability Scoring System). These fix vulnerabilities that are actively being exploited or are trivially exploitable.
+  </Step>
+  <Step title="Update Everything">
+    It is not just your OS — update your browser, browser extensions, office software, PDF readers, media players, firmware (router, IoT devices), and mobile apps.
+  </Step>
+</Steps>
+
+<Warning>
+Routers and IoT devices (smart cameras, smart speakers, smart TVs) are frequently overlooked. These devices run firmware that is rarely updated, often contains known vulnerabilities, and is connected to your home network 24/7. Check your router manufacturer's website quarterly for firmware updates.
+</Warning>
 
 ## Public Wi-Fi Risks
-Public Wi-Fi networks (at coffee shops, airports, or hotels) are fundamentally insecure. You don't know who controls the network or who else is connected to it.
-- Avoid accessing sensitive accounts (like banking) on public Wi-Fi.
-- **Use a VPN (Virtual Private Network):** A VPN creates an encrypted tunnel between your device and the internet, protecting your traffic from local snooping.
-- Turn off automatic connection to open Wi-Fi networks.
 
-## The Importance of Backups
-There are two types of computer users: those who have lost data, and those who will. Between ransomware, hardware failure, and physical theft, data loss is inevitable.
-- **The 3-2-1 Rule:** Keep **3** copies of your data, on **2** different types of media, with **1** copy stored off-site (like in the cloud).
-- **Test Your Backups:** A backup is only useful if you can successfully restore it.
+Public Wi-Fi networks (coffee shops, airports, hotels, coworking spaces) are inherently insecure. You have no control over who operates the network, who else is connected, or what traffic monitoring may be in place.
+
+### Attack Scenarios on Public Wi-Fi
+
+| Attack | How It Works | Impact |
+|--------|-------------|--------|
+| **Evil Twin** | Attacker creates a Wi-Fi network with the same name as the legitimate one (e.g., "Starbucks_WiFi"). Your device connects to the attacker's network. | All your traffic is routed through the attacker |
+| **Man-in-the-Middle (MitM)** | Attacker positions themselves between you and the access point, intercepting and potentially modifying traffic. | Credentials, cookies, and data can be captured |
+| **Packet Sniffing** | Attacker passively captures all unencrypted traffic on the network using tools like Wireshark. | Any data sent over HTTP (not HTTPS) is visible |
+| **Session Hijacking** | Attacker captures your session cookie and uses it to impersonate you on a website. | Attacker gains access to your authenticated session |
+
+### How to Stay Safe on Public Wi-Fi
+
+1. **Use a VPN**: A VPN (Virtual Private Network) creates an encrypted tunnel between your device and the VPN server. Even if the local network is compromised, the attacker only sees encrypted gibberish.
+2. **Verify the network name**: Ask staff for the exact network name and password. Don't connect to open networks.
+3. **Avoid sensitive activities**: Don't access banking, email, or password managers on public Wi-Fi without a VPN.
+4. **Disable auto-connect**: Turn off "automatically connect to open networks" in your device settings.
+5. **Use HTTPS everywhere**: While not a complete solution, HTTPS protects individual connections even on hostile networks.
+
+### VPN Selection Criteria
+
+Not all VPNs are created equal. A bad VPN is worse than no VPN — because it creates a false sense of security while potentially logging and selling your data.
+
+| Criteria | What to Look For |
+|----------|-----------------|
+| **No-logs policy** | The provider should not store any records of your browsing activity. Look for independently audited no-logs claims. |
+| **Jurisdiction** | Choose providers based in privacy-friendly jurisdictions (Switzerland, Iceland, Panama) outside Five Eyes/Fourteen Eyes intelligence alliances. |
+| **Protocol** | WireGuard or OpenVPN (avoid PPTP, which is broken). |
+| **Trusted providers** | Mullvad, ProtonVPN, IVPN — all independently audited. |
+
+## Backups — The 3-2-1 Rule
+
+Data loss is not a question of "if" but "when." Between ransomware, hardware failure, accidental deletion, and physical theft, every important file you own is at risk.
+
+### The 3-2-1 Backup Strategy
+
+- **3** copies of your data (the original + 2 backups)
+- **2** different types of storage media (e.g., internal SSD + external hard drive)
+- **1** copy stored off-site (cloud storage or a physically separate location)
+
+### Backup Best Practices
+
+- **Automate backups**: Manual backups get forgotten. Use built-in tools (Windows Backup, macOS Time Machine) or services (Backblaze, iCloud, Google Drive).
+- **Test your backups**: A backup is only useful if you can successfully restore from it. Test restoring files at least once a quarter.
+- **Encrypt backup drives**: If your external backup drive is stolen, the data should be unreadable without the encryption key.
+- **Version your backups**: Keep multiple versions so you can restore from before a ransomware infection or accidental corruption.
+
+<Tip>
+Cloud backups protect against physical disasters (fire, flood, theft) but not necessarily against ransomware. If ransomware encrypts your local files and those changes sync to the cloud, your cloud backup is also encrypted. Use a backup service that offers **versioning** (like Backblaze or Time Machine) so you can roll back to a pre-infection state.
+</Tip>
+
+## USB Attack Vectors
+
+USB devices are one of the most underestimated attack vectors. They bypass network-level defenses entirely because they operate at the physical layer.
+
+### Types of USB Attacks
+
+- **Malicious USB drives**: An attacker drops a USB drive in a parking lot, lobby, or conference room labeled "Confidential — Q4 Financials." Curiosity drives someone to plug it in, and the drive auto-executes malware.
+- **USB Rubber Ducky**: A device that looks like an ordinary USB flash drive but is actually a programmable keyboard. When plugged in, it types pre-programmed keystrokes at superhuman speed — opening a terminal, downloading malware, and creating a backdoor in under 10 seconds.
+- **USB Killer**: A device that charges capacitors from the USB port's power supply, then discharges a high-voltage surge back into the computer, physically destroying the hardware.
+- **Juice Jacking**: Public USB charging stations at airports or hotels may be modified to transfer data or install malware while your phone charges.
+
+### USB Defense
+
+- **Never plug in unknown USB devices.** Treat found USB drives like you would a suspicious package.
+- **Use data-blocking USB cables** (USB condoms) when charging at public stations.
+- **Disable USB auto-run** in your OS settings.
+- **In organizations**: Implement USB device control policies that whitelist only approved devices.
+
+## Full-Disk Encryption
+
+If your laptop or phone is lost or stolen, full-disk encryption ensures the data on it is unreadable without the decryption key.
+
+| OS | Built-in Tool | How to Enable |
+|----|--------------|---------------|
+| **Windows** | BitLocker | Settings → Privacy & Security → Device Encryption |
+| **macOS** | FileVault | System Preferences → Security & Privacy → FileVault |
+| **Linux** | LUKS | Typically configured during OS installation |
+| **iOS** | Automatic | Enabled by default when you set a passcode |
+| **Android** | Automatic | Enabled by default on modern devices (Android 10+) |
+
+<Note>
+Full-disk encryption protects data **at rest** (when the device is powered off or locked). Once you unlock the device and log in, the data is accessible. This is why a strong login password/PIN and a short auto-lock timeout are essential complements to encryption.
+</Note>
 
 ## Physical Security
-If an attacker gains physical access to your device, it's game over.
-- Always lock your screen when stepping away from your computer.
-- Enable full-disk encryption (BitLocker on Windows, FileVault on macOS) so that if your laptop is stolen, your data cannot be read.
+
+If an attacker gains physical access to your device, most digital defenses become irrelevant.
+
+- **Lock your screen** every time you step away — even for 30 seconds. Use `Win + L` (Windows) or `Ctrl + Cmd + Q` (macOS).
+- **Enable auto-lock**: Set your screen to lock automatically after 1-2 minutes of inactivity.
+- **Use privacy screens**: Anti-glare privacy filters on laptops prevent shoulder surfing in public spaces.
+- **Secure your workspace**: In shared offices, never leave laptops unattended. Use cable locks if necessary.
+- **Enable Find My Device**: Activate the built-in tracking feature (Find My iPhone, Find My Device on Android/Windows) so you can locate, lock, or remotely wipe a lost device.
+
+## Key Takeaways
+
+1. **Update everything**: OS, browser, apps, router firmware, IoT devices. Enable automatic updates.
+2. **Avoid public Wi-Fi without a VPN**: Use Mullvad, ProtonVPN, or IVPN with WireGuard protocol.
+3. **Follow the 3-2-1 backup rule**: 3 copies, 2 media types, 1 off-site. Test restores regularly.
+4. **Never plug in unknown USB devices**: Treat found drives as hostile by default.
+5. **Encrypt your drives**: Enable BitLocker/FileVault and ensure your phone has a passcode.
+6. **Lock your screen**: Every time, every day, no exceptions.
