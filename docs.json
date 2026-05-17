@@ -11,9 +11,7 @@
     "light": "#3B82F6",
     "dark": "#1E3A8A"
   },
-  "modeToggle": {
-    "default": "dark"
-  },
+  "theme": "mint",
   "navigation": {
     "global": {
       "anchors": [
