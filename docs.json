@@ -52,6 +52,33 @@
             ]
           }
         ]
+      },
+      {
+        "language": "pt-BR",
+        "groups": [
+          {
+            "group": "Fundamentos",
+            "pages": [
+              "pt-br/essentials/welcome",
+              "pt-br/essentials/cybersecurity-intro",
+              "pt-br/essentials/threats-and-attacks",
+              "pt-br/essentials/password-security",
+              "pt-br/essentials/safe-browsing",
+              "pt-br/essentials/device-hygiene",
+              "pt-br/essentials/what-to-do-if-hacked"
+            ]
+          },
+          {
+            "group": "Tópicos Avançados",
+            "pages": [
+              "pt-br/advanced/network-security",
+              "pt-br/advanced/cryptography",
+              "pt-br/advanced/web-vulnerabilities",
+              "pt-br/advanced/secure-coding-practices",
+              "pt-br/advanced/penetration-testing"
+            ]
+          }
+        ]
       }
     ]
   }

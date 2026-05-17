@@ -1,0 +1,124 @@
+---
+title: "Higiene de Dispositivos"
+description: "Gerenciamento de patches, riscos de Wi-Fi público, VPNs, backups, vetores de ataque USB, criptografia e segurança física."
+---
+
+# Higiene de Dispositivos (Device Hygiene)
+
+Cibersegurança não é apenas sobre o que você faz online — se estende a como você mantém, configura e protege fisicamente cada dispositivo que possui. Um único notebook sem patch, um celular sem criptografia ou um momento de descuido em Wi-Fi público pode anular todas as outras medidas de segurança.
+
+## Atualizações de Software e Gerenciamento de Patches
+
+Atualizações de software não são apenas sobre novos recursos. São sobre corrigir **vulnerabilidades conhecidas** que atacantes exploram ativamente.
+
+### A Janela de Vulnerabilidade (Patch Gap)
+
+Quando um fabricante descobre e corrige uma vulnerabilidade, atacantes imediatamente fazem engenharia reversa do patch para entender a falha. Eles então constroem exploits direcionados a usuários que ainda não atualizaram.
+
+**Exemplo real**: O ransomware WannaCry (2017) explorou uma vulnerabilidade do Windows chamada **EternalBlue**. A Microsoft tinha lançado o patch **dois meses antes** do ataque. Todo sistema infectado simplesmente não havia aplicado a atualização. Mais de 230.000 computadores em 150 países foram comprometidos.
+
+### Boas Práticas de Atualização
+
+<Steps>
+  <Step title="Habilite Atualizações Automáticas">
+    Configure seu sistema operacional, navegador e aplicações críticas para atualizar automaticamente.
+  </Step>
+  <Step title="Não Adie Reinicializações">
+    Quando uma atualização exige reiniciar, faça imediatamente. "Lembre-me amanhã" é um risco de segurança.
+  </Step>
+  <Step title="Atualize Tudo">
+    Não é apenas o SO — atualize navegador, extensões, software de escritório, leitores de PDF, firmware (roteador, dispositivos IoT) e apps móveis.
+  </Step>
+</Steps>
+
+<Warning>
+Roteadores e dispositivos IoT (câmeras inteligentes, smart TVs, assistentes de voz) são frequentemente negligenciados. Esses dispositivos rodam firmware raramente atualizado, frequentemente contêm vulnerabilidades conhecidas e estão conectados à sua rede doméstica 24/7.
+</Warning>
+
+## Riscos de Wi-Fi Público
+
+Redes Wi-Fi públicas (cafeterias, aeroportos, hotéis, coworkings) são inerentemente inseguras.
+
+### Cenários de Ataque em Wi-Fi Público
+
+| Ataque | Como Funciona | Impacto |
+|--------|--------------|---------|
+| **Evil Twin (Gêmeo Maligno)** | Atacante cria uma rede Wi-Fi com o mesmo nome da legítima | Todo seu tráfego é roteado pelo atacante |
+| **Man-in-the-Middle — MitM (Homem no Meio)** | Atacante se posiciona entre você e o ponto de acesso, interceptando tráfego | Credenciais e dados podem ser capturados |
+| **Sniffing de Pacotes (Packet Sniffing)** | Atacante captura passivamente todo o tráfego não criptografado | Dados enviados por HTTP ficam visíveis |
+| **Sequestro de Sessão (Session Hijacking)** | Atacante captura seu cookie de sessão e o usa para se passar por você | Atacante ganha acesso à sua sessão autenticada |
+
+### Como se Proteger em Wi-Fi Público
+
+1. **Use uma VPN (Virtual Private Network — Rede Privada Virtual)**: Cria um túnel criptografado entre seu dispositivo e o servidor VPN.
+2. **Verifique o nome da rede**: Pergunte aos funcionários o nome exato da rede.
+3. **Evite atividades sensíveis**: Não acesse banco ou e-mail em Wi-Fi público sem VPN.
+4. **Desabilite conexão automática**: Desligue "conectar automaticamente a redes abertas".
+
+### Critérios para Escolher uma VPN
+
+| Critério | O Que Procurar |
+|----------|---------------|
+| **Política de zero logs (No-logs)** | O provedor não deve armazenar registros da sua atividade. Procure auditorias independentes. |
+| **Protocolo** | WireGuard ou OpenVPN (evite PPTP, que é quebrado). |
+| **Provedores confiáveis** | Mullvad, ProtonVPN, IVPN — todos auditados independentemente. |
+
+## Backups — A Regra 3-2-1
+
+Perda de dados não é questão de "se", mas de "quando". Entre ransomware, falha de hardware, exclusão acidental e roubo físico, todo arquivo importante está em risco.
+
+### Estratégia de Backup 3-2-1
+
+- **3** cópias dos seus dados (o original + 2 backups)
+- **2** tipos diferentes de mídia (ex.: SSD interno + HD externo)
+- **1** cópia armazenada fora do local (armazenamento em nuvem ou localização fisicamente separada)
+
+<Tip>
+Backups em nuvem protegem contra desastres físicos (incêndio, inundação, roubo), mas não necessariamente contra ransomware. Se o ransomware criptografa seus arquivos locais e essas mudanças sincronizam com a nuvem, seu backup na nuvem também fica criptografado. Use um serviço que ofereça **versionamento** (como Backblaze ou Time Machine) para voltar a um estado pré-infecção.
+</Tip>
+
+## Vetores de Ataque USB
+
+Dispositivos USB são um dos vetores de ataque mais subestimados.
+
+### Tipos de Ataques USB
+
+- **Drives USB maliciosos**: Atacante deixa um pendrive em um estacionamento rotulado "Confidencial — Relatório Financeiro Q4." A curiosidade leva alguém a conectá-lo, e o drive auto-executa malware.
+- **USB Rubber Ducky (Patinho de Borracha USB)**: Dispositivo que parece um pendrive comum mas é na verdade um teclado programável. Quando conectado, digita comandos pré-programados em velocidade sobre-humana — abrindo um terminal, baixando malware e criando um backdoor em menos de 10 segundos.
+- **Juice Jacking (Sequestro de Carga)**: Estações de carregamento USB públicas em aeroportos ou hotéis podem ser modificadas para transferir dados ou instalar malware enquanto seu celular carrega.
+
+### Defesa contra USB
+
+- **Nunca conecte dispositivos USB desconhecidos.** Trate pendrives encontrados como pacotes suspeitos.
+- **Use cabos USB de bloqueio de dados** ao carregar em estações públicas.
+- **Desabilite auto-execução USB** nas configurações do SO.
+
+## Criptografia de Disco Completo (Full-Disk Encryption)
+
+Se seu notebook ou celular for perdido ou roubado, a criptografia de disco completo garante que os dados sejam ilegíveis sem a chave de descriptografia.
+
+| SO | Ferramenta | Como Habilitar |
+|----|-----------|---------------|
+| **Windows** | BitLocker | Configurações → Privacidade e Segurança → Criptografia de Dispositivo |
+| **macOS** | FileVault | Preferências do Sistema → Segurança e Privacidade → FileVault |
+| **Linux** | LUKS | Geralmente configurado durante a instalação do SO |
+| **iOS** | Automático | Habilitado por padrão quando você define um código de acesso |
+| **Android** | Automático | Habilitado por padrão em dispositivos modernos (Android 10+) |
+
+## Segurança Física (Physical Security)
+
+Se um atacante ganha acesso físico ao seu dispositivo, a maioria das defesas digitais se torna irrelevante.
+
+- **Trave sua tela** toda vez que se afastar — mesmo por 30 segundos. Use `Win + L` (Windows) ou `Ctrl + Cmd + Q` (macOS).
+- **Habilite travamento automático**: Configure sua tela para travar automaticamente após 1-2 minutos de inatividade.
+- **Use telas de privacidade**: Filtros anti-espionagem em notebooks previnem shoulder surfing (espionagem por cima do ombro) em espaços públicos.
+- **Habilite Encontrar Meu Dispositivo (Find My Device)**: Ative o rastreamento integrado para poder localizar, travar ou apagar remotamente um dispositivo perdido.
+
+## Principais Conclusões
+
+1. **Atualize tudo**: SO, navegador, apps, firmware do roteador, dispositivos IoT. Habilite atualizações automáticas.
+2. **Evite Wi-Fi público sem VPN**: Use Mullvad, ProtonVPN ou IVPN com protocolo WireGuard.
+3. **Siga a regra 3-2-1 de backup**: 3 cópias, 2 tipos de mídia, 1 fora do local. Teste restaurações regularmente.
+4. **Nunca conecte USB desconhecidos**: Trate drives encontrados como hostis por padrão.
+5. **Criptografe seus discos**: Habilite BitLocker/FileVault e garanta que seu celular tenha código de acesso.
+6. **Trave sua tela**: Toda vez, todo dia, sem exceções.

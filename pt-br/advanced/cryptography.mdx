@@ -1,0 +1,148 @@
+---
+title: "Criptografia"
+description: "Criptografia simétrica e assimétrica, hashing, assinaturas digitais, handshake TLS, troca de chaves e criptografia pós-quântica."
+---
+
+# Criptografia (Cryptography)
+
+Criptografia é a base matemática que torna a segurança digital possível. Cada vez que você visita um site via HTTPS, envia uma mensagem criptografada ou faz login com uma senha, criptografia está trabalhando nos bastidores.
+
+## Criptografia Simétrica (Symmetric Encryption)
+
+Na criptografia simétrica, a **mesma chave** é usada tanto para criptografar quanto para descriptografar os dados.
+
+| Algoritmo | Tamanho da Chave | Status | Uso |
+|-----------|-----------------|--------|-----|
+| **AES-256** | 256 bits | Padrão da indústria | Criptografia de arquivos/disco, VPNs, TLS |
+| **ChaCha20-Poly1305** | 256 bits | Alternativa moderna | Mobile/IoT (mais rápido em software) |
+| **3DES** | 168 bits | Descontinuado | Apenas sistemas legados |
+| **DES** | 56 bits | Quebrado | Nunca use |
+
+### O Problema da Distribuição de Chaves (Key Distribution Problem)
+
+Criptografia simétrica é rápida, mas tem um desafio fundamental: **como compartilhar a chave de forma segura com o destinatário?** Se você envia a chave pelo mesmo canal dos dados, um atacante que intercepta o canal obtém ambos. É por isso que a criptografia assimétrica foi inventada.
+
+## Criptografia Assimétrica — Chave Pública (Public Key Cryptography)
+
+Usa um **par de chaves matematicamente vinculadas** — uma Chave Pública (Public Key, compartilhada abertamente) e uma Chave Privada (Private Key, mantida em segredo).
+
+| Algoritmo | Baseado Em | Tamanho | Status |
+|-----------|-----------|---------|--------|
+| **RSA** | Fatoração de inteiros | 2048-4096 bits | Amplamente usado, sendo descontinuado |
+| **ECDSA/ECDH** | Matemática de Curva Elíptica (Elliptic Curve) | 256-384 bits | Preferido — mesma segurança, chaves menores |
+| **Ed25519** | Curva de Edwards | 256 bits | Moderno, rápido — SSH, Signal, WireGuard |
+
+### A Abordagem Híbrida (The Hybrid Approach)
+
+Na prática, sistemas modernos usam **ambas**: criptografia assimétrica para trocar uma chave de sessão simétrica com segurança, depois criptografia simétrica (AES/ChaCha20) para os dados reais.
+
+## O Handshake TLS 1.3
+
+TLS (Transport Layer Security — Segurança da Camada de Transporte) é o protocolo que alimenta o HTTPS. O handshake (aperto de mão) do TLS 1.3 se completa em uma **única ida e volta (round trip)**:
+
+<Steps>
+  <Step title="Client Hello (Olá do Cliente)">
+    Navegador envia suítes de cifra suportadas, versão TLS, número aleatório e seu compartilhamento de chave Diffie-Hellman.
+  </Step>
+  <Step title="Server Hello (Olá do Servidor)">
+    Servidor seleciona suíte de cifra, envia seu compartilhamento de chave e certificado digital (assinado por uma Autoridade Certificadora — CA).
+  </Step>
+  <Step title="Derivação de Chave (Key Derivation)">
+    Ambos os lados computam independentemente o mesmo segredo compartilhado via Diffie-Hellman — sem transmiti-lo.
+  </Step>
+  <Step title="Comunicação Criptografada">
+    Todos os dados subsequentes são criptografados com chaves simétricas derivadas (AES-256-GCM ou ChaCha20-Poly1305).
+  </Step>
+</Steps>
+
+<Note>
+TLS 1.3 removeu suítes de cifra inseguras (troca de chave RSA, modo CBC, SHA-1) e introduziu resumo 0-RTT para conexões repetidas. Se seu servidor ainda suporta TLS 1.0/1.1, está vulnerável a ataques conhecidos.
+</Note>
+
+## Troca de Chaves Diffie-Hellman (Diffie-Hellman Key Exchange)
+
+Permite que duas partes estabeleçam um segredo compartilhado por um canal inseguro sem transmitir o segredo.
+
+**Analogia simplificada**: Alice e Bob escolhem cada um uma cor privada, concordam em uma cor base pública, cada um mistura sua cor privada com a base e troca os resultados. Cada um mistura a cor recebida com sua cor privada — chegando à mesma cor final. Um espião não consegue reverter as cores privadas a partir das misturas intermediárias.
+
+Na prática, isso usa exponenciação modular (DH clássico) ou multiplicação de pontos em curva elíptica (ECDH).
+
+## Hashing
+
+Uma função **unidirecional** que produz uma saída de tamanho fixo a partir de qualquer entrada.
+
+### Propriedades de Funções Hash Seguras
+
+1. **Determinística**: Mesma entrada → mesmo hash
+2. **Unidirecional (One-way)**: Não é possível reverter o hash para recuperar a entrada
+3. **Efeito avalanche (Avalanche effect)**: Pequena mudança na entrada → hash completamente diferente
+4. **Resistente a colisões (Collision resistant)**: Inviável encontrar duas entradas que produzam o mesmo hash
+
+### Comparação de Algoritmos
+
+| Algoritmo | Saída | Status | Uso |
+|-----------|-------|--------|-----|
+| **MD5** | 128 bits | **Quebrado** | Nunca use para segurança |
+| **SHA-1** | 160 bits | **Quebrado** | Nunca use para segurança |
+| **SHA-256** | 256 bits | Seguro | Integridade de arquivos, blockchain, assinaturas |
+| **bcrypt** | 184 bits | Seguro | Armazenamento de senhas |
+| **Argon2** | Variável | **Melhor para senhas** | Vencedor da Competição de Hashing de Senhas (2015) |
+
+### Hashing de Senhas (Password Hashing)
+
+Senhas devem ser armazenadas com um **algoritmo lento e com sal (salt)**:
+
+- **Sal (Salt)**: Valor aleatório adicionado antes do hashing — garante que senhas idênticas produzam hashes diferentes.
+- **Fator de trabalho (Work factor)**: Deliberadamente lento (~100ms por hash), tornando força bruta impraticável.
+
+```
+password = "hunter2"
+salt = random_bytes(16)
+hash = argon2id(password, salt, time_cost=3, memory_cost=65536)
+stored = salt + hash
+```
+
+<Warning>
+Se um banco de dados armazena senhas como MD5 ou SHA-256 sem sal, o sistema está criticamente vulnerável. Atacantes podem quebrar a maioria das senhas em minutos usando rainbow tables (tabelas arco-íris) ou força bruta por GPU.
+</Warning>
+
+## Assinaturas Digitais (Digital Signatures)
+
+Combinam hashing + criptografia assimétrica para **autenticação** e **integridade**.
+
+<Steps>
+  <Step title="Assinar (Sign)">
+    Remetente calcula o hash do documento (SHA-256), criptografa o hash com sua Chave Privada. O hash criptografado = assinatura digital.
+  </Step>
+  <Step title="Verificar (Verify)">
+    Destinatário descriptografa a assinatura com a Chave Pública do remetente, calcula independentemente o hash do documento. Se ambos os hashes coincidem → autêntico e inalterado.
+  </Step>
+</Steps>
+
+### Cadeias de Certificados (Certificate Chains)
+
+Certificados digitais são assinados por Autoridades Certificadoras (CAs — Certificate Authorities). Seu navegador confia em um site porque pode rastrear uma cadeia de confiança (chain of trust) até uma CA Raiz (Root CA) pré-instalada no SO/navegador.
+
+## Criptografia Pós-Quântica (Post-Quantum Cryptography)
+
+Computadores quânticos eventualmente quebrarão RSA e criptografia de Curva Elíptica usando o algoritmo de Shor. Dados capturados hoje poderão ser descriptografados no futuro ("colha agora, descriptografe depois" — harvest now, decrypt later).
+
+### Padrões Pós-Quânticos do NIST (2024)
+
+| Algoritmo | Tipo | Propósito |
+|-----------|------|----------|
+| **ML-KEM (Kyber)** | Baseado em reticulados (Lattice-based) | Troca de chaves (Key exchange) |
+| **ML-DSA (Dilithium)** | Baseado em reticulados | Assinaturas digitais |
+| **SLH-DSA (SPHINCS+)** | Baseado em hash | Assinaturas (sem estado) |
+
+<Note>
+A ameaça quântica não é iminente (quebrar RSA-2048 requer ~4.000+ qubits estáveis; computadores quânticos atuais têm ~1.000), mas a migração leva anos. Organizações com dados sensíveis devem planejar agora.
+</Note>
+
+## Principais Conclusões
+
+1. **Simétrica = rápida, assimétrica = resolve distribuição de chaves**: Sistemas modernos usam ambas.
+2. **TLS 1.3 é o mínimo**: Desabilite TLS 1.0/1.1.
+3. **Nunca MD5 ou SHA-1 para segurança**: SHA-256 para integridade, Argon2 para senhas.
+4. **Sal + hashing lento para senhas**: Nunca armazene texto puro.
+5. **Observe desenvolvimentos quânticos**: Padrões pós-quânticos existem — planeje a migração.

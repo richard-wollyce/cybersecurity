@@ -1,0 +1,122 @@
+---
+title: "Ameaças e Ataques"
+description: "Como atacantes operam — phishing, malware, ransomware, engenharia social e roubo de credenciais explicados em profundidade."
+---
+
+# Ameaças Digitais Comuns
+
+Entender como atacantes operam é a base de uma defesa eficaz. Cibercriminosos não agem aleatoriamente — eles seguem metodologias estruturadas, exploram comportamentos humanos previsíveis e aproveitam as mesmas vulnerabilidades repetidamente.
+
+Segundo o Relatório de Investigações de Violações de Dados (DBIR) da Verizon de 2023, **74% de todas as violações envolveram o elemento humano** — incluindo ataques de engenharia social (social engineering), erros e uso indevido de credenciais.
+
+## O Ciclo de Vida do Ataque
+
+A maioria dos ciberataques segue uma sequência previsível conhecida como **Cyber Kill Chain** (Cadeia de Eliminação Cibernética), desenvolvida pela Lockheed Martin:
+
+<Steps>
+  <Step title="Reconhecimento (Reconnaissance)">
+    O atacante pesquisa o alvo — coletando endereços de e-mail, nomes de funcionários, tecnologias usadas e estrutura organizacional a partir de fontes públicas (LinkedIn, sites de empresas, GitHub, registros DNS).
+  </Step>
+  <Step title="Armamento (Weaponization)">
+    O atacante cria um payload — um anexo malicioso, uma página de phishing, um link comprometido ou um exploit direcionado a uma vulnerabilidade conhecida.
+  </Step>
+  <Step title="Entrega (Delivery)">
+    O payload é entregue — via e-mail (phishing), site malicioso, drive USB ou atualização de software comprometida.
+  </Step>
+  <Step title="Exploração (Exploitation)">
+    O payload é executado — explorando uma vulnerabilidade no software, navegador ou julgamento humano do alvo.
+  </Step>
+  <Step title="Instalação (Installation)">
+    Malware é instalado no sistema alvo, estabelecendo um ponto de apoio persistente (backdoor — porta dos fundos).
+  </Step>
+  <Step title="Comando e Controle — C2 (Command & Control)">
+    O sistema comprometido se comunica com a infraestrutura do atacante, aguardando instruções.
+  </Step>
+  <Step title="Ações sobre Objetivos (Actions on Objectives)">
+    O atacante alcança seu objetivo — roubar dados, criptografar arquivos para resgate, mover-se lateralmente para outros sistemas ou causar interrupção.
+  </Step>
+</Steps>
+
+## Phishing e Engenharia Social (Social Engineering)
+
+**Phishing** (pescaria digital) é o vetor de ataque inicial mais comum, responsável por **16% de todas as violações** segundo o DBIR da Verizon.
+
+### Anatomia de um E-mail de Phishing
+
+| Elemento | E-mail Legítimo | E-mail de Phishing |
+|----------|----------------|-------------------|
+| Endereço do remetente | `seguranca@banco.com.br` | `seguranca@banc0-suporte.com` |
+| Saudação | Usa seu nome real | "Prezado Cliente" ou "Caro Usuário" |
+| Urgência | Tom informativo | "Sua conta será suspensa em 24 horas!" |
+| Destino do link | `https://www.banco.com.br/config` | `https://banco-verificar.dominio-suspeito.com` |
+| Anexos | Raros, esperados | Inesperados: `.zip`, `.docm` ou `.exe` |
+
+### Tipos de Phishing
+
+- **Phishing em massa**: E-mails enviados para milhares de destinatários. Pouco esforço, baixa taxa de sucesso, mas o alto volume compensa.
+- **Spear phishing (phishing direcionado)**: Direcionado a um indivíduo específico, usando informações pessoais coletadas durante o reconhecimento. Taxa de sucesso muito maior.
+- **Whaling (caça à baleia)**: Spear phishing direcionado especificamente a executivos C-level (CEO, CFO, CTO).
+- **Vishing (voice phishing)**: Ligações telefônicas se passando por suporte de TI, bancos ou agências governamentais.
+- **Smishing (SMS phishing)**: Mensagens de texto com links maliciosos ("Seu pacote está atrasado, rastreie aqui: [link malicioso]").
+
+<Warning>
+Ataques de engenharia social exploram confiança, urgência, medo e vontade de ajudar — todas respostas humanas naturais. A melhor defesa não é apenas tecnologia, mas *consciência*. Se algo parece apressado, incomum ou bom demais para ser verdade — verifique independentemente antes de agir.
+</Warning>
+
+## Malware (Software Malicioso)
+
+**Malware** é qualquer software intencionalmente projetado para causar dano, roubar dados ou fornecer acesso não autorizado.
+
+### Tipos de Malware
+
+| Tipo | Comportamento | Exemplo |
+|------|--------------|---------|
+| **Vírus** | Anexa-se a arquivos legítimos e se espalha quando executado | ILOVEYOU (2000) — causou US$ 10B+ em danos |
+| **Worm (verme)** | Auto-replica através de redes sem interação do usuário | WannaCry (2017) — infectou 230.000+ computadores em 150 países |
+| **Trojan (cavalo de Troia)** | Disfarça-se como software legítimo | Emotet — inicialmente se disfarçava como e-mails de fatura |
+| **Spyware (software espião)** | Monitora silenciosamente a atividade do usuário | Pegasus — usado para vigiar jornalistas e ativistas |
+| **Ransomware (sequestro digital)** | Criptografa arquivos e exige resgate | Colonial Pipeline (2021) — US$ 4,4M de resgate |
+| **Rootkit** | Esconde-se profundamente no SO para manter acesso persistente e indetectável | Sony BMG rootkit (2005) — instalado via CDs de música |
+| **Malware sem arquivo (Fileless)** | Opera inteiramente na memória, não deixando arquivos em disco | Ataques baseados em PowerShell que evadem antivírus |
+
+### Ransomware — Uma Categoria Especial
+
+O ransomware merece atenção especial por ser o tipo mais devastador financeiramente:
+
+1. **Criptografia**: O malware criptografa os arquivos da vítima usando criptografia forte (AES-256 + RSA).
+2. **Nota de resgate**: Uma mensagem exige pagamento (geralmente em criptomoeda) em troca da chave de descriptografia.
+3. **Dupla extorsão**: Grupos modernos também *roubam* os dados antes de criptografá-los, ameaçando publicá-los se o resgate não for pago.
+4. **RaaS (Ransomware-as-a-Service)**: Organizações criminosas vendem kits de ransomware para afiliados, que executam os ataques e dividem os lucros.
+
+## Roubo de Credenciais (Credential Theft)
+
+Credenciais roubadas são a forma mais comum de atacantes obterem acesso inicial (**credenciais roubadas estiveram envolvidas em 49% das violações** — Verizon DBIR 2023).
+
+### Métodos de Roubo de Credenciais
+
+- **Violações de dados (Data breaches)**: Atacantes comprometem o banco de dados de um site e roubam milhões de pares usuário/senha. Se usuários reutilizam senhas, cada conta com aquela senha está em risco.
+- **Credential stuffing (preenchimento de credenciais)**: Ferramentas automatizadas testam credenciais roubadas contra centenas de outros serviços (banco, e-mail, redes sociais).
+- **Password spraying (pulverização de senhas)**: Em vez de tentar muitas senhas contra uma conta, atacantes tentam *uma senha comum* contra muitas contas (ex.: `Verao2024!` contra 10.000 contas de funcionários).
+- **Keyloggers (registradores de teclas)**: Malware que registra cada tecla digitada, capturando senhas enquanto são digitadas.
+- **Man-in-the-Middle — MitM (Homem no Meio)**: Interceptação da comunicação entre um usuário e um serviço (especialmente em Wi-Fi inseguro) para capturar credenciais em trânsito.
+
+<Tip>
+A defesa mais eficaz contra roubo de credenciais é **senhas únicas + autenticação multifator (MFA — Multi-Factor Authentication)**. Se cada conta tem uma senha única e aleatória armazenada em um gerenciador de senhas, uma violação em um site não pode se espalhar para outros. E se o MFA estiver habilitado, uma senha roubada sozinha não é suficiente.
+</Tip>
+
+## Ataques à Cadeia de Suprimentos (Supply Chain Attacks)
+
+Ataques à cadeia de suprimentos visam o software, serviços ou hardware confiáveis dos quais organizações dependem. Em vez de atacar o alvo diretamente, atacantes comprometem um fornecedor — e o payload malicioso é entregue através de canais legítimos de atualização.
+
+**Exemplos notáveis:**
+- **SolarWinds (2020)**: Atacantes injetaram código malicioso na atualização do software Orion, distribuída para 18.000+ organizações, incluindo agências governamentais dos EUA.
+- **Kaseya (2021)**: O grupo de ransomware REvil explorou vulnerabilidades no software VSA da Kaseya, criptografando dados em 1.500+ empresas.
+- **Log4Shell (2021)**: Uma vulnerabilidade crítica na biblioteca de logging Apache Log4j afetou milhões de aplicações Java mundialmente.
+
+## Como Se Proteger — Principais Conclusões
+
+1. **Verifique antes de confiar**: Sempre confirme a identidade do remetente independentemente antes de clicar em links ou compartilhar informações.
+2. **Use senhas únicas + MFA**: Elimine reutilização de senhas e habilite MFA em cada conta que suportar.
+3. **Mantenha o software atualizado**: Patches corrigem as vulnerabilidades que atacantes exploram.
+4. **Desconfie de urgência**: Organizações legítimas raramente exigem ação imediata sob ameaça de consequências.
+5. **Reporte atividades suspeitas**: Em contexto organizacional, reportar um e-mail suspeito pode prevenir uma violação que afeta milhares de pessoas.

@@ -1,0 +1,113 @@
+---
+title: "Segurança de Redes"
+description: "Firewalls, segmentação de rede, IDS/IPS, VPNs, Arquitetura Zero Trust, segurança DNS e operações SOC."
+---
+
+# Segurança de Redes (Network Security)
+
+Segurança de redes é a disciplina de proteger a infraestrutura de comunicação que conecta sistemas, usuários e dados. Abrange desde cabeamento físico e hardware até perímetros definidos por software e modelos de segurança nativos de nuvem.
+
+## Firewalls e Filtragem de Tráfego
+
+Um firewall (barreira de proteção) é um dispositivo de segurança de rede que monitora e controla o tráfego com base em regras de segurança predefinidas.
+
+### Evolução dos Firewalls
+
+| Geração | Tipo | Capacidades |
+|---------|------|-------------|
+| 1ª Gen | **Filtro de Pacotes (Stateless — Sem Estado)** | Inspeciona pacotes individuais isoladamente. Filtra por IP, porta e protocolo. |
+| 2ª Gen | **Inspeção com Estado (Stateful)** | Rastreia conexões ativas e toma decisões baseadas no contexto do fluxo. |
+| 3ª Gen | **Camada de Aplicação (Proxy)** | Inspeciona conteúdo na camada de aplicação. Filtra por URLs e tipos de arquivo. |
+| Atual | **Next-Generation — NGFW (Próxima Geração)** | Combina inspeção com estado + DPI (Deep Packet Inspection — Inspeção Profunda de Pacotes) + IPS + reconhecimento de aplicações + descriptografia TLS + integração de inteligência de ameaças. |
+
+### Regras de Firewall — Boas Práticas
+
+- **Negar por padrão (Default Deny)**: Bloqueie tudo por padrão, depois permita explicitamente apenas o tráfego necessário.
+- **Menor privilégio (Least Privilege)**: Permita apenas as portas e protocolos mínimos necessários.
+- **Logging**: Registre todo tráfego negado e revise os logs periodicamente.
+
+## Segmentação de Rede (Network Segmentation)
+
+Uma rede plana (flat network) — onde cada dispositivo pode comunicar com todos os outros — é extremamente perigosa. Se um atacante compromete uma estação de trabalho, pode se mover lateralmente para servidores e bancos de dados.
+
+### Estratégias de Segmentação
+
+- **VLANs (Virtual LANs — LANs Virtuais)**: Separam logicamente dispositivos em domínios de broadcast. Wi-Fi de visitantes, estações de trabalho, servidores e dispositivos IoT devem estar em VLANs diferentes.
+- **DMZ (Demilitarized Zone — Zona Desmilitarizada)**: Zona de rede separada que hospeda serviços públicos (servidores web, gateways de e-mail) isolados da rede interna.
+- **Microsegmentação (Micro-segmentation)**: Segmentação granular no nível de carga de trabalho (VMs individuais, containers). Comum em ambientes de nuvem e data center.
+
+<Tip>
+Uma forma prática de pensar sobre segmentação: se um dispositivo for comprometido, quais outros sistemas ele pode alcançar? A resposta deveria ser "o mínimo possível."
+</Tip>
+
+## IDS/IPS — Detecção e Prevenção de Intrusão
+
+| Sistema | Comportamento | Posicionamento |
+|---------|--------------|---------------|
+| **IDS** (Intrusion Detection System — Sistema de Detecção de Intrusão) | **Passivo** — monitora tráfego, detecta anomalias, gera alertas. Não bloqueia. | Porta SPAN ou TAP de rede. |
+| **IPS** (Intrusion Prevention System — Sistema de Prevenção de Intrusão) | **Ativo** — senta inline no tráfego e pode automaticamente descartar pacotes ou bloquear conexões. | Inline entre firewall e rede interna. |
+
+### Métodos de Detecção
+
+- **Baseado em assinatura (Signature-based)**: Compara tráfego com banco de dados de assinaturas conhecidas. Eficaz contra ameaças conhecidas, cego para zero-days.
+- **Baseado em anomalia (Anomaly-based)**: Estabelece uma baseline de comportamento "normal" e alerta sobre desvios. Detecta ataques novos, mas gera mais falsos positivos.
+- **Comportamental (Behavioral)**: Analisa padrões de comportamento através de múltiplos eventos. Detecta ataques sofisticados multi-estágio.
+
+## Arquitetura Zero Trust (Confiança Zero)
+
+O modelo tradicional era **baseado em perímetro**: tudo dentro da rede corporativa era confiável. Esse modelo está fundamentalmente quebrado em um mundo de serviços em nuvem, trabalho remoto e BYOD (Bring Your Own Device — Traga Seu Próprio Dispositivo).
+
+**Zero Trust** substitui isso com um princípio simples: **"Nunca confie, sempre verifique" (Never trust, always verify).**
+
+### Princípios do Zero Trust
+
+1. **Verifique explicitamente**: Autentique e autorize cada requisição de acesso com base em todos os dados disponíveis (identidade, dispositivo, localização, sensibilidade dos dados).
+2. **Acesso de menor privilégio (Least privilege access)**: Conceda apenas o acesso mínimo necessário para a tarefa específica.
+3. **Assuma a violação (Assume breach)**: Projete defesas como se a rede já estivesse comprometida. Segmente acesso, criptografe tudo, monitore continuamente.
+
+## Segurança DNS
+
+DNS é frequentemente chamado de "calcanhar de Aquiles da internet." A maioria das organizações monitora tráfego HTTP/HTTPS de perto mas ignora DNS — tornando-o um canal popular para ataques e exfiltração de dados.
+
+### Ameaças Baseadas em DNS
+
+- **DNS Tunneling (Tunelamento DNS)**: Atacantes codificam dados dentro de consultas DNS para exfiltrar dados ou estabelecer canais de C2 (Comando e Controle). Como DNS raramente é bloqueado no firewall, essa técnica frequentemente evade defesas tradicionais.
+- **DGA (Domain Generation Algorithms — Algoritmos de Geração de Domínio)**: Malware gera milhares de nomes de domínio pseudo-aleatórios para comunicação com servidores C2.
+
+### Soluções de Segurança DNS
+
+- **DNSSEC**: Assina digitalmente registros DNS para garantir autenticidade e integridade.
+- **Filtragem DNS (DNS Filtering)**: Bloqueia consultas a domínios maliciosos conhecidos (Cisco Umbrella, Cloudflare Gateway, Quad9).
+
+## SOC — Centro de Operações de Segurança (Security Operations Center)
+
+Um **SOC** é uma equipe centralizada responsável por monitorar, detectar, analisar e responder a incidentes de cibersegurança.
+
+### SIEM (Security Information and Event Management)
+
+A principal ferramenta do SOC é o **SIEM** — uma plataforma que coleta e correlaciona dados de log de toda a infraestrutura para detectar ameaças.
+
+**Como um SIEM funciona:**
+1. **Coleta**: Ingere logs de centenas de fontes.
+2. **Normaliza**: Padroniza formatos de log para análise.
+3. **Correlaciona**: Aplica regras de detecção e machine learning para identificar padrões de ataque.
+4. **Alerta**: Gera alertas priorizados para analistas SOC.
+5. **Investiga**: Analistas fazem triagem, investigam e escalam conforme necessário.
+
+**Plataformas SIEM populares**: Splunk, Microsoft Sentinel, Elastic SIEM, IBM QRadar.
+
+## VPNs (Virtual Private Networks — Redes Privadas Virtuais)
+
+VPNs estendem uma rede privada através de uma rede pública, criptografando o tráfego.
+
+### Alternativa Moderna: ZTNA
+
+**ZTNA (Zero Trust Network Access — Acesso de Rede Zero Trust)** está substituindo VPNs tradicionais. Diferente de VPNs (que concedem amplo acesso à rede uma vez conectado), ZTNA concede acesso a **aplicações específicas** baseado em identidade e contexto — sem expor a rede subjacente.
+
+## Principais Conclusões
+
+1. **Defesa em profundidade (Defense in depth)**: Camadas múltiplas de controles — nenhum controle único é suficiente.
+2. **Segmente sua rede**: Uma rede plana é o paraíso do hacker. Isole sistemas críticos.
+3. **Adote Zero Trust**: "Nunca confie, sempre verifique" é o paradigma moderno de segurança.
+4. **Monitore DNS**: DNS é um ponto cego para a maioria das organizações e canal favorito dos atacantes.
+5. **Invista em visibilidade**: Se você não consegue ver o que acontece na sua rede (SIEM, logging, monitoramento), não consegue defendê-la.

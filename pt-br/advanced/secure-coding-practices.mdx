@@ -1,0 +1,163 @@
+---
+title: "Práticas de Codificação Segura"
+description: "Validação de entrada, codificação de saída, escaneamento de dependências, gerenciamento de segredos, segurança CI/CD e modelagem de ameaças."
+---
+
+# Práticas de Codificação Segura (Secure Coding Practices)
+
+Segurança não pode ser aparafusada em uma aplicação depois de construída. Deve ser **projetada na arquitetura** e **escrita no código** desde a primeira linha. O custo de corrigir uma vulnerabilidade em produção é **6-15x maior** do que corrigi-la durante o desenvolvimento.
+
+## 1. Validação de Entrada (Input Validation)
+
+**Nunca confie em dados do usuário, do cliente ou de qualquer sistema externo.**
+
+| Estratégia | Descrição | Exemplo |
+|-----------|-----------|---------|
+| **Allow-listing (Lista de permissão)** | Defina exatamente o que É permitido | Username: `^[a-zA-Z0-9_]{3,20}$` |
+| **Block-listing (Lista de bloqueio)** | Defina o que NÃO é permitido | Bloquear tags `<script>` |
+| **Verificação de tipo** | Garanta que o input corresponde ao tipo esperado | Idade deve ser inteiro |
+| **Limites de comprimento** | Restrinja o tamanho do input | Comentário máx. 5000 chars |
+
+<Warning>
+**Sempre prefira allow-listing a block-listing.** Listas de bloqueio são inerentemente incompletas — atacantes constantemente inventam novos truques de codificação e técnicas de ofuscação para evadi-las.
+</Warning>
+
+### Validação Server-Side vs. Client-Side
+
+- **Validação client-side** (JavaScript no navegador) melhora UX. **Não** é um controle de segurança. Atacantes a ignoram trivialmente usando DevTools, Burp Suite ou curl.
+- **Validação server-side** é obrigatória. Cada input deve ser validado no servidor.
+
+## 2. Codificação de Saída (Output Encoding)
+
+A defesa primária contra **XSS (Cross-Site Scripting — Script entre Sites)**. Antes de renderizar dados do usuário no navegador, codifique-os para o **contexto de saída** apropriado.
+
+| Contexto | Método | Exemplo |
+|----------|--------|---------|
+| Corpo HTML | Codificação de entidade HTML | `<` → `&lt;` |
+| Atributo HTML | Codificação de atributo | `"` → `&quot;` |
+| JavaScript | Codificação JavaScript | `'` → `\x27` |
+| Parâmetro URL | Codificação percent | `<` → `%3C` |
+
+<Tip>
+Regra de ouro: se você usa `dangerouslySetInnerHTML` (React), `[innerHTML]` (Angular) ou `v-html` (Vue), deve sanitizar o input primeiro usando uma biblioteca como DOMPurify. Essas saídas de emergência desabilitam a proteção XSS do framework.
+</Tip>
+
+## 3. Consultas Parametrizadas (Parameterized Queries)
+
+A **única defesa confiável** contra SQL Injection (Injeção SQL) é separar código SQL dos dados do usuário.
+
+```python
+# ❌ VULNERÁVEL — Concatenação de strings
+query = f"SELECT * FROM users WHERE email = '{email}'"
+
+# ✅ SEGURO — Consulta parametrizada
+cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+```
+
+```javascript
+// ❌ VULNERÁVEL — Template literal
+const query = `SELECT * FROM users WHERE id = ${userId}`;
+
+// ✅ SEGURO — Consulta parametrizada (Node.js + pg)
+const result = await pool.query(
+  'SELECT * FROM users WHERE id = $1',
+  [userId]
+);
+```
+
+O driver do banco trata valores parametrizados estritamente como **dados**, nunca como código SQL executável.
+
+## 4. Menor Privilégio (Least Privilege)
+
+Cada usuário, processo e aplicação deve ter **apenas as permissões mínimas necessárias**.
+
+### Exemplos no Nível de Aplicação
+
+- O usuário do banco de dados da aplicação web deve ter `SELECT`, `INSERT`, `UPDATE` em tabelas específicas — **não** `DROP TABLE` ou `GRANT ALL`.
+- Um microserviço que apenas lê dados deve ter credenciais somente leitura.
+- Um pipeline CI/CD fazendo deploy em staging não deve ter credenciais de produção.
+
+### O Princípio do Raio de Explosão (Blast Radius)
+
+Menor privilégio limita o **raio de explosão** de um comprometimento. Se um atacante compromete um serviço com permissões mínimas, o dano é contido.
+
+## 5. Gerenciamento de Segredos (Secrets Management)
+
+**Nunca hardcode segredos** (chaves de API, senhas de banco, chaves de criptografia, tokens) no código-fonte.
+
+Segundo o relatório da GitGuardian de 2023, mais de **10 milhões de novos segredos** foram detectados em commits públicos do GitHub em um único ano.
+
+### Onde Segredos Devem Ficar
+
+| Ambiente | Solução |
+|----------|---------|
+| **Desenvolvimento local** | Arquivos `.env` (adicionados ao `.gitignore`) |
+| **Pipelines CI/CD** | Secrets do pipeline (GitHub Secrets, GitLab CI Variables) |
+| **Produção** | Gerenciadores dedicados (AWS Secrets Manager, HashiCorp Vault, GCP Secret Manager) |
+
+### Hooks de Pré-commit (Pre-commit Hooks)
+
+Use ferramentas como **gitleaks**, **trufflehog** ou **detect-secrets** como hooks de pré-commit para escanear segredos antes de serem commitados:
+
+```bash
+# Instalar gitleaks como hook de pré-commit
+brew install gitleaks
+gitleaks detect --source . --verbose
+```
+
+## 6. Segurança de Dependências (Dependency Security)
+
+Aplicações modernas dependem de centenas de pacotes open-source. Cada dependência faz parte da sua superfície de ataque.
+
+### Risco na Cadeia de Suprimentos (Supply Chain Risk)
+
+- **Log4Shell (2021)**: Vulnerabilidade crítica no Apache Log4j permitia execução remota de código com uma única mensagem de log. CVSS: **10.0/10.0**.
+- **event-stream (2018)**: Pacote npm popular foi comprometido por um novo mantenedor que injetou código direcionado a carteiras de criptomoeda.
+
+### Ferramentas de Escaneamento
+
+| Ferramenta | Ecossistema | Tipo |
+|-----------|-------------|------|
+| **npm audit** | Node.js | Integrado |
+| **Dependabot** | GitHub (todas as linguagens) | PRs automatizados para dependências vulneráveis |
+| **Snyk** | Multi-linguagem | SCA + scanning de containers |
+| **pip-audit** | Python | Pacotes pip |
+
+## 7. Falhar com Segurança (Fail Securely)
+
+Quando uma aplicação encontra um erro, deve falhar de forma que **não conceda acesso adicional ou vaze informações**.
+
+```python
+# ❌ Vaza detalhes internos
+except Exception as e:
+    return {"error": str(e)}
+    # "Error: connection to postgres://admin:s3cret@db.internal:5432/prod failed"
+
+# ✅ Tratamento seguro de erros
+except Exception as e:
+    logger.error(f"Falha na conexão com banco: {e}")  # Log detalhado server-side
+    return {"error": "Ocorreu um erro interno. Tente novamente mais tarde."}
+```
+
+## 8. Modelagem de Ameaças — STRIDE (Threat Modeling)
+
+O framework **STRIDE** categoriza ameaças:
+
+| Letra | Ameaça (Threat) | Pergunta |
+|-------|-----------------|---------|
+| **S** | Spoofing (Falsificação de Identidade) | Alguém pode fingir ser outro usuário ou serviço? |
+| **T** | Tampering (Adulteração) | Alguém pode modificar dados em trânsito ou armazenados? |
+| **R** | Repudiation (Repúdio) | Alguém pode negar ter realizado uma ação? |
+| **I** | Information Disclosure (Vazamento de Informação) | Dados sensíveis podem vazar para partes não autorizadas? |
+| **D** | Denial of Service (Negação de Serviço) | Alguém pode tornar o sistema indisponível? |
+| **E** | Elevation of Privilege (Escalação de Privilégio) | Alguém pode ganhar permissões além do seu papel? |
+
+## Principais Conclusões
+
+1. **Valide todo input server-side**: Allow-lists sobre block-lists.
+2. **Codifique toda saída**: Codificação contextual previne XSS.
+3. **Parametrize todas as consultas**: A única defesa confiável contra SQLi.
+4. **Nunca hardcode segredos**: Use gerenciadores de segredos e hooks de pré-commit.
+5. **Escaneie dependências continuamente**: Automatize no CI/CD.
+6. **Falhe com segurança**: Erros genéricos para usuários, logs detalhados server-side.
+7. **Modele ameaças cedo**: STRIDE durante o design, não após o deploy.

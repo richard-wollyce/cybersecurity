@@ -1,0 +1,106 @@
+---
+title: "Navegação Segura"
+description: "Navegue na internet com segurança — HTTPS, segurança DNS, extensões de navegador, rastreamento por cookies e defesa contra malvertising."
+---
+
+# Navegação Segura (Safe Browsing)
+
+Seu navegador web é a aplicação mais usada no computador — e, portanto, a mais visada. É a porta de entrada entre você e a internet, e cada site que visita, cada extensão que instala e cada link que clica representa um vetor de ataque potencial.
+
+## Entendendo HTTPS (e Suas Limitações)
+
+Quando você vê o ícone de cadeado (🔒) e `https://` na barra de endereço, significa que a conexão está criptografada usando **TLS (Transport Layer Security — Segurança da Camada de Transporte)**.
+
+HTTPS fornece três garantias:
+1. **Criptografia (Encryption)**: Dados em trânsito são criptografados — seu provedor de internet ou um atacante na mesma rede não podem ler o conteúdo.
+2. **Integridade (Integrity)**: Dados não podem ser adulterados em trânsito sem detecção.
+3. **Autenticação (Authentication)**: A identidade do site é verificada por uma Autoridade Certificadora (CA — Certificate Authority).
+
+<Warning>
+HTTPS NÃO significa que um site é seguro, legítimo ou confiável. Só significa que a *conexão* é criptografada. Um site de phishing pode (e frequentemente faz) usar HTTPS para roubar sua senha com segurança. De fato, **mais de 80% dos sites de phishing agora usam HTTPS**.
+</Warning>
+
+## Segurança DNS (DNS Security)
+
+**DNS (Domain Name System — Sistema de Nomes de Domínio)** é a lista telefônica da internet — traduz domínios legíveis (`google.com`) em endereços IP (`142.250.80.46`).
+
+### Ataques DNS
+
+- **DNS Spoofing/Poisoning (Envenenamento de DNS)**: Atacante injeta registros DNS falsos no cache de um resolver, redirecionando usuários para sites maliciosos mesmo quando digitam a URL correta.
+- **DNS Hijacking (Sequestro de DNS)**: Atacante assume controle do servidor DNS ou das configurações DNS do seu roteador.
+
+### Soluções de DNS Seguro
+
+- **DNS-over-HTTPS (DoH)**: Criptografa consultas DNS dentro de HTTPS, impedindo ISPs de ver ou adulterar suas requisições DNS.
+- **Provedores DNS recomendados**: Cloudflare (`1.1.1.1`), Google Public DNS (`8.8.8.8`), Quad9 (`9.9.9.9` — também bloqueia domínios maliciosos conhecidos).
+
+<Tip>
+Trocar seu provedor DNS do padrão da sua operadora para Cloudflare ou Quad9 é uma das melhorias de segurança mais simples e eficazes que você pode fazer. Leva 2 minutos, é gratuito e fornece privacidade e proteção contra domínios maliciosos.
+</Tip>
+
+## Identificando Links Maliciosos
+
+### Técnicas Comuns de Engano
+
+| Técnica | Exemplo | O Que Procurar |
+|---------|---------|---------------|
+| **Typosquatting** | `paypa1.com` (número 1 no lugar da letra l) | Substituições de caracteres em nomes de domínio |
+| **Abuso de subdomínio** | `login.banco.com.site-mau.com` | O domínio real é `site-mau.com`, não `banco.com` |
+| **Encurtadores de URL** | `bit.ly/3xK9mT` | O destino real é oculto; use ferramentas de expansão |
+| **Ataques homógrafos** | `аpple.com` (Cirílico "а" no lugar do Latim "a") | Caracteres de alfabetos diferentes que parecem idênticos |
+
+### Ferramentas de Verificação
+
+- **VirusTotal** (`virustotal.com`): Escaneie URLs e arquivos contra 70+ motores antivírus.
+- **URLScan.io**: Visualiza o que uma URL realmente faz quando visitada.
+- **Google Safe Browsing**: Verifique se uma URL está sinalizada como perigosa.
+
+## Extensões de Navegador — Poder e Risco
+
+Extensões têm acesso a dados incrivelmente sensíveis — podem ler cada página que você visita, modificar conteúdo, acessar cookies e interceptar dados de formulários (incluindo senhas).
+
+### Regras de Segurança para Extensões
+
+1. **Minimize**: Instale apenas extensões que você usa ativamente. Desinstale o resto.
+2. **Verifique permissões**: Desconfie de extensões que pedem "Ler e alterar todos os seus dados em todos os sites."
+3. **Apenas lojas oficiais**: Instale apenas da Chrome Web Store, Firefox Add-ons ou lojas oficiais equivalentes.
+4. **Revise periodicamente**: Audite suas extensões trimestralmente e remova as que não usa mais.
+
+### Extensões de Segurança Recomendadas
+
+| Extensão | Propósito |
+|----------|----------|
+| **uBlock Origin** | Bloqueador de anúncios e rastreadores (também bloqueia malvertising) |
+| **Privacy Badger** | Bloqueia rastreadores invisíveis (desenvolvido pela EFF) |
+| **Bitwarden** | Integração do gerenciador de senhas |
+
+## Cookies e Rastreamento (Tracking)
+
+### Tipos de Cookies
+
+- **Cookies de primeira parte (First-party)**: Definidos pelo site que você está visitando. Geralmente necessários e benignos (cookies de sessão, tokens de login).
+- **Cookies de terceiros (Third-party)**: Definidos por domínios *outros* que o que você está visitando (redes de anúncios, serviços de analytics). Permitem rastreamento entre sites — seguindo você pela internet para construir perfis de publicidade.
+
+### Impressão Digital do Navegador (Browser Fingerprinting)
+
+Mesmo sem cookies, sites podem identificá-lo através da **impressão digital do navegador** — coletando resolução de tela, fontes instaladas, plugins, fuso horário, configurações de idioma e especificações de hardware para criar uma "impressão digital" única.
+
+## Malvertising (Publicidade Maliciosa)
+
+**Malvertising** é o uso de redes de anúncios legítimas para entregar malware. Atacantes compram espaço publicitário em sites respeitáveis, e o anúncio contém código malicioso que pode infectar seu dispositivo — às vezes sem você sequer clicar (conhecido como **drive-by download — download automático**).
+
+### Por Que Bloqueadores de Anúncios São Ferramentas de Segurança
+
+Usar um bloqueador como **uBlock Origin** não é apenas sobre evitar anúncios irritantes:
+- Bloqueia ataques de malvertising na camada de rede
+- Reduz exposição a scripts de rastreamento
+- Previne drive-by downloads de anúncios maliciosos
+- Melhora significativamente o desempenho de carregamento de páginas
+
+## Principais Conclusões
+
+1. **HTTPS ≠ seguro**: Só significa que a conexão é criptografada. Sites de phishing usam HTTPS também.
+2. **Troque seu DNS**: Use Cloudflare (`1.1.1.1`) ou Quad9 (`9.9.9.9`) para privacidade e segurança.
+3. **Passe o mouse antes de clicar**: Sempre verifique a URL de destino real.
+4. **Minimize extensões**: Cada extensão é um vetor de ataque potencial.
+5. **Use um bloqueador de anúncios**: uBlock Origin bloqueia malvertising, rastreamento e drive-by downloads.

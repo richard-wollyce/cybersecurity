@@ -1,0 +1,141 @@
+---
+title: "O Que Fazer Se For Hackeado"
+description: "Um manual completo de resposta a incidentes — isolar, preservar, rotacionar, notificar e revisar."
+---
+
+# O Que Fazer Se Você For Hackeado
+
+Mesmo com senhas fortes, MFA (Autenticação Multifator) e hábitos de navegação seguros — incidentes acontecem. Atacantes são persistentes e nenhuma defesa é perfeita. A diferença entre um inconveniente menor e uma catástrofe geralmente depende de **quão rápido e efetivamente você responde**.
+
+## O Framework de Resposta a Incidentes
+
+A resposta profissional segue um ciclo de vida estruturado definido pelo NIST (National Institute of Standards and Technology — Instituto Nacional de Padrões e Tecnologia):
+
+<Steps>
+  <Step title="1. Identificação (Identification)">
+    Detecte e confirme que um incidente ocorreu. Sinais: bloqueios inesperados de conta, localizações de login desconhecidas, transações não autorizadas, arquivos criptografados com notas de resgate, ou contatos reportando mensagens suspeitas vindas das suas contas.
+  </Step>
+  <Step title="2. Contenção (Containment)">
+    Estanque o sangramento. Limite o acesso do atacante para prevenir mais danos.
+  </Step>
+  <Step title="3. Erradicação (Eradication)">
+    Remova o ponto de apoio do atacante — malware, backdoors (portas dos fundos), credenciais comprometidas.
+  </Step>
+  <Step title="4. Recuperação (Recovery)">
+    Restaure sistemas e dados para operação normal a partir de backups limpos.
+  </Step>
+  <Step title="5. Lições Aprendidas (Lessons Learned)">
+    Analise o que aconteceu, como aconteceu e o que pode ser melhorado para prevenir recorrência.
+  </Step>
+</Steps>
+
+## Passo 1: Desconecte e Isole
+
+Se você suspeita que seu dispositivo está infectado com malware ou ransomware:
+
+- **Desconecte da rede imediatamente.** Desligue o Wi-Fi, desconecte o cabo Ethernet, ative o Modo Avião.
+- **NÃO desligue o dispositivo** (a menos que esteja criptografando arquivos ativamente na sua frente). Evidências forenses na RAM são perdidas quando o dispositivo é desligado.
+- **Não conecte drives USB externos** — o malware pode se espalhar para mídias removíveis.
+
+<Warning>
+Para ransomware: se você está vendo arquivos sendo criptografados em tempo real, desligue o dispositivo imediatamente para interromper o processo. A troca de perder dados forenses da RAM vale a pena para salvar seus arquivos restantes.
+</Warning>
+
+## Passo 2: Preserve Evidências
+
+Antes de começar a trocar senhas e rodar scans, **documente tudo**:
+
+- **Capture screenshots** de mensagens de erro, notas de resgate e e-mails suspeitos.
+- **Registre timestamps (marcas de tempo)**: Quando você notou o problema pela primeira vez? Quando acessou a conta normalmente pela última vez?
+- **Verifique o histórico de login**: A maioria dos serviços (Google, Microsoft, Facebook, Apple) permite revisar localizações e dispositivos de login recentes.
+- **Salve cabeçalhos de e-mail**: Se o incidente começou com um e-mail de phishing, salve os cabeçalhos completos para análise.
+
+<Note>
+Em ambiente corporativo, a preservação de evidências é legalmente crítica. Se o incidente pode resultar em litígio, investigação regulatória ou envolvimento policial, NÃO modifique nenhum sistema até que sua equipe jurídica e/ou um profissional de forense digital tenha sido consultado.
+</Note>
+
+## Passo 3: Troque Senhas (De um Dispositivo Limpo)
+
+1. Use um **dispositivo diferente e verificadamente limpo** para trocar suas senhas.
+2. Comece pelas **contas de maior prioridade**:
+
+| Prioridade | Tipo de Conta | Por Quê |
+|-----------|--------------|---------|
+| 1 | **E-mail** | Redefinições de senha de tudo chegam aqui |
+| 2 | **Gerenciador de senhas** | Contém todas as outras credenciais |
+| 3 | **Banco / Financeiro** | Impacto financeiro direto |
+| 4 | **Armazenamento em nuvem** | Pode conter documentos sensíveis |
+| 5 | **Redes sociais** | Usadas para impersonação e phishing de contatos |
+
+3. Gere senhas novas e únicas para cada conta usando seu gerenciador de senhas.
+4. **Habilite MFA** em cada conta imediatamente.
+5. **Revogue sessões ativas**: A maioria dos serviços permite "Sair de todos os dispositivos."
+
+## Passo 4: Monitore Contas Financeiras
+
+Se informações financeiras ou documentos de identidade foram potencialmente expostos:
+
+- **Verifique extratos bancários** para transações não autorizadas nos últimos 30 dias.
+- **Contate seu banco imediatamente** para cancelar cartões comprometidos.
+- **Configure alertas de transação**: Habilite notificações em tempo real para todas as transações.
+- **Coloque um alerta de fraude**: No Brasil, contate o **Serasa** e **SPC/SCPC** para colocar um alerta de fraude no seu cadastro.
+- **Considere um bloqueio de crédito**: Previne qualquer pessoa de abrir novas contas de crédito em seu nome.
+
+## Passo 5: Avise Seus Contatos
+
+Atacantes frequentemente usam e-mail e redes sociais comprometidos para enviar links de phishing para contatos da vítima.
+
+**Modelo de comunicação:**
+
+> "Minha conta de [e-mail/rede social] foi comprometida recentemente. Se você recebeu mensagens, links ou solicitações incomuns vindas de mim nos últimos [X dias], por favor não clique neles. Estou trabalhando para proteger minha conta. Desculpe pelo inconveniente."
+
+## Passo 6: Escaneie e Reconstrua
+
+### Para Infecções de Malware/Vírus
+
+1. **Rode um scan completo** usando antivírus confiável (Malwarebytes, Windows Defender, Bitdefender).
+2. **Inicie em Modo Seguro (Safe Mode)** para o scan — previne que a maioria dos malwares rode e se esconda.
+3. **Escaneie com múltiplas ferramentas**: Nenhum antivírus pega tudo. Use um AV primário + um scanner de segunda opinião.
+
+### Para Comprometimentos Graves (Ransomware, Rootkits)
+
+A **única opção verdadeiramente segura** é formatar e reconstruir:
+
+1. **Faça reset de fábrica** (ou reinstale o SO a partir de mídia oficial).
+2. **Restaure dados de um backup limpo** — um que seja anterior à infecção.
+3. **Não restaure arquivos executáveis** do backup — apenas documentos, fotos e dados.
+4. **Reinstale aplicações** a partir de fontes oficiais.
+
+<Warning>
+Se você foi atingido por ransomware, **NÃO pague o resgate**. Segundo o FBI, pagar não garante que você terá seus arquivos de volta, e financia organizações criminosas. Verifique **nomoreransom.org** — um projeto da Europol e empresas de segurança que fornece ferramentas de descriptografia gratuitas para muitas famílias de ransomware.
+</Warning>
+
+## Passo 7: Revisão Pós-Incidente
+
+### Perguntas a Responder
+
+1. **Como o atacante entrou?** (E-mail de phishing? Senha reutilizada? Vulnerabilidade sem patch?)
+2. **Qual foi o raio de explosão (blast radius)?** (Quais contas, dispositivos ou dados foram afetados?)
+3. **Quanto tempo o atacante esteve presente?**
+4. **O que funcionou bem na resposta?**
+5. **O que falhou ou foi lento demais?**
+
+## Considerações Legais e Regulatórias
+
+Dependendo da natureza e escopo do incidente, você pode ter obrigações legais:
+
+- **LGPD (Lei Geral de Proteção de Dados — Brasil)**: Organizações devem reportar violações de dados envolvendo dados pessoais à **ANPD (Autoridade Nacional de Proteção de Dados)** e aos indivíduos afetados em prazo "razoável".
+- **GDPR (General Data Protection Regulation — Europa)**: Organizações devem reportar violações à autoridade supervisora em **72 horas**.
+
+Para indivíduos, considere registrar um relatório com:
+- **Brasil**: **CERT.br** (cert.br) — o CSIRT nacional brasileiro. Também registre B.O. (Boletim de Ocorrência) na delegacia especializada em crimes cibernéticos.
+- **Procon**: Para fraudes envolvendo relações de consumo.
+
+## Principais Conclusões
+
+1. **Velocidade importa**: Quanto mais rápido você detecta e responde, menos dano o atacante pode causar.
+2. **Preserve evidências antes de consertar**: Screenshots, timestamps e histórico de login são críticos.
+3. **Troque senhas de um dispositivo limpo**: Nunca use o dispositivo comprometido para rotação de credenciais.
+4. **Avise seus contatos**: Previna o ataque de se espalhar pela sua rede de confiança.
+5. **Formate em caso de dúvida**: Para infecções graves, reset de fábrica é mais seguro.
+6. **Revise e melhore**: Todo incidente é uma oportunidade de aprendizado.

