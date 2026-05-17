@@ -1,0 +1,58 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "Cybersecurity",
+  "favicon": "/favicon.svg",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "colors": {
+    "primary": "#1E40AF",
+    "light": "#3B82F6",
+    "dark": "#1E3A8A"
+  },
+  "modeToggle": {
+    "default": "dark"
+  },
+  "navigation": {
+    "global": {
+      "anchors": [
+        {
+          "anchor": "GitHub",
+          "icon": "github",
+          "href": "https://github.com/richard-wollyce/cybersecurity"
+        }
+      ]
+    },
+    "languages": [
+      {
+        "language": "en",
+        "default": true,
+        "groups": [
+          {
+            "group": "Essentials",
+            "pages": [
+              "essentials/welcome",
+              "essentials/cybersecurity-intro",
+              "essentials/threats-and-attacks",
+              "essentials/password-security",
+              "essentials/safe-browsing",
+              "essentials/device-hygiene",
+              "essentials/what-to-do-if-hacked"
+            ]
+          },
+          {
+            "group": "Advanced Topics",
+            "pages": [
+              "advanced/network-security",
+              "advanced/cryptography",
+              "advanced/web-vulnerabilities",
+              "advanced/secure-coding-practices",
+              "advanced/penetration-testing"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
