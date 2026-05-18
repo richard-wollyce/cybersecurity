@@ -31,7 +31,6 @@
             "group": "Essentials",
             "pages": [
               "essentials/welcome",
-              "essentials/cybersecurity-intro",
               "essentials/threats-and-attacks",
               "essentials/password-security",
               "essentials/safe-browsing",
@@ -58,7 +57,6 @@
             "group": "Fundamentos",
             "pages": [
               "pt-br/essentials/welcome",
-              "pt-br/essentials/cybersecurity-intro",
               "pt-br/essentials/threats-and-attacks",
               "pt-br/essentials/password-security",
               "pt-br/essentials/safe-browsing",
