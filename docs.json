@@ -35,8 +35,7 @@
               "essentials/password-security",
               "essentials/safe-browsing",
               "essentials/device-hygiene",
-              "essentials/what-to-do-if-hacked",
-              "essentials/cypherpunks"
+              "essentials/what-to-do-if-hacked"
             ]
           },
           {
@@ -46,7 +45,8 @@
               "advanced/cryptography",
               "advanced/web-vulnerabilities",
               "advanced/secure-coding-practices",
-              "advanced/penetration-testing"
+              "advanced/penetration-testing",
+              "advanced/cypherpunks"
             ]
           }
         ]
@@ -62,8 +62,7 @@
               "pt-br/essentials/password-security",
               "pt-br/essentials/safe-browsing",
               "pt-br/essentials/device-hygiene",
-              "pt-br/essentials/what-to-do-if-hacked",
-              "pt-br/essentials/cypherpunks"
+              "pt-br/essentials/what-to-do-if-hacked"
             ]
           },
           {
@@ -73,7 +72,8 @@
               "pt-br/advanced/cryptography",
               "pt-br/advanced/web-vulnerabilities",
               "pt-br/advanced/secure-coding-practices",
-              "pt-br/advanced/penetration-testing"
+              "pt-br/advanced/penetration-testing",
+              "pt-br/advanced/cypherpunks"
             ]
           }
         ]
