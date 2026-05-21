@@ -1,15 +1,15 @@
 ---
 title: "O Que Fazer Se For Hackeado"
-description: "Um manual completo de resposta a incidentes — isolar, preservar, rotacionar, notificar e revisar."
+description: "Um manual completo de resposta a incidentes, isolar, preservar, rotacionar, notificar e revisar."
 ---
 
 # O Que Fazer Se Você For Hackeado
 
-Mesmo com senhas fortes, MFA (Autenticação Multifator) e hábitos de navegação seguros — incidentes acontecem. Atacantes são persistentes e nenhuma defesa é perfeita. A diferença entre um inconveniente menor e uma catástrofe geralmente depende de **quão rápido e efetivamente você responde**.
+Mesmo com senhas fortes, MFA (Autenticação Multifator) e hábitos de navegação seguros, incidentes acontecem. Atacantes são persistentes e nenhuma defesa é perfeita. A diferença entre um inconveniente menor e uma catástrofe geralmente depende de **quão rápido e efetivamente você responde**.
 
 ## O Framework de Resposta a Incidentes
 
-A resposta profissional segue um ciclo de vida estruturado definido pelo NIST (National Institute of Standards and Technology — Instituto Nacional de Padrões e Tecnologia):
+A resposta profissional segue um ciclo de vida estruturado definido pelo NIST (National Institute of Standards and Technology, ou Instituto Nacional de Padrões e Tecnologia):
 
 <Steps>
   <Step title="1. Identificação (Identification)">
@@ -19,7 +19,7 @@ A resposta profissional segue um ciclo de vida estruturado definido pelo NIST (N
     Estanque o sangramento. Limite o acesso do atacante para prevenir mais danos.
   </Step>
   <Step title="3. Erradicação (Eradication)">
-    Remova o ponto de apoio do atacante — malware, backdoors (portas dos fundos), credenciais comprometidas.
+    Remova o ponto de apoio do atacante, malware, backdoors (portas dos fundos), credenciais comprometidas.
   </Step>
   <Step title="4. Recuperação (Recovery)">
     Restaure sistemas e dados para operação normal a partir de backups limpos.
@@ -35,7 +35,7 @@ Se você suspeita que seu dispositivo está infectado com malware ou ransomware:
 
 - **Desconecte da rede imediatamente.** Desligue o Wi-Fi, desconecte o cabo Ethernet, ative o Modo Avião.
 - **NÃO desligue o dispositivo** (a menos que esteja criptografando arquivos ativamente na sua frente). Evidências forenses na RAM são perdidas quando o dispositivo é desligado.
-- **Não conecte drives USB externos** — o malware pode se espalhar para mídias removíveis.
+- **Não conecte drives USB externos**: o malware pode se espalhar para mídias removíveis.
 
 <Warning>
 Para ransomware: se você está vendo arquivos sendo criptografados em tempo real, desligue o dispositivo imediatamente para interromper o processo. A troca de perder dados forenses da RAM vale a pena para salvar seus arquivos restantes.
@@ -94,7 +94,7 @@ Atacantes frequentemente usam e-mail e redes sociais comprometidos para enviar l
 ### Para Infecções de Malware/Vírus
 
 1. **Rode um scan completo** usando antivírus confiável (Malwarebytes, Windows Defender, Bitdefender).
-2. **Inicie em Modo Seguro (Safe Mode)** para o scan — previne que a maioria dos malwares rode e se esconda.
+2. **Inicie em Modo Seguro (Safe Mode)** para o scan, previne que a maioria dos malwares rode e se esconda.
 3. **Escaneie com múltiplas ferramentas**: Nenhum antivírus pega tudo. Use um AV primário + um scanner de segunda opinião.
 
 ### Para Comprometimentos Graves (Ransomware, Rootkits)
@@ -102,12 +102,12 @@ Atacantes frequentemente usam e-mail e redes sociais comprometidos para enviar l
 A **única opção verdadeiramente segura** é formatar e reconstruir:
 
 1. **Faça reset de fábrica** (ou reinstale o SO a partir de mídia oficial).
-2. **Restaure dados de um backup limpo** — um que seja anterior à infecção.
-3. **Não restaure arquivos executáveis** do backup — apenas documentos, fotos e dados.
+2. **Restaure dados de um backup limpo**: um que seja anterior à infecção.
+3. **Não restaure arquivos executáveis** do backup, apenas documentos, fotos e dados.
 4. **Reinstale aplicações** a partir de fontes oficiais.
 
 <Warning>
-Se você foi atingido por ransomware, **NÃO pague o resgate**. Segundo o FBI, pagar não garante que você terá seus arquivos de volta, e financia organizações criminosas. Verifique **nomoreransom.org** — um projeto da Europol e empresas de segurança que fornece ferramentas de descriptografia gratuitas para muitas famílias de ransomware.
+Se você foi atingido por ransomware, **NÃO pague o resgate**. Segundo o FBI, pagar não garante que você terá seus arquivos de volta, e financia organizações criminosas. Verifique **nomoreransom.org**: um projeto da Europol e empresas de segurança que fornece ferramentas de descriptografia gratuitas para muitas famílias de ransomware.
 </Warning>
 
 ## Passo 7: Revisão Pós-Incidente
@@ -124,11 +124,11 @@ Se você foi atingido por ransomware, **NÃO pague o resgate**. Segundo o FBI, p
 
 Dependendo da natureza e escopo do incidente, você pode ter obrigações legais:
 
-- **LGPD (Lei Geral de Proteção de Dados — Brasil)**: Organizações devem reportar violações de dados envolvendo dados pessoais à **ANPD (Autoridade Nacional de Proteção de Dados)** e aos indivíduos afetados em prazo "razoável".
-- **GDPR (General Data Protection Regulation — Europa)**: Organizações devem reportar violações à autoridade supervisora em **72 horas**.
+- **LGPD (Lei Geral de Proteção de Dados, ou Brasil)**: Organizações devem reportar violações de dados envolvendo dados pessoais à **ANPD (Autoridade Nacional de Proteção de Dados)** e aos indivíduos afetados em prazo "razoável".
+- **GDPR (General Data Protection Regulation, ou Europa)**: Organizações devem reportar violações à autoridade supervisora em **72 horas**.
 
 Para indivíduos, considere registrar um relatório com:
-- **Brasil**: **CERT.br** (cert.br) — o CSIRT nacional brasileiro. Também registre B.O. (Boletim de Ocorrência) na delegacia especializada em crimes cibernéticos.
+- **Brasil**: **CERT.br** (cert.br), o CSIRT nacional brasileiro. Também registre B.O. (Boletim de Ocorrência) na delegacia especializada em crimes cibernéticos.
 - **Procon**: Para fraudes envolvendo relações de consumo.
 
 ## Principais Conclusões

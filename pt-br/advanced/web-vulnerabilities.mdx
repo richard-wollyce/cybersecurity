@@ -1,13 +1,13 @@
 ---
 title: "Vulnerabilidades Web"
-description: "O OWASP Top 10, ataques de injeção, XSS, CSRF, SSRF, autenticação quebrada e configurações inseguras — com exemplos reais."
+description: "O OWASP Top 10, ataques de injeção, XSS, CSRF, SSRF, autenticação quebrada e configurações inseguras, com exemplos reais."
 ---
 
 # Vulnerabilidades Web (Web Vulnerabilities)
 
 Aplicações web modernas são sistemas complexos construídos sobre camadas de frameworks, bibliotecas, APIs, bancos de dados e serviços de terceiros. Cada camada introduz vulnerabilidades potenciais que atacantes ativamente caçam.
 
-O **OWASP (Open Worldwide Application Security Project — Projeto Aberto de Segurança de Aplicações Web)** mantém a lista padrão da indústria dos riscos mais críticos.
+O **OWASP (Open Worldwide Application Security Project, ou Projeto Aberto de Segurança de Aplicações Web)** mantém a lista padrão da indústria dos riscos mais críticos.
 
 ## A01: Controle de Acesso Quebrado (Broken Access Control)
 
@@ -15,7 +15,7 @@ O risco #1 no OWASP Top 10 (2021). Ocorre quando usuários podem agir fora de su
 
 ### Falhas Comuns
 
-- **IDOR (Insecure Direct Object Reference — Referência Direta Insegura a Objeto)**: Mudar um parâmetro na URL para acessar dados de outro usuário.
+- **IDOR (Insecure Direct Object Reference, ou Referência Direta Insegura a Objeto)**: Mudar um parâmetro na URL para acessar dados de outro usuário.
 
 ```
 # Usuário 1001 visualiza sua própria fatura:
@@ -36,7 +36,7 @@ Nunca confie em controles do lado do cliente (esconder botões, desabilitar camp
 
 Falhas de injeção ocorrem quando dados não confiáveis são enviados a um interpretador como parte de um comando ou consulta.
 
-### SQL Injection — Injeção SQL (SQLi)
+### SQL Injection: Injeção SQL (SQLi)
 
 O ataque de injeção mais conhecido. Um atacante manipula uma consulta SQL injetando código através da entrada do usuário.
 
@@ -59,7 +59,7 @@ SELECT * FROM users WHERE username = 'admin' --' AND password = 'qualquercoisa'
 
 O `--` comenta a verificação de senha, concedendo acesso à conta admin sem saber a senha.
 
-**Código seguro (consulta parametrizada — parameterized query):**
+**Código seguro (consulta parametrizada, ou parameterized query):**
 ```python
 # SEMPRE use consultas parametrizadas
 cursor.execute(
@@ -81,9 +81,9 @@ A vulnerabilidade mais comum em implantações do mundo real. Ocorre quando conf
 - Headers de segurança ausentes (`Content-Security-Policy`, `X-Frame-Options`, `Strict-Transport-Security`)
 - Buckets de armazenamento em nuvem (S3, GCS) deixados publicamente acessíveis
 
-**Exemplo real**: Em 2017, um bucket AWS S3 mal configurado pertencente a um contratante militar dos EUA expôs dados de inteligência **Top Secret** — incluindo senhas, credenciais de segurança e chaves privadas de um sistema do Pentágono.
+**Exemplo real**: Em 2017, um bucket AWS S3 mal configurado pertencente a um contratante militar dos EUA expôs dados de inteligência **Top Secret**: incluindo senhas, credenciais de segurança e chaves privadas de um sistema do Pentágono.
 
-## A07: Cross-Site Scripting — XSS (Script entre Sites)
+## A07: Cross-Site Scripting: XSS (Script entre Sites)
 
 XSS ocorre quando uma aplicação inclui dados não confiáveis em uma página web sem validação ou codificação adequada.
 
@@ -105,10 +105,10 @@ XSS ocorre quando uma aplicação inclui dados não confiáveis em uma página w
 ### Defesa
 
 - **Codificação de saída (Output encoding)**: Codifique todos os dados do usuário antes de renderizar em HTML, JavaScript, CSS ou URLs.
-- **CSP (Content Security Policy — Política de Segurança de Conteúdo)**: Header que restringe quais scripts podem executar na página.
+- **CSP (Content Security Policy, ou Política de Segurança de Conteúdo)**: Header que restringe quais scripts podem executar na página.
 - **Proteções de frameworks**: React, Angular e Vue codificam saída automaticamente. Nunca ignore essas proteções (ex.: `dangerouslySetInnerHTML` no React) sem sanitização.
 
-## A08: CSRF (Cross-Site Request Forgery — Falsificação de Requisição entre Sites)
+## A08: CSRF (Cross-Site Request Forgery: Falsificação de Requisição entre Sites)
 
 CSRF engana o navegador da vítima para fazer uma requisição indesejada em um site onde ela está autenticada.
 
@@ -124,9 +124,9 @@ CSRF engana o navegador da vítima para fazer uma requisição indesejada em um 
 - **Cookies SameSite**: Defina o atributo `SameSite` em cookies de sessão para `Strict` ou `Lax`.
 - **Re-autenticação**: Para ações sensíveis, exija que o usuário reinsira sua senha.
 
-## A10: SSRF (Server-Side Request Forgery — Falsificação de Requisição do Lado do Servidor)
+## A10: SSRF (Server-Side Request Forgery: Falsificação de Requisição do Lado do Servidor)
 
-SSRF ocorre quando um atacante pode fazer o servidor enviar requisições HTTP para destinos arbitrários — incluindo serviços internos não acessíveis pela internet.
+SSRF ocorre quando um atacante pode fazer o servidor enviar requisições HTTP para destinos arbitrários, incluindo serviços internos não acessíveis pela internet.
 
 ```
 # Requisição normal - buscar URL para preview

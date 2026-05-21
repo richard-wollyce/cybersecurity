@@ -5,7 +5,7 @@ description: "Gerenciamento de patches, riscos de Wi-Fi público, VPNs, backups,
 
 # Higiene de Dispositivos (Device Hygiene)
 
-Cibersegurança não é apenas sobre o que você faz online — se estende a como você mantém, configura e protege fisicamente cada dispositivo que possui. Um único notebook sem patch, um celular sem criptografia ou um momento de descuido em Wi-Fi público pode anular todas as outras medidas de segurança.
+Cibersegurança não é apenas sobre o que você faz online, se estende a como você mantém, configura e protege fisicamente cada dispositivo que possui. Um único notebook sem patch, um celular sem criptografia ou um momento de descuido em Wi-Fi público pode anular todas as outras medidas de segurança.
 
 ## Atualizações de Software e Gerenciamento de Patches
 
@@ -27,7 +27,7 @@ Quando um fabricante descobre e corrige uma vulnerabilidade, atacantes imediatam
     Quando uma atualização exige reiniciar, faça imediatamente. "Lembre-me amanhã" é um risco de segurança.
   </Step>
   <Step title="Atualize Tudo">
-    Não é apenas o SO — atualize navegador, extensões, software de escritório, leitores de PDF, firmware (roteador, dispositivos IoT) e apps móveis.
+    Não é apenas o SO, atualize navegador, extensões, software de escritório, leitores de PDF, firmware (roteador, dispositivos IoT) e apps móveis.
   </Step>
 </Steps>
 
@@ -44,13 +44,13 @@ Redes Wi-Fi públicas (cafeterias, aeroportos, hotéis, coworkings) são inerent
 | Ataque | Como Funciona | Impacto |
 |--------|--------------|---------|
 | **Evil Twin (Gêmeo Maligno)** | Atacante cria uma rede Wi-Fi com o mesmo nome da legítima | Todo seu tráfego é roteado pelo atacante |
-| **Man-in-the-Middle — MitM (Homem no Meio)** | Atacante se posiciona entre você e o ponto de acesso, interceptando tráfego | Credenciais e dados podem ser capturados |
+| **Man-in-the-Middle, MitM (Homem no Meio)** | Atacante se posiciona entre você e o ponto de acesso, interceptando tráfego | Credenciais e dados podem ser capturados |
 | **Sniffing de Pacotes (Packet Sniffing)** | Atacante captura passivamente todo o tráfego não criptografado | Dados enviados por HTTP ficam visíveis |
 | **Sequestro de Sessão (Session Hijacking)** | Atacante captura seu cookie de sessão e o usa para se passar por você | Atacante ganha acesso à sua sessão autenticada |
 
 ### Como se Proteger em Wi-Fi Público
 
-1. **Use uma VPN (Virtual Private Network — Rede Privada Virtual)**: Cria um túnel criptografado entre seu dispositivo e o servidor VPN.
+1. **Use uma VPN (Virtual Private Network, ou Rede Privada Virtual)**: Cria um túnel criptografado entre seu dispositivo e o servidor VPN.
 2. **Verifique o nome da rede**: Pergunte aos funcionários o nome exato da rede.
 3. **Evite atividades sensíveis**: Não acesse banco ou e-mail em Wi-Fi público sem VPN.
 4. **Desabilite conexão automática**: Desligue "conectar automaticamente a redes abertas".
@@ -61,9 +61,9 @@ Redes Wi-Fi públicas (cafeterias, aeroportos, hotéis, coworkings) são inerent
 |----------|---------------|
 | **Política de zero logs (No-logs)** | O provedor não deve armazenar registros da sua atividade. Procure auditorias independentes. |
 | **Protocolo** | WireGuard ou OpenVPN (evite PPTP, que é quebrado). |
-| **Provedores confiáveis** | Mullvad, ProtonVPN, IVPN — todos auditados independentemente. |
+| **Provedores confiáveis** | Mullvad, ProtonVPN, IVPN, todos auditados independentemente. |
 
-## Backups — A Regra 3-2-1
+## Backups: A Regra 3-2-1
 
 Perda de dados não é questão de "se", mas de "quando". Entre ransomware, falha de hardware, exclusão acidental e roubo físico, todo arquivo importante está em risco.
 
@@ -83,8 +83,8 @@ Dispositivos USB são um dos vetores de ataque mais subestimados.
 
 ### Tipos de Ataques USB
 
-- **Drives USB maliciosos**: Atacante deixa um pendrive em um estacionamento rotulado "Confidencial — Relatório Financeiro Q4." A curiosidade leva alguém a conectá-lo, e o drive auto-executa malware.
-- **USB Rubber Ducky (Patinho de Borracha USB)**: Dispositivo que parece um pendrive comum mas é na verdade um teclado programável. Quando conectado, digita comandos pré-programados em velocidade sobre-humana — abrindo um terminal, baixando malware e criando um backdoor em menos de 10 segundos.
+- **Drives USB maliciosos**: Atacante deixa um pendrive em um estacionamento rotulado "Confidencial, Relatório Financeiro Q4." A curiosidade leva alguém a conectá-lo, e o drive auto-executa malware.
+- **USB Rubber Ducky (Patinho de Borracha USB)**: Dispositivo que parece um pendrive comum mas é na verdade um teclado programável. Quando conectado, digita comandos pré-programados em velocidade sobre-humana, abrindo um terminal, baixando malware e criando um backdoor em menos de 10 segundos.
 - **Juice Jacking (Sequestro de Carga)**: Estações de carregamento USB públicas em aeroportos ou hotéis podem ser modificadas para transferir dados ou instalar malware enquanto seu celular carrega.
 
 ### Defesa contra USB
@@ -109,7 +109,7 @@ Se seu notebook ou celular for perdido ou roubado, a criptografia de disco compl
 
 Se um atacante ganha acesso físico ao seu dispositivo, a maioria das defesas digitais se torna irrelevante.
 
-- **Trave sua tela** toda vez que se afastar — mesmo por 30 segundos. Use `Win + L` (Windows) ou `Ctrl + Cmd + Q` (macOS).
+- **Trave sua tela** toda vez que se afastar, mesmo por 30 segundos. Use `Win + L` (Windows) ou `Ctrl + Cmd + Q` (macOS).
 - **Habilite travamento automático**: Configure sua tela para travar automaticamente após 1-2 minutos de inatividade.
 - **Use telas de privacidade**: Filtros anti-espionagem em notebooks previnem shoulder surfing (espionagem por cima do ombro) em espaços públicos.
 - **Habilite Encontrar Meu Dispositivo (Find My Device)**: Ative o rastreamento integrado para poder localizar, travar ou apagar remotamente um dispositivo perdido.

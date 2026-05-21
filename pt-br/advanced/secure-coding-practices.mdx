@@ -19,7 +19,7 @@ Segurança não pode ser aparafusada em uma aplicação depois de construída. D
 | **Limites de comprimento** | Restrinja o tamanho do input | Comentário máx. 5000 chars |
 
 <Warning>
-**Sempre prefira allow-listing a block-listing.** Listas de bloqueio são inerentemente incompletas — atacantes constantemente inventam novos truques de codificação e técnicas de ofuscação para evadi-las.
+**Sempre prefira allow-listing a block-listing.** Listas de bloqueio são inerentemente incompletas, atacantes constantemente inventam novos truques de codificação e técnicas de ofuscação para evadi-las.
 </Warning>
 
 ### Validação Server-Side vs. Client-Side
@@ -29,7 +29,7 @@ Segurança não pode ser aparafusada em uma aplicação depois de construída. D
 
 ## 2. Codificação de Saída (Output Encoding)
 
-A defesa primária contra **XSS (Cross-Site Scripting — Script entre Sites)**. Antes de renderizar dados do usuário no navegador, codifique-os para o **contexto de saída** apropriado.
+A defesa primária contra **XSS (Cross-Site Scripting, ou Script entre Sites)**. Antes de renderizar dados do usuário no navegador, codifique-os para o **contexto de saída** apropriado.
 
 | Contexto | Método | Exemplo |
 |----------|--------|---------|
@@ -47,18 +47,18 @@ Regra de ouro: se você usa `dangerouslySetInnerHTML` (React), `[innerHTML]` (An
 A **única defesa confiável** contra SQL Injection (Injeção SQL) é separar código SQL dos dados do usuário.
 
 ```python
-# ❌ VULNERÁVEL — Concatenação de strings
+# ❌ VULNERÁVEL: Concatenação de strings
 query = f"SELECT * FROM users WHERE email = '{email}'"
 
-# ✅ SEGURO — Consulta parametrizada
+# ✅ SEGURO: Consulta parametrizada
 cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
 ```
 
 ```javascript
-// ❌ VULNERÁVEL — Template literal
+// ❌ VULNERÁVEL: Template literal
 const query = `SELECT * FROM users WHERE id = ${userId}`;
 
-// ✅ SEGURO — Consulta parametrizada (Node.js + pg)
+// ✅ SEGURO: Consulta parametrizada (Node.js + pg)
 const result = await pool.query(
   'SELECT * FROM users WHERE id = $1',
   [userId]
@@ -73,7 +73,7 @@ Cada usuário, processo e aplicação deve ter **apenas as permissões mínimas 
 
 ### Exemplos no Nível de Aplicação
 
-- O usuário do banco de dados da aplicação web deve ter `SELECT`, `INSERT`, `UPDATE` em tabelas específicas — **não** `DROP TABLE` ou `GRANT ALL`.
+- O usuário do banco de dados da aplicação web deve ter `SELECT`, `INSERT`, `UPDATE` em tabelas específicas: **não** `DROP TABLE` ou `GRANT ALL`.
 - Um microserviço que apenas lê dados deve ter credenciais somente leitura.
 - Um pipeline CI/CD fazendo deploy em staging não deve ter credenciais de produção.
 
@@ -139,7 +139,7 @@ except Exception as e:
     return {"error": "Ocorreu um erro interno. Tente novamente mais tarde."}
 ```
 
-## 8. Modelagem de Ameaças — STRIDE (Threat Modeling)
+## 8. Modelagem de Ameaças: STRIDE (Threat Modeling)
 
 O framework **STRIDE** categoriza ameaças:
 

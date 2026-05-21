@@ -5,7 +5,7 @@ description: "Ethical hacking methodology, OSINT, scanning, exploitation, privil
 
 # Penetration Testing
 
-Penetration Testing (pentesting) is the **authorized, simulated cyberattack** on a computer system, performed to evaluate the security of the system. Unlike malicious hacking, pentesting is legal, contracted, and documented — with the explicit goal of finding and fixing vulnerabilities before real attackers do.
+Penetration Testing (pentesting) is the **authorized, simulated cyberattack** on a computer system, performed to evaluate the security of the system. Unlike malicious hacking, pentesting is legal, contracted, and documented, with the explicit goal of finding and fixing vulnerabilities before real attackers do.
 
 Pentesting is both a methodology and a mindset. It requires understanding how systems work, how they fail, and how attackers exploit those failures.
 
@@ -71,7 +71,7 @@ Professional pentesting follows a structured, repeatable approach:
 | Certificate Transparency | `crt.sh` | All TLS certificates issued for a domain (reveals subdomains) |
 | Wayback Machine | `web.archive.org` | Historical versions of the website (may reveal removed content) |
 
-### Active Reconnaissance (Direct interaction — the target may detect you)
+### Active Reconnaissance (Direct interaction: the target may detect you)
 
 Active recon involves directly probing the target's systems. This includes port scanning, service enumeration, and directory brute-forcing.
 
@@ -101,8 +101,8 @@ nmap -sU --top-ports 100 target.com
 |------|---------|
 | **Burp Suite** | Intercept, inspect, and modify HTTP traffic. Manual and automated web app testing. |
 | **OWASP ZAP** | Open-source alternative to Burp Suite. Automated vulnerability scanning. |
-| **Nikto** | Web server scanner — detects dangerous files, outdated server software, and misconfigurations. |
-| **ffuf / Gobuster** | Directory and file brute-forcing — discovers hidden paths and admin panels. |
+| **Nikto** | Web server scanner; detects dangerous files, outdated server software, and misconfigurations. |
+| **ffuf / Gobuster** | Directory and file brute-forcing; discovers hidden paths and admin panels. |
 | **SQLMap** | Automated SQL injection detection and exploitation. |
 
 ## Phase 5: Exploitation
@@ -148,7 +148,7 @@ After gaining initial access, a pentester evaluates the actual impact of the com
 - **Privilege Escalation**: Moving from a low-privilege user to root/administrator. Techniques include kernel exploits, misconfigured SUID binaries, writable cron jobs, and unquoted service paths.
 - **Lateral Movement**: Moving from the compromised system to other systems on the network. Techniques include credential harvesting, pass-the-hash, RDP/SSH pivoting, and exploiting trust relationships.
 - **Data Exfiltration**: Identifying and extracting sensitive data (to prove impact, not to steal it). Document what was accessible.
-- **Persistence**: Establishing mechanisms to maintain access (backdoor accounts, scheduled tasks, web shells) — to demonstrate what a real attacker could do.
+- **Persistence**: Establishing mechanisms to maintain access (backdoor accounts, scheduled tasks, web shells), to demonstrate what a real attacker could do.
 
 ### Privilege Escalation Checklists
 
@@ -172,7 +172,7 @@ The report is the **most important deliverable** of a penetration test. It commu
 
 ### Report Structure
 
-1. **Executive Summary**: High-level overview for management — overall risk posture, critical findings, business impact, and strategic recommendations. No technical jargon.
+1. **Executive Summary**: High-level overview for management: overall risk posture, critical findings, business impact, and strategic recommendations. No technical jargon.
 2. **Scope and Methodology**: What was tested, how, and during what timeframe.
 3. **Findings**: Each vulnerability documented with:
    - **Title** and **severity** (Critical/High/Medium/Low/Informational)
@@ -186,7 +186,7 @@ The report is the **most important deliverable** of a penetration test. It commu
 
 ## Bug Bounty Programs
 
-Bug bounty programs are a complementary approach where organizations invite external security researchers to find and responsibly disclose vulnerabilities — in exchange for monetary rewards.
+Bug bounty programs are a complementary approach where organizations invite external security researchers to find and responsibly disclose vulnerabilities, in exchange for monetary rewards.
 
 ### Major Platforms
 
@@ -209,23 +209,23 @@ Bug bounty programs are a complementary approach where organizations invite exte
 Pentesting operates within a strict legal and ethical framework:
 
 - **Always get written authorization** before testing any system.
-- **Stay within scope** — do not test systems or functionalities not covered by the agreement.
-- **Report all findings** — even accidental discoveries outside scope.
-- **Handle data responsibly** — if you access sensitive data during testing, treat it as confidential.
-- **Disclose responsibly** — follow the organization's disclosure timeline. Never publish findings without permission.
+- **Stay within scope**: do not test systems or functionalities not covered by the agreement.
+- **Report all findings**, even accidental discoveries outside scope.
+- **Handle data responsibly**: if you access sensitive data during testing, treat it as confidential.
+- **Disclose responsibly**: follow the organization's disclosure timeline. Never publish findings without permission.
 
 ### Relevant Laws
 
 | Jurisdiction | Law |
 |-------------|-----|
-| **Brazil** | Lei 12.737/2012 (Lei Carolina Dieckmann) — criminalizes unauthorized access to computer systems |
+| **Brazil** | Lei 12.737/2012 (Lei Carolina Dieckmann); criminalizes unauthorized access to computer systems |
 | **US** | Computer Fraud and Abuse Act (CFAA) |
 | **EU** | EU Directive on Attacks Against Information Systems (2013/40/EU) |
 | **UK** | Computer Misuse Act 1990 |
 
 ## Key Takeaways
 
-1. **Methodology matters**: Follow a structured approach — reconnaissance, scanning, exploitation, post-exploitation, reporting.
+1. **Methodology matters**: Follow a structured approach: reconnaissance, scanning, exploitation, post-exploitation, reporting.
 2. **OSINT is powerful**: Publicly available information often reveals more than technical scanning.
 3. **Authorization is non-negotiable**: Testing without permission is a crime, period.
 4. **The report is the product**: A vulnerability discovered but poorly communicated has no value.

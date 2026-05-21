@@ -1,13 +1,13 @@
 ---
 title: "Threats and Attacks"
-description: "How attackers operate — phishing, malware, ransomware, social engineering, and credential theft explained in depth."
+description: "How attackers operate, phishing, malware, ransomware, social engineering, and credential theft explained in depth."
 ---
 
 # Common Digital Threats
 
-Understanding how attackers operate is the foundation of effective defense. Cybercriminals are not random — they follow structured methodologies, exploit predictable human behaviors, and leverage the same vulnerabilities over and over again.
+Understanding how attackers operate is the foundation of effective defense. Cybercriminals are not random; they follow structured methodologies, exploit predictable human behaviors, and leverage the same vulnerabilities over and over again.
 
-According to the 2023 Verizon Data Breach Investigations Report (DBIR), **74% of all breaches involved the human element** — including social engineering attacks, errors, and misuse of credentials.
+According to the 2023 Verizon Data Breach Investigations Report (DBIR), **74% of all breaches involved the human element**: including social engineering attacks, errors, and misuse of credentials.
 
 ## The Attack Lifecycle
 
@@ -15,16 +15,16 @@ Most cyberattacks follow a predictable sequence known as the **Cyber Kill Chain*
 
 <Steps>
   <Step title="Reconnaissance">
-    The attacker researches the target — gathering email addresses, employee names, technology stacks, and organizational structure from public sources (LinkedIn, company websites, GitHub, DNS records).
+    The attacker researches the target, gathering email addresses, employee names, technology stacks, and organizational structure from public sources (LinkedIn, company websites, GitHub, DNS records).
   </Step>
   <Step title="Weaponization">
-    The attacker creates a payload — a malicious email attachment, a phishing page, a compromised link, or an exploit targeting a known vulnerability.
+    The attacker creates a payload, a malicious email attachment, a phishing page, a compromised link, or an exploit targeting a known vulnerability.
   </Step>
   <Step title="Delivery">
-    The payload is delivered — via email (phishing), a malicious website, a USB drive, or a compromised software update.
+    The payload is delivered, via email (phishing), a malicious website, a USB drive, or a compromised software update.
   </Step>
   <Step title="Exploitation">
-    The payload executes — exploiting a vulnerability in the target's software, browser, or human judgment.
+    The payload executes, exploiting a vulnerability in the target's software, browser, or human judgment.
   </Step>
   <Step title="Installation">
     Malware is installed on the target system, establishing a persistent foothold (backdoor).
@@ -33,7 +33,7 @@ Most cyberattacks follow a predictable sequence known as the **Cyber Kill Chain*
     The compromised system communicates back to the attacker's infrastructure, awaiting further instructions.
   </Step>
   <Step title="Actions on Objectives">
-    The attacker achieves their goal — stealing data, encrypting files for ransom, moving laterally to other systems, or causing disruption.
+    The attacker achieves their goal, stealing data, encrypting files for ransom, moving laterally to other systems, or causing disruption.
   </Step>
 </Steps>
 
@@ -60,20 +60,20 @@ A well-crafted phishing email exploits urgency, authority, and trust:
 - **Bulk phishing**: Mass emails sent to thousands of recipients. Low effort, low success rate, but high volume compensates.
 - **Spear phishing**: Targeted at a specific individual, using personal information gathered during reconnaissance. Much higher success rate.
 - **Whaling**: Spear phishing specifically targeting C-level executives (CEO, CFO, CTO).
-- **Vishing**: Voice phishing — phone calls impersonating IT support, banks, or government agencies.
-- **Smishing**: SMS phishing — text messages with malicious links ("Your package is delayed, track here: [malicious link]").
+- **Vishing**: Voice phishing, phone calls impersonating IT support, banks, or government agencies.
+- **Smishing**: SMS phishing, text messages with malicious links ("Your package is delayed, track here: [malicious link]").
 
 ### Social Engineering Beyond Email
 
 Social engineering is the broader discipline of manipulating human psychology. Techniques include:
 
 - **Pretexting**: Creating a fabricated scenario to gain trust ("Hi, I'm from IT and I need your password to fix an urgent issue on your account").
-- **Baiting**: Leaving infected USB drives in parking lots or lobbies, labeled "Confidential — Q4 Salary Report".
+- **Baiting**: Leaving infected USB drives in parking lots or lobbies, labeled "Confidential, Q4 Salary Report".
 - **Tailgating/Piggybacking**: Physically following an authorized employee through a secured door.
 - **Quid pro quo**: Offering something in exchange for information ("Free security audit if you share your network diagram").
 
 <Warning>
-Social engineering attacks exploit trust, urgency, fear, and helpfulness — all natural human responses. The best defense is not just technology, but *awareness*. If something feels rushed, unusual, or too good to be true — verify independently before acting.
+Social engineering attacks exploit trust, urgency, fear, and helpfulness, all natural human responses. The best defense is not just technology, but *awareness*. If something feels rushed, unusual, or too good to be true, verify independently before acting.
 </Warning>
 
 ## Malware
@@ -84,15 +84,15 @@ Social engineering attacks exploit trust, urgency, fear, and helpfulness — all
 
 | Type | Behavior | Example |
 |------|----------|---------|
-| **Virus** | Attaches to legitimate files and spreads when the file is executed | ILOVEYOU (2000) — caused $10B+ in damages |
-| **Worm** | Self-replicates across networks without user interaction | WannaCry (2017) — infected 230,000+ computers in 150 countries |
-| **Trojan** | Disguises itself as legitimate software | Emotet — initially posed as invoice emails |
-| **Spyware** | Silently monitors user activity (keystrokes, screenshots, browsing) | Pegasus — used to surveil journalists and activists |
-| **Adware** | Displays unwanted advertisements, often bundled with free software | Fireball — infected 250M+ computers |
-| **Rootkit** | Hides deep in the operating system to maintain persistent, undetectable access | Sony BMG rootkit (2005) — installed via music CDs |
+| **Virus** | Attaches to legitimate files and spreads when the file is executed | ILOVEYOU (2000); caused $10B+ in damages |
+| **Worm** | Self-replicates across networks without user interaction | WannaCry (2017); infected 230,000+ computers in 150 countries |
+| **Trojan** | Disguises itself as legitimate software | Emotet; initially posed as invoice emails |
+| **Spyware** | Silently monitors user activity (keystrokes, screenshots, browsing) | Pegasus; used to surveil journalists and activists |
+| **Adware** | Displays unwanted advertisements, often bundled with free software | Fireball; infected 250M+ computers |
+| **Rootkit** | Hides deep in the operating system to maintain persistent, undetectable access | Sony BMG rootkit (2005); installed via music CDs |
 | **Fileless malware** | Operates entirely in memory, leaving no files on disk | PowerShell-based attacks that evade traditional antivirus |
 
-### Ransomware — A Special Category
+### Ransomware: A Special Category
 
 Ransomware deserves special attention because it has become the most financially devastating type of malware:
 
@@ -108,12 +108,12 @@ Ransomware deserves special attention because it has become the most financially
 
 ## Credential Theft
 
-Stolen credentials are the single most common way attackers gain initial access to systems (**stolen credentials were involved in 49% of breaches** — Verizon DBIR 2023).
+Stolen credentials are the single most common way attackers gain initial access to systems (**stolen credentials were involved in 49% of breaches** - Verizon DBIR 2023).
 
 ### Methods of Credential Theft
 
 - **Data breaches**: Attackers compromise a website's database and steal millions of username/password pairs. If users reuse passwords, every account with that password is now at risk.
-- **Credential stuffing**: Automated tools test stolen credentials against hundreds of other services (banking, email, social media). Success rates range from 0.1% to 2% — but at scale, that is thousands of compromised accounts.
+- **Credential stuffing**: Automated tools test stolen credentials against hundreds of other services (banking, email, social media). Success rates range from 0.1% to 2%, but at scale, that is thousands of compromised accounts.
 - **Password spraying**: Instead of trying many passwords against one account (which triggers lockout), attackers try *one common password* against many accounts (e.g., `Summer2024!` across 10,000 employee accounts).
 - **Keyloggers**: Malware that records every keystroke, capturing passwords as they are typed.
 - **Man-in-the-Middle (MitM)**: Intercepting communication between a user and a service (especially on unsecured Wi-Fi) to capture credentials in transit.
@@ -124,7 +124,7 @@ The single most effective defense against credential theft is **unique passwords
 
 ## Supply Chain Attacks
 
-Supply chain attacks target the trusted software, services, or hardware that organizations depend on. Instead of attacking the target directly, attackers compromise a supplier — and the malicious payload is delivered through legitimate update channels.
+Supply chain attacks target the trusted software, services, or hardware that organizations depend on. Instead of attacking the target directly, attackers compromise a supplier, and the malicious payload is delivered through legitimate update channels.
 
 **Notable examples:**
 - **SolarWinds (2020)**: Attackers injected malicious code into the Orion software update, which was distributed to 18,000+ organizations, including US government agencies.
@@ -135,7 +135,7 @@ Supply chain attacks target the trusted software, services, or hardware that org
 Supply chain attacks are particularly dangerous because they exploit *trust*. Users and organizations install updates specifically because they trust the vendor. This makes these attacks extremely difficult to detect until the damage is already done.
 </Warning>
 
-## How to Protect Yourself — Key Takeaways
+## How to Protect Yourself: Key Takeaways
 
 1. **Verify before you trust**: Always confirm the sender's identity independently before clicking links, opening attachments, or sharing information.
 2. **Use unique passwords + MFA**: Eliminate password reuse and enable MFA on every account that supports it.

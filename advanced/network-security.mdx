@@ -36,7 +36,7 @@ A firewall is a network security device that monitors and controls incoming and 
 | 3rd Gen | **Application Layer (Proxy)** | Inspects the content of traffic at the application layer. Can filter based on URLs, file types, and application protocols. |
 | Current | **Next-Generation (NGFW)** | Combines stateful inspection + deep packet inspection (DPI) + intrusion prevention (IPS) + application awareness + TLS decryption + threat intelligence integration. Examples: Palo Alto, Fortinet, Cisco Firepower. |
 
-### Firewall Rules — Best Practices
+### Firewall Rules: Best Practices
 
 - **Default Deny**: Block everything by default, then explicitly allow only necessary traffic. Never default allow.
 - **Least Privilege**: Allow only the minimum ports and protocols required for each service.
@@ -45,7 +45,7 @@ A firewall is a network security device that monitors and controls incoming and 
 
 ## Network Segmentation
 
-A flat network — where every device can communicate with every other device — is extremely dangerous. If an attacker compromises one workstation, they can move laterally to servers, databases, and critical infrastructure.
+A flat network, where every device can communicate with every other device, is extremely dangerous. If an attacker compromises one workstation, they can move laterally to servers, databases, and critical infrastructure.
 
 ### Segmentation Strategies
 
@@ -62,8 +62,8 @@ A practical way to think about segmentation: if a device is compromised, what ot
 
 | System | Behavior | Placement |
 |--------|----------|-----------|
-| **IDS** (Intrusion Detection System) | **Passive** — monitors traffic, detects anomalies, and generates alerts. Does not block traffic. | Placed on a SPAN port or network TAP to receive a copy of all traffic. |
-| **IPS** (Intrusion Prevention System) | **Active** — sits inline with traffic and can automatically drop packets, block connections, or reset sessions when malicious activity is detected. | Placed inline between the firewall and the internal network. |
+| **IDS** (Intrusion Detection System) | **Passive**: monitors traffic, detects anomalies, and generates alerts. Does not block traffic. | Placed on a SPAN port or network TAP to receive a copy of all traffic. |
+| **IPS** (Intrusion Prevention System) | **Active**: sits inline with traffic and can automatically drop packets, block connections, or reset sessions when malicious activity is detected. | Placed inline between the firewall and the internal network. |
 
 ### Detection Methods
 
@@ -93,7 +93,7 @@ The traditional security model was **perimeter-based**: everything inside the co
 
 ## DNS Security
 
-DNS is often called "the Achilles' heel of the internet." Most organizations monitor HTTP/HTTPS traffic closely but ignore DNS — which makes it a popular channel for attacks and data exfiltration.
+DNS is often called "the Achilles' heel of the internet." Most organizations monitor HTTP/HTTPS traffic closely but ignore DNS, which makes it a popular channel for attacks and data exfiltration.
 
 ### DNS-based Threats
 
@@ -113,7 +113,7 @@ A **SOC** is a centralized team responsible for monitoring, detecting, analyzing
 
 ### SIEM (Security Information and Event Management)
 
-The SOC's primary tool is a **SIEM** — a platform that collects and correlates log data from across the entire infrastructure (firewalls, IDS/IPS, endpoints, servers, cloud services, applications) to detect threats.
+The SOC's primary tool is a **SIEM**: a platform that collects and correlates log data from across the entire infrastructure (firewalls, IDS/IPS, endpoints, servers, cloud services, applications) to detect threats.
 
 **How a SIEM works:**
 1. **Collect**: Ingest logs from hundreds of data sources.
@@ -138,11 +138,11 @@ VPNs extend a private network across a public network, encrypting traffic and pr
 
 ### Modern Alternative: ZTNA
 
-**Zero Trust Network Access (ZTNA)** is replacing traditional VPNs in many organizations. Unlike VPNs (which grant broad network access once connected), ZTNA grants access to specific applications based on identity, device posture, and context — without exposing the underlying network.
+**Zero Trust Network Access (ZTNA)** is replacing traditional VPNs in many organizations. Unlike VPNs (which grant broad network access once connected), ZTNA grants access to specific applications based on identity, device posture, and context, without exposing the underlying network.
 
 ## Key Takeaways
 
-1. **Defense in depth**: Layer multiple controls (firewalls, IDS/IPS, segmentation, encryption) — no single control is sufficient.
+1. **Defense in depth**: Layer multiple controls (firewalls, IDS/IPS, segmentation, encryption); no single control is sufficient.
 2. **Segment your network**: A flat network is a hacker's paradise. Isolate critical systems.
 3. **Adopt Zero Trust**: "Never trust, always verify" is the modern security paradigm.
 4. **Monitor DNS**: DNS is a blind spot for most organizations and a favorite channel for attackers.

@@ -1,6 +1,6 @@
 ---
 title: "Web Vulnerabilities"
-description: "The OWASP Top 10, injection attacks, XSS, CSRF, SSRF, broken authentication, and security misconfigurations — with real exploit examples."
+description: "The OWASP Top 10, injection attacks, XSS, CSRF, SSRF, broken authentication, and security misconfigurations, with real exploit examples."
 ---
 
 # Web Vulnerabilities
@@ -35,7 +35,7 @@ Never rely on client-side controls (hiding buttons, disabling fields) for securi
 ### Defense
 
 - Implement role-based access control (RBAC) or attribute-based access control (ABAC) on the server.
-- Deny by default — require explicit authorization for every endpoint.
+- Deny by default: require explicit authorization for every endpoint.
 - Log and alert on access control failures.
 
 ## A02: Cryptographic Failures
@@ -50,7 +50,7 @@ Previously called "Sensitive Data Exposure." This covers failures in protecting 
 - Hardcoding encryption keys in source code
 - Using weak or default TLS configurations
 
-**Real-world example**: In 2013, Adobe suffered a breach exposing **153 million user records**. Passwords were encrypted (not hashed) using 3DES in ECB mode with a single key — allowing attackers to decrypt them. ECB mode is particularly dangerous because identical plaintexts produce identical ciphertexts, revealing patterns.
+**Real-world example**: In 2013, Adobe suffered a breach exposing **153 million user records**. Passwords were encrypted (not hashed) using 3DES in ECB mode with a single key, allowing attackers to decrypt them. ECB mode is particularly dangerous because identical plaintexts produce identical ciphertexts, revealing patterns.
 
 ## A03: Injection
 
@@ -95,11 +95,11 @@ cursor.execute(
 | **NoSQL Injection** | MongoDB, CouchDB | `{"username": {"$gt": ""}, "password": {"$gt": ""}}` |
 | **OS Command Injection** | System shell | `; rm -rf /` appended to a filename input |
 | **LDAP Injection** | Directory services | `*)(uid=*))(|(uid=*` to bypass authentication |
-| **Template Injection (SSTI)** | Server-side templates (Jinja2, Twig) | `{{7*7}}` renders as `49` — confirming code execution |
+| **Template Injection (SSTI)** | Server-side templates (Jinja2, Twig) | `{{7*7}}` renders as `49`; confirming code execution |
 
 ## A04: Insecure Design
 
-This category addresses flaws in the architecture and design of the application — not implementation bugs, but missing security controls that should have been designed in from the start.
+This category addresses flaws in the architecture and design of the application, not implementation bugs, but missing security controls that should have been designed in from the start.
 
 **Examples:**
 - A password recovery flow that allows unlimited attempts with no rate limiting
@@ -121,7 +121,7 @@ The most common vulnerability in real-world deployments. It occurs when security
 - Missing security headers (`Content-Security-Policy`, `X-Frame-Options`, `Strict-Transport-Security`)
 - Cloud storage buckets (S3, GCS) left publicly accessible
 
-**Real-world example**: In 2017, a misconfigured AWS S3 bucket belonging to a US military contractor exposed **Top Secret** intelligence data — including passwords, security credentials, and the private keys to a Pentagon system.
+**Real-world example**: In 2017, a misconfigured AWS S3 bucket belonging to a US military contractor exposed **Top Secret** intelligence data, including passwords, security credentials, and the private keys to a Pentagon system.
 
 ## A07: Cross-Site Scripting (XSS)
 
@@ -142,7 +142,7 @@ XSS occurs when an application includes untrusted data in a web page without pro
 </script>
 ```
 
-If this script executes in a victim's browser, it sends their session cookie to the attacker — enabling session hijacking.
+If this script executes in a victim's browser, it sends their session cookie to the attacker, enabling session hijacking.
 
 ### Defense
 
@@ -168,7 +168,7 @@ CSRF tricks a victim's browser into making an unwanted request to a site where t
 
 ## A10: Server-Side Request Forgery (SSRF)
 
-SSRF occurs when an attacker can make the server send HTTP requests to arbitrary destinations — including internal services that are not directly accessible from the internet.
+SSRF occurs when an attacker can make the server send HTTP requests to arbitrary destinations, including internal services that are not directly accessible from the internet.
 
 **Attack scenario:**
 ```

@@ -1,13 +1,13 @@
 ---
 title: "Safe Browsing"
-description: "Navigate the internet securely — HTTPS, DNS security, browser extensions, cookie tracking, and malvertising defense."
+description: "Navigate the internet securely, HTTPS, DNS security, browser extensions, cookie tracking, and malvertising defense."
 ---
 
 # Safe Browsing
 
-Your web browser is the most frequently used application on your computer — and therefore the most targeted. It is the gateway between you and the internet, and every website you visit, every extension you install, and every link you click represents a potential attack vector.
+Your web browser is the most frequently used application on your computer, and therefore the most targeted. It is the gateway between you and the internet, and every website you visit, every extension you install, and every link you click represents a potential attack vector.
 
-Safe browsing is not about paranoia — it is about developing informed habits that dramatically reduce your exposure to threats.
+Safe browsing is not about paranoia; it is about developing informed habits that dramatically reduce your exposure to threats.
 
 ## Understanding HTTPS (and Its Limitations)
 
@@ -16,7 +16,7 @@ Safe browsing is not about paranoia — it is about developing informed habits t
 When you see the padlock icon (🔒) and `https://` in your browser's address bar, it means the connection between your browser and the website is encrypted using **TLS (Transport Layer Security)**.
 
 HTTPS provides three guarantees:
-1. **Encryption**: Data in transit is encrypted — your ISP, Wi-Fi operator, or an attacker on the same network cannot read the content.
+1. **Encryption**: Data in transit is encrypted, your ISP, Wi-Fi operator, or an attacker on the same network cannot read the content.
 2. **Integrity**: Data cannot be tampered with in transit without detection.
 3. **Authentication**: The website's identity is verified by a Certificate Authority (CA) that issued the site's TLS certificate.
 
@@ -30,11 +30,11 @@ Think of it this way: HTTPS is like a sealed envelope. It guarantees that nobody
 
 ### Certificate Transparency
 
-Modern browsers use **Certificate Transparency (CT)** logs — public, append-only records of all TLS certificates issued. This helps detect rogue or misissued certificates. If a Certificate Authority is compromised and issues a fake certificate for `google.com`, CT logs make it publicly visible and detectable.
+Modern browsers use **Certificate Transparency (CT)** logs, public, append-only records of all TLS certificates issued. This helps detect rogue or misissued certificates. If a Certificate Authority is compromised and issues a fake certificate for `google.com`, CT logs make it publicly visible and detectable.
 
 ## DNS Security
 
-**DNS (Domain Name System)** is the phone book of the internet — it translates human-readable domains (`google.com`) to IP addresses (`142.250.80.46`). DNS is critical to your browsing experience, and it is often the weakest link.
+**DNS (Domain Name System)** is the phone book of the internet; it translates human-readable domains (`google.com`) to IP addresses (`142.250.80.46`). DNS is critical to your browsing experience, and it is often the weakest link.
 
 ### DNS Attacks
 
@@ -45,7 +45,7 @@ Modern browsers use **Certificate Transparency (CT)** logs — public, append-on
 
 - **DNS-over-HTTPS (DoH)**: Encrypts DNS queries inside HTTPS, preventing ISPs and network operators from seeing or tampering with your DNS requests. Supported by Firefox, Chrome, Edge, and Brave.
 - **DNS-over-TLS (DoT)**: Similar to DoH but uses a dedicated TLS connection on port 853.
-- **Recommended DNS providers**: Cloudflare (`1.1.1.1`), Google Public DNS (`8.8.8.8`), Quad9 (`9.9.9.9` — also blocks known malicious domains).
+- **Recommended DNS providers**: Cloudflare (`1.1.1.1`), Google Public DNS (`8.8.8.8`), Quad9 (`9.9.9.9` - also blocks known malicious domains).
 
 <Tip>
 Switching your DNS provider from your ISP's default to Cloudflare or Quad9 is one of the simplest and most effective security improvements you can make. It takes 2 minutes, costs nothing, and provides both privacy and protection against known malicious domains.
@@ -75,9 +75,9 @@ Before clicking any link, train yourself to analyze it:
 - **URLScan.io**: Visualizes what a URL actually does when visited (redirects, scripts, requests).
 - **Google Safe Browsing** (`transparencyreport.google.com`): Check if a URL is flagged as dangerous.
 
-## Browser Extensions — Power and Risk
+## Browser Extensions: Power and Risk
 
-Browser extensions have access to incredibly sensitive data — they can read every page you visit, modify page content, access your cookies, and even intercept form data (including passwords).
+Browser extensions have access to incredibly sensitive data; they can read every page you visit, modify page content, access your cookies, and even intercept form data (including passwords).
 
 ### The Risk
 
@@ -109,11 +109,11 @@ In 2023, researchers discovered that **multiple popular Chrome extensions with m
 ### Types of Cookies
 
 - **First-party cookies**: Set by the website you are visiting. Generally necessary and benign (session cookies, login tokens).
-- **Third-party cookies**: Set by domains *other* than the one you are visiting (ad networks, analytics services). These enable cross-site tracking — following you across the internet to build advertising profiles.
+- **Third-party cookies**: Set by domains *other* than the one you are visiting (ad networks, analytics services). These enable cross-site tracking, following you across the internet to build advertising profiles.
 
 ### Browser Fingerprinting
 
-Even without cookies, websites can identify you through **browser fingerprinting** — collecting your screen resolution, installed fonts, browser plugins, timezone, language settings, and hardware specifications to create a unique "fingerprint." The EFF's Panopticlick research found that **84% of browser fingerprints are unique**.
+Even without cookies, websites can identify you through **browser fingerprinting**: collecting your screen resolution, installed fonts, browser plugins, timezone, language settings, and hardware specifications to create a unique "fingerprint." The EFF's Panopticlick research found that **84% of browser fingerprints are unique**.
 
 <Note>
 Major browsers (Safari, Firefox, Brave) now block third-party cookies by default. Chrome plans to phase them out by 2025. However, browser fingerprinting remains an active tracking technique that is harder to prevent.
@@ -121,7 +121,7 @@ Major browsers (Safari, Firefox, Brave) now block third-party cookies by default
 
 ## Malvertising
 
-**Malvertising** (malicious advertising) is the use of legitimate ad networks to deliver malware. Attackers buy ad space on reputable websites, and the ad itself contains malicious code that can infect your device — sometimes without you even clicking on it (known as a **drive-by download**).
+**Malvertising** (malicious advertising) is the use of legitimate ad networks to deliver malware. Attackers buy ad space on reputable websites, and the ad itself contains malicious code that can infect your device, sometimes without you even clicking on it (known as a **drive-by download**).
 
 ### Why Ad Blockers Are a Security Tool
 
@@ -133,7 +133,7 @@ Using a reputable ad blocker like **uBlock Origin** is not just about avoiding a
 
 ### Drive-By Downloads
 
-A **drive-by download** occurs when visiting a webpage automatically triggers the download and execution of malicious code — without any user interaction. These attacks exploit vulnerabilities in browsers, browser plugins (like outdated Flash or Java), or the operating system itself.
+A **drive-by download** occurs when visiting a webpage automatically triggers the download and execution of malicious code, without any user interaction. These attacks exploit vulnerabilities in browsers, browser plugins (like outdated Flash or Java), or the operating system itself.
 
 **Defense**: Keep your browser and OS updated, use an ad blocker, and disable unnecessary browser plugins.
 

@@ -13,7 +13,7 @@ This module covers the principles, practices, and tools that professional develo
 
 **Never trust data from the user, the client, or any external system.**
 
-Every input — form fields, URL parameters, HTTP headers, cookies, file uploads, API payloads, webhook data — is a potential attack vector.
+Every input (form fields, URL parameters, HTTP headers, cookies, file uploads, API payloads, webhook data) is a potential attack vector.
 
 ### Validation Strategies
 
@@ -26,7 +26,7 @@ Every input — form fields, URL parameters, HTTP headers, cookies, file uploads
 | **Range checking** | Verify numerical bounds | Quantity: 1-100 |
 
 <Warning>
-**Always prefer allow-listing over block-listing.** Block-lists are inherently incomplete — attackers constantly invent new encoding tricks, Unicode bypasses, and obfuscation techniques to evade them. An allow-list defines exactly what is valid; everything else is rejected.
+**Always prefer allow-listing over block-listing.** Block-lists are inherently incomplete, attackers constantly invent new encoding tricks, Unicode bypasses, and obfuscation techniques to evade them. An allow-list defines exactly what is valid; everything else is rejected.
 </Warning>
 
 ### Server-Side vs. Client-Side Validation
@@ -64,35 +64,35 @@ The **only reliable defense** against SQL Injection is to separate SQL code from
 ### Vulnerable vs. Secure Code
 
 ```python
-# ❌ VULNERABLE — String concatenation
+# ❌ VULNERABLE: String concatenation
 query = f"SELECT * FROM users WHERE email = '{email}'"
 
-# ✅ SECURE — Parameterized query
+# ✅ SECURE: Parameterized query
 cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
 ```
 
 ```javascript
-// ❌ VULNERABLE — Template literal
+// ❌ VULNERABLE: Template literal
 const query = `SELECT * FROM users WHERE id = ${userId}`;
 
-// ✅ SECURE — Parameterized query (Node.js + pg)
+// ✅ SECURE: Parameterized query (Node.js + pg)
 const result = await pool.query(
   'SELECT * FROM users WHERE id = $1',
   [userId]
 );
 ```
 
-The database driver treats parameterized values strictly as **data**, never as executable SQL code — making injection impossible regardless of what the attacker submits.
+The database driver treats parameterized values strictly as **data**, never as executable SQL code, making injection impossible regardless of what the attacker submits.
 
 ### ORMs Are Not Immune
 
 ORMs (Sequelize, Prisma, SQLAlchemy, ActiveRecord) generally use parameterized queries internally, but they also expose raw query methods that bypass protections:
 
 ```javascript
-// ❌ VULNERABLE — Raw query in Sequelize
+// ❌ VULNERABLE: Raw query in Sequelize
 await sequelize.query(`SELECT * FROM users WHERE name = '${name}'`);
 
-// ✅ SECURE — Parameterized raw query
+// ✅ SECURE: Parameterized raw query
 await sequelize.query('SELECT * FROM users WHERE name = ?', {
   replacements: [name]
 });
@@ -104,10 +104,10 @@ The principle of least privilege dictates that every user, process, and applicat
 
 ### Application-Level Examples
 
-- A web application's database user should have `SELECT`, `INSERT`, `UPDATE` permissions on specific tables — **not** `DROP TABLE`, `CREATE USER`, or `GRANT ALL`.
+- A web application's database user should have `SELECT`, `INSERT`, `UPDATE` permissions on specific tables: **not** `DROP TABLE`, `CREATE USER`, or `GRANT ALL`.
 - An API microservice that only reads data should have read-only database credentials.
 - A CI/CD pipeline deploying to staging should not have production credentials.
-- A Lambda function processing images should have S3 read/write access to one bucket — not all buckets.
+- A Lambda function processing images should have S3 read/write access to one bucket: not all buckets.
 
 ### The Blast Radius Principle
 
@@ -119,7 +119,7 @@ Least privilege limits the **blast radius** of a compromise. If an attacker comp
 
 ### Why This Matters
 
-According to GitGuardian's 2023 State of Secrets Sprawl report, over **10 million new secrets** were detected in public GitHub commits in a single year. Once a secret is committed to Git, it is in the history forever — even if the file is deleted.
+According to GitGuardian's 2023 State of Secrets Sprawl report, over **10 million new secrets** were detected in public GitHub commits in a single year. Once a secret is committed to Git, it is in the history forever, even if the file is deleted.
 
 ### Where Secrets Belong
 
@@ -190,7 +190,7 @@ except Exception as e:
 
 ## 8. CI/CD Security
 
-Your CI/CD pipeline is a high-value target — it has access to your source code, secrets, and production infrastructure.
+Your CI/CD pipeline is a high-value target; it has access to your source code, secrets, and production infrastructure.
 
 ### Security Controls for Pipelines
 
@@ -202,7 +202,7 @@ Your CI/CD pipeline is a high-value target — it has access to your source code
 
 ## 9. Threat Modeling (STRIDE)
 
-**Threat modeling** is the practice of systematically identifying potential threats to your application during the design phase — before writing code.
+**Threat modeling** is the practice of systematically identifying potential threats to your application during the design phase, before writing code.
 
 The **STRIDE** framework categorizes threats:
 

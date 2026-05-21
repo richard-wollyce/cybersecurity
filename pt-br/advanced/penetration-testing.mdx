@@ -5,7 +5,7 @@ description: "Metodologia de hacking ético, OSINT, scanning, exploração, esca
 
 # Testes de Penetração (Penetration Testing)
 
-Testes de Penetração (pentesting) é o **ciberataque simulado e autorizado** em um sistema computacional, realizado para avaliar a segurança do sistema. Diferente do hacking malicioso, pentesting é legal, contratado e documentado — com o objetivo explícito de encontrar e corrigir vulnerabilidades antes que atacantes reais o façam.
+Testes de Penetração (pentesting) é o **ciberataque simulado e autorizado** em um sistema computacional, realizado para avaliar a segurança do sistema. Diferente do hacking malicioso, pentesting é legal, contratado e documentado, com o objetivo explícito de encontrar e corrigir vulnerabilidades antes que atacantes reais o façam.
 
 ## Tipos de Testes de Penetração
 
@@ -29,7 +29,7 @@ Testes de Penetração (pentesting) é o **ciberataque simulado e autorizado** e
     - Qual é a janela de teste?
     - **Obtenha autorização por escrito.** Testes sem permissão explícita são crime.
   </Step>
-  <Step title="2. Reconhecimento — OSINT (Reconnaissance)">
+  <Step title="2. Reconhecimento, OSINT (Reconnaissance)">
     Colete o máximo de informação possível sobre o alvo antes de interagir ativamente.
   </Step>
   <Step title="3. Scanning e Enumeração (Scanning and Enumeration)">
@@ -49,7 +49,7 @@ Testes de Penetração (pentesting) é o **ciberataque simulado e autorizado** e
   </Step>
 </Steps>
 
-## Fase 2: Reconhecimento — OSINT (Open Source Intelligence — Inteligência de Fonte Aberta)
+## Fase 2: Reconhecimento: OSINT (Open Source Intelligence: Inteligência de Fonte Aberta)
 
 | Técnica | Ferramenta/Fonte | O Que Você Aprende |
 |---------|-----------------|-------------------|
@@ -82,8 +82,8 @@ nmap -A alvo.com.br
 |-----------|----------|
 | **Burp Suite** | Interceptar, inspecionar e modificar tráfego HTTP. Teste manual e automatizado. |
 | **OWASP ZAP** | Alternativa open-source ao Burp Suite. Scanning automatizado de vulnerabilidades. |
-| **Nikto** | Scanner de servidor web — detecta arquivos perigosos e software desatualizado. |
-| **ffuf / Gobuster** | Força bruta de diretórios e arquivos — descobre caminhos ocultos e painéis admin. |
+| **Nikto** | Scanner de servidor web, detecta arquivos perigosos e software desatualizado. |
+| **ffuf / Gobuster** | Força bruta de diretórios e arquivos, descobre caminhos ocultos e painéis admin. |
 | **SQLMap** | Detecção e exploração automatizada de SQL Injection. |
 
 ## Fase 5: Exploração com Metasploit
@@ -113,7 +113,7 @@ exploit
 ```
 
 <Warning>
-**Aviso legal**: Usar ferramentas de exploração contra sistemas sem autorização explícita e escrita é uma ofensa criminal em virtualmente toda jurisdição. Sempre tenha uma Declaração de Trabalho (SOW — Statement of Work) ou Regras de Engajamento (RoE — Rules of Engagement) assinadas antes de testar.
+**Aviso legal**: Usar ferramentas de exploração contra sistemas sem autorização explícita e escrita é uma ofensa criminal em virtualmente toda jurisdição. Sempre tenha uma Declaração de Trabalho (SOW, Statement of Work) ou Regras de Engajamento (RoE, Rules of Engagement) assinadas antes de testar.
 </Warning>
 
 ## Fase 6: Pós-Exploração (Post-Exploitation)
@@ -144,7 +144,7 @@ O relatório é o **produto mais importante** de um teste de penetração.
 
 ### Estrutura do Relatório
 
-1. **Sumário Executivo**: Visão geral para gestão — postura geral de risco, descobertas críticas, impacto no negócio e recomendações estratégicas. Sem jargão técnico.
+1. **Sumário Executivo**: Visão geral para gestão: postura geral de risco, descobertas críticas, impacto no negócio e recomendações estratégicas. Sem jargão técnico.
 2. **Escopo e Metodologia**: O que foi testado, como e durante que período.
 3. **Descobertas (Findings)**: Cada vulnerabilidade com:
    - **Título** e **severidade** (Crítica/Alta/Média/Baixa/Informativa)
@@ -157,7 +157,7 @@ O relatório é o **produto mais importante** de um teste de penetração.
 
 ## Programas de Bug Bounty (Recompensa por Bugs)
 
-Programas de bug bounty convidam pesquisadores externos a encontrar e divulgar responsavelmente vulnerabilidades — em troca de recompensas monetárias.
+Programas de bug bounty convidam pesquisadores externos a encontrar e divulgar responsavelmente vulnerabilidades, em troca de recompensas monetárias.
 
 ### Plataformas Principais
 
@@ -181,7 +181,7 @@ Programas de bug bounty convidam pesquisadores externos a encontrar e divulgar r
 
 | Jurisdição | Lei |
 |-----------|-----|
-| **Brasil** | **Lei 12.737/2012 (Lei Carolina Dieckmann)** — criminaliza o acesso não autorizado a sistemas computacionais. **Marco Civil da Internet (Lei 12.965/2014)** — estabelece direitos e deveres no uso da internet. |
+| **Brasil** | **Lei 12.737/2012 (Lei Carolina Dieckmann)**, criminaliza o acesso não autorizado a sistemas computacionais. **Marco Civil da Internet (Lei 12.965/2014)**, estabelece direitos e deveres no uso da internet. |
 | **EUA** | Computer Fraud and Abuse Act (CFAA) |
 | **UE** | EU Directive on Attacks Against Information Systems (2013/40/EU) |
 | **UK** | Computer Misuse Act 1990 |
@@ -192,7 +192,7 @@ Programas de bug bounty convidam pesquisadores externos a encontrar e divulgar r
 
 ## Principais Conclusões
 
-1. **Metodologia importa**: Siga uma abordagem estruturada — reconhecimento, scanning, exploração, pós-exploração, relatório.
+1. **Metodologia importa**: Siga uma abordagem estruturada: reconhecimento, scanning, exploração, pós-exploração, relatório.
 2. **OSINT é poderoso**: Informação publicamente disponível frequentemente revela mais que scanning técnico.
 3. **Autorização é inegociável**: Testes sem permissão são crime, ponto final.
 4. **O relatório é o produto**: Uma vulnerabilidade descoberta mas mal comunicada não tem valor.
