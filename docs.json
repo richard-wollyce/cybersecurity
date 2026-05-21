@@ -35,7 +35,8 @@
               "essentials/password-security",
               "essentials/safe-browsing",
               "essentials/device-hygiene",
-              "essentials/what-to-do-if-hacked"
+              "essentials/what-to-do-if-hacked",
+              "essentials/cypherpunks"
             ]
           },
           {
@@ -61,7 +62,8 @@
               "pt-br/essentials/password-security",
               "pt-br/essentials/safe-browsing",
               "pt-br/essentials/device-hygiene",
-              "pt-br/essentials/what-to-do-if-hacked"
+              "pt-br/essentials/what-to-do-if-hacked",
+              "pt-br/essentials/cypherpunks"
             ]
           },
           {
