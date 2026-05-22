@@ -19,6 +19,11 @@
           "anchor": "GitHub",
           "icon": "github",
           "href": "https://github.com/richard-wollyce/road-to-cybersec"
+        },
+        {
+          "anchor": "License",
+          "icon": "book",
+          "href": "/license"
         }
       ]
     },
