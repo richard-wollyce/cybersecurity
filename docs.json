@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "Cybersecurity",
+  "name": "Road To Cybersec",
   "favicon": "/favicon.svg",
   "logo": {
     "dark": "/logo/dark.svg",
@@ -18,7 +18,7 @@
         {
           "anchor": "GitHub",
           "icon": "github",
-          "href": "https://github.com/richard-wollyce/cybersecurity"
+          "href": "https://github.com/richard-wollyce/road-to-cybersec"
         }
       ]
     },
