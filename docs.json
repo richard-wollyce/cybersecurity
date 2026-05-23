@@ -12,6 +12,9 @@
     "dark": "#1E3A8A"
   },
   "theme": "mint",
+  "styles": [
+    "/styles/logo.css"
+  ],
   "navigation": {
     "global": {
       "anchors": [
