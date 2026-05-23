@@ -1,0 +1,26 @@
+/* Constrain header logos to a consistent height without editing SVGs */
+
+/* Targets common header/logo selectors; uses !important to override theme defaults. */
+header img,
+header svg,
+.logo img,
+.logo svg,
+.navbar img,
+.navbar svg,
+.mint-nav img,
+.mint-nav svg {
+  height: 48px !important;
+  max-height: 48px !important;
+  width: auto !important;
+}
+
+/* Ensure embedded raster inside SVG scales proportionally */
+svg image {
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* Optional – slightly reduce large SVG viewBox if a consumer ignores height */
+img[alt*="logo"], svg[aria-label*="logo"] {
+  max-height: 48px !important;
+}
