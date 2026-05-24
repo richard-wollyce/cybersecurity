@@ -36,7 +36,7 @@
         "default": true,
         "groups": [
           {
-            "group": "Start",
+            "group": "Welcome",
             "pages": [
               "index"
             ]
@@ -44,7 +44,7 @@
           {
             "group": "Essentials",
             "pages": [
-              "essentials/welcome",
+              "essentials/essentials-overview",
               "essentials/threats-and-attacks",
               "essentials/password-security",
               "essentials/safe-browsing",
@@ -71,7 +71,7 @@
           {
             "group": "Fundamentos",
             "pages": [
-              "pt-br/essentials/welcome",
+              "pt-br/essentials/essentials-overview",
               "pt-br/essentials/threats-and-attacks",
               "pt-br/essentials/password-security",
               "pt-br/essentials/safe-browsing",
