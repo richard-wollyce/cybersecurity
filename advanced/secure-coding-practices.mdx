@@ -1,228 +1,315 @@
 ---
 title: "Secure Coding Practices"
-description: "Input validation, output encoding, dependency scanning, secrets management, CI/CD security, and threat modeling."
+description: "Build secure software with input validation, output encoding, authorization, secrets management, dependency security, CI/CD hardening, provenance, and threat modeling."
 ---
 
 # Secure Coding Practices
 
-Security cannot be bolted onto an application after it is built. It must be **designed into the architecture** and **written into the code** from the very first line. The cost of fixing a vulnerability in production is **6-15x higher** than fixing it during development (IBM Systems Sciences Institute).
+Secure coding is the discipline of building software so that common attacks fail by design. It covers input handling, authorization, secrets, dependencies, CI/CD, logging, and the release process.
 
-This module covers the principles, practices, and tools that professional developers use to build secure software.
+Recent supply chain incidents show that secure coding no longer stops at application code. Your packages, editor extensions, build scripts, tokens, and deployment pipeline are also part of the product's security boundary.
 
 ## 1. Input Validation
 
-**Never trust data from the user, the client, or any external system.**
+**Never trust data from users, clients, webhooks, files, APIs, queues, or third-party systems.**
 
-Every input (form fields, URL parameters, HTTP headers, cookies, file uploads, API payloads, webhook data) is a potential attack vector.
+Every input can be an attack path:
+
+- Form fields
+- URL parameters
+- HTTP headers
+- Cookies
+- File uploads
+- API payloads
+- Webhook events
+- CSV imports
+- AI tool outputs
+- Messages from queues or workers
 
 ### Validation Strategies
 
 | Strategy | Description | Example |
 |----------|-------------|---------|
-| **Allow-listing** | Define exactly what IS allowed | Username: `^[a-zA-Z0-9_]{3,20}$` |
-| **Block-listing** | Define what is NOT allowed | Block `<script>` tags |
-| **Type checking** | Ensure input matches expected type | Age must be integer, email must match format |
-| **Length limits** | Restrict input length | Comment max 5000 chars |
-| **Range checking** | Verify numerical bounds | Quantity: 1-100 |
+| **Allowlisting** | Define exactly what is allowed | Username matches `^[a-zA-Z0-9_]{3,20}$` |
+| **Type checking** | Confirm expected type | `age` must be an integer |
+| **Length limits** | Restrict size | Comment maximum 5000 characters |
+| **Range checks** | Verify numerical boundaries | Quantity must be 1 to 100 |
+| **Schema validation** | Validate complete object structure | API payload must match a JSON schema |
 
 <Warning>
-**Always prefer allow-listing over block-listing.** Block-lists are inherently incomplete, attackers constantly invent new encoding tricks, Unicode bypasses, and obfuscation techniques to evade them. An allow-list defines exactly what is valid; everything else is rejected.
+Prefer allowlists over blocklists. Attackers can bypass blocklists with encoding tricks, Unicode confusables, alternate syntax, and unexpected parser behavior.
 </Warning>
-
-### Server-Side vs. Client-Side Validation
-
-- **Client-side validation** (JavaScript in the browser) improves UX by providing immediate feedback. It is **not** a security control. Attackers bypass it trivially using browser DevTools, Burp Suite, or curl.
-- **Server-side validation** is mandatory. Every input must be validated on the server before processing, regardless of any client-side checks.
 
 ## 2. Output Encoding
 
-Output encoding is the primary defense against **Cross-Site Scripting (XSS)**. The principle: before rendering user-supplied data in the browser, encode it for the appropriate **output context**.
+Output encoding prevents untrusted data from becoming executable content in a browser.
 
-### Context-Specific Encoding
+| Output context | Defense |
+|----------------|---------|
+| HTML body | HTML entity encoding |
+| HTML attribute | Attribute encoding |
+| JavaScript string | JavaScript encoding or avoid inline JS |
+| URL parameter | Percent encoding |
+| CSS | CSS escaping or avoid untrusted CSS |
 
-| Context | Encoding Method | Example |
-|---------|---------------|---------|
-| HTML body | HTML entity encoding | `<` → `&lt;` |
-| HTML attribute | Attribute encoding | `"` → `&quot;` |
-| JavaScript | JavaScript encoding | `'` → `\x27` |
-| URL parameter | Percent encoding | `<` → `%3C` |
-| CSS | CSS hex encoding | `(` → `\28` |
-
-Most modern frameworks handle this automatically:
-- **React**: Encodes output by default. Only `dangerouslySetInnerHTML` bypasses it.
-- **Angular**: Uses contextual auto-escaping in templates.
-- **Vue**: Encodes `{{ }}` interpolation by default. Only `v-html` bypasses it.
+Modern frameworks such as React, Angular, Vue, and Svelte escape output by default in normal templates. The risk returns when developers bypass those protections.
 
 <Tip>
-The golden rule: if you ever find yourself using `dangerouslySetInnerHTML` (React), `[innerHTML]` (Angular), or `v-html` (Vue), you must sanitize the input first using a library like DOMPurify. These escape hatches exist for legitimate use cases, but they disable the framework's built-in XSS protection.
+If you use APIs such as `dangerouslySetInnerHTML`, `innerHTML`, or `v-html`, sanitize first with a trusted HTML sanitizer such as DOMPurify.
 </Tip>
 
 ## 3. Parameterized Queries
 
-The **only reliable defense** against SQL Injection is to separate SQL code from user data using parameterized queries (prepared statements).
-
-### Vulnerable vs. Secure Code
+Parameterized queries separate SQL code from user data.
 
 ```python
-# ❌ VULNERABLE: String concatenation
+# Vulnerable: user input changes query syntax
 query = f"SELECT * FROM users WHERE email = '{email}'"
 
-# ✅ SECURE: Parameterized query
+# Safer: user input is passed as data
 cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
 ```
 
 ```javascript
-// ❌ VULNERABLE: Template literal
+// Vulnerable
 const query = `SELECT * FROM users WHERE id = ${userId}`;
 
-// ✅ SECURE: Parameterized query (Node.js + pg)
+// Safer with node-postgres
 const result = await pool.query(
-  'SELECT * FROM users WHERE id = $1',
+  "SELECT * FROM users WHERE id = $1",
   [userId]
 );
 ```
 
-The database driver treats parameterized values strictly as **data**, never as executable SQL code, making injection impossible regardless of what the attacker submits.
+ORMs help, but raw query APIs can still be dangerous. Treat raw SQL as a sharp tool.
 
-### ORMs Are Not Immune
+## 4. Authorization by Default
 
-ORMs (Sequelize, Prisma, SQLAlchemy, ActiveRecord) generally use parameterized queries internally, but they also expose raw query methods that bypass protections:
+Authentication asks "who are you?" Authorization asks "what are you allowed to do?"
 
-```javascript
-// ❌ VULNERABLE: Raw query in Sequelize
-await sequelize.query(`SELECT * FROM users WHERE name = '${name}'`);
+Secure systems enforce authorization on the server for every sensitive object and action.
 
-// ✅ SECURE: Parameterized raw query
-await sequelize.query('SELECT * FROM users WHERE name = ?', {
-  replacements: [name]
-});
-```
+### Patterns
 
-## 4. Least Privilege
+- Deny by default.
+- Centralize authorization checks where practical.
+- Check object ownership, not just route access.
+- Use least privilege roles.
+- Re-check authorization after state changes.
+- Log authorization failures.
 
-The principle of least privilege dictates that every user, process, and application should have **only the minimum permissions necessary** to perform its function.
+### Anti-Pattern
 
-### Application-Level Examples
-
-- A web application's database user should have `SELECT`, `INSERT`, `UPDATE` permissions on specific tables: **not** `DROP TABLE`, `CREATE USER`, or `GRANT ALL`.
-- An API microservice that only reads data should have read-only database credentials.
-- A CI/CD pipeline deploying to staging should not have production credentials.
-- A Lambda function processing images should have S3 read/write access to one bucket: not all buckets.
-
-### The Blast Radius Principle
-
-Least privilege limits the **blast radius** of a compromise. If an attacker compromises a service with minimal permissions, the damage is contained. If every service runs as root with full database access, a single compromise cascades to everything.
+Hiding an admin button in the UI but leaving the API endpoint unprotected is not authorization. Attackers can call the API directly.
 
 ## 5. Secrets Management
 
-**Never hardcode secrets** (API keys, database passwords, encryption keys, tokens) in source code.
-
-### Why This Matters
-
-According to GitGuardian's 2023 State of Secrets Sprawl report, over **10 million new secrets** were detected in public GitHub commits in a single year. Once a secret is committed to Git, it is in the history forever, even if the file is deleted.
+Secrets include passwords, tokens, API keys, SSH private keys, signing keys, database URLs, webhooks secrets, and cloud credentials.
 
 ### Where Secrets Belong
 
-| Environment | Solution |
-|------------|---------|
-| **Local development** | `.env` files (added to `.gitignore`) |
-| **CI/CD pipelines** | Pipeline secrets (GitHub Secrets, GitLab CI Variables) |
-| **Production** | Dedicated secrets managers (AWS Secrets Manager, HashiCorp Vault, GCP Secret Manager) |
-| **Kubernetes** | Kubernetes Secrets (encrypted at rest) + external secrets operators |
+| Environment | Better storage |
+|-------------|----------------|
+| Local development | `.env` files excluded from Git, or local secret stores |
+| CI/CD | Platform secret storage with least privilege |
+| Production | Cloud KMS, managed secret manager, Vault, or platform equivalent |
+| Kubernetes | External secrets operators or encrypted secret storage |
+| Developer machines | Password manager, SSH agent, hardware key, or short-lived credentials |
 
-### Pre-commit Hooks
+### Secret Hygiene
 
-Use tools like **gitleaks**, **trufflehog**, or **detect-secrets** as pre-commit hooks to scan for secrets before they are committed:
+- Never hardcode secrets.
+- Never commit `.env` files.
+- Scan commits with tools such as gitleaks, trufflehog, or detect-secrets.
+- Use short-lived credentials where possible.
+- Scope tokens narrowly.
+- Rotate secrets after exposure.
+- Separate development, staging, and production secrets.
 
-```bash
-# Install gitleaks as a pre-commit hook
-brew install gitleaks
-gitleaks detect --source . --verbose
-```
+<Warning>
+In a developer tool compromise, assume secrets available to that tool may be exposed. Rotate GitHub, package registry, cloud, SSH, CI/CD, and Vault tokens as needed.
+</Warning>
 
 ## 6. Dependency Security
 
-Modern applications depend on hundreds of open-source packages. Each dependency is part of your attack surface.
+Modern applications depend on open-source packages, containers, build plugins, editor extensions, and SaaS SDKs. Each one can introduce vulnerabilities or malicious behavior.
 
-### Supply Chain Risk
+### Supply Chain Risks
 
-- **Log4Shell (2021)**: A critical vulnerability in Apache Log4j (a logging library used by millions of Java applications) allowed remote code execution with a single crafted log message. CVSS score: **10.0/10.0**.
-- **event-stream (2018)**: A popular npm package was compromised by a new maintainer who injected code targeting cryptocurrency wallets.
+- Known vulnerable dependency versions.
+- Typosquatted packages.
+- Compromised maintainer accounts.
+- Malicious install scripts.
+- Dependency confusion between public and private package names.
+- Auto-updates that pull unreviewed code.
+- Abandoned packages with no security fixes.
 
-### Dependency Scanning Tools
+### Controls
 
-| Tool | Ecosystem | Type |
-|------|-----------|------|
-| **npm audit** | Node.js | Built-in |
-| **Dependabot** | GitHub (all languages) | Automated PRs for vulnerable dependencies |
-| **Snyk** | Multi-language | SCA + container scanning |
-| **OWASP Dependency-Check** | Java, .NET | Open-source |
-| **pip-audit** | Python | pip packages |
+- Use lockfiles for reproducible installs.
+- Review dependency diffs in pull requests.
+- Run dependency scanning in CI.
+- Remove unused packages.
+- Prefer packages with active maintainers and clear ownership.
+- Use private package namespaces to reduce dependency confusion.
+- Restrict install scripts where possible.
+- Monitor package publishes for unexpected releases.
 
-<Note>
-Run dependency scans in your CI/CD pipeline on every commit. Configure them to **fail the build** on critical/high severity vulnerabilities. Treat vulnerable dependencies with the same urgency as bugs in your own code.
-</Note>
+## 7. Software Provenance and Build Integrity
 
-## 7. Fail Securely
+Software provenance answers: where did this artifact come from, what source produced it, and what workflow built it?
 
-When an application encounters an error, it should fail in a way that **does not grant additional access or leak information**.
+### Practices
 
-### Anti-Patterns
+- Use protected branches.
+- Require code review for critical paths.
+- Require signed commits or signed releases where appropriate.
+- Generate SBOMs for releases.
+- Produce build attestations for important artifacts.
+- Keep build logs.
+- Isolate CI runners.
+- Do not expose production secrets to untrusted pull request workflows.
+- Pin third-party CI actions to specific versions or commits.
 
-```python
-# ❌ Leaks internal details
-except Exception as e:
-    return {"error": str(e)}
-    # "Error: connection to postgres://admin:s3cret@db.internal:5432/prod failed"
-
-# ✅ Secure error handling
-except Exception as e:
-    logger.error(f"Database connection failed: {e}")  # Log full details server-side
-    return {"error": "An internal error occurred. Please try again later."}
-```
-
-### Principles
-
-- Never display raw stack traces, database errors, or file paths to end users.
-- Log detailed errors server-side for debugging.
-- Return generic, user-friendly error messages to the client.
-- Ensure authentication/authorization failures default to **deny** (not allow).
+<Tip>
+Cryptographic signatures prove that a key signed something. They do not prove the signer, build system, or maintainer account was not compromised. Combine signing with access control, review, monitoring, and incident response.
+</Tip>
 
 ## 8. CI/CD Security
 
-Your CI/CD pipeline is a high-value target; it has access to your source code, secrets, and production infrastructure.
+CI/CD systems are high-value targets because they can access source code, secrets, deployments, containers, cloud accounts, and package registries.
 
-### Security Controls for Pipelines
+### CI/CD Controls
 
-- **Branch protection**: Require code reviews and approvals before merging to main.
-- **Signed commits**: Verify that commits are from authorized developers (GPG signing).
-- **Minimal permissions**: CI/CD service accounts should have the least privilege necessary.
-- **Pin dependencies**: Use exact versions (not `latest`) in Dockerfiles and package manifests.
-- **Scan in pipeline**: Run SAST, DAST, dependency scanning, and secrets detection as pipeline stages.
+- Require branch protection on main branches.
+- Use least-privilege service accounts.
+- Separate build, test, staging, and production permissions.
+- Avoid long-lived deployment tokens.
+- Restrict who can modify workflows.
+- Protect self-hosted runners.
+- Require manual approval for production deploys when risk is high.
+- Log secret access and deployment activity.
+- Scan artifacts before release.
 
-## 9. Threat Modeling (STRIDE)
+### Pull Request Safety
 
-**Threat modeling** is the practice of systematically identifying potential threats to your application during the design phase, before writing code.
+Be careful when CI runs code from forks or untrusted contributors. That code may try to print secrets, modify workflows, or abuse runner permissions.
 
-The **STRIDE** framework categorizes threats:
+Safer options:
 
-| Letter | Threat | Question to Ask |
-|--------|--------|----------------|
-| **S** | Spoofing | Can someone pretend to be another user or service? |
-| **T** | Tampering | Can someone modify data in transit or at rest? |
-| **R** | Repudiation | Can someone deny performing an action? |
-| **I** | Information Disclosure | Can sensitive data leak to unauthorized parties? |
-| **D** | Denial of Service | Can someone make the system unavailable? |
-| **E** | Elevation of Privilege | Can someone gain permissions beyond their role? |
+- Do not expose secrets to untrusted PRs.
+- Use read-only tokens for validation jobs.
+- Require maintainer approval before running privileged jobs.
+- Review workflow changes carefully.
 
-For each component in your architecture, ask each STRIDE question. Document the threats, assess the risk, and implement controls.
+## 9. Secure Error Handling
+
+Applications should fail safely and avoid leaking internal details.
+
+```python
+# Bad: leaks internals to users
+except Exception as e:
+    return {"error": str(e)}
+
+# Better: log details server-side, return a generic message
+except Exception as e:
+    logger.exception("Database operation failed")
+    return {"error": "An internal error occurred. Please try again later."}
+```
+
+Principles:
+
+- Never show stack traces to end users.
+- Do not return database URLs, file paths, secrets, or internal hostnames.
+- Log enough detail for investigation.
+- Use correlation IDs so support can connect user reports to logs.
+- Fail closed for authentication and authorization errors.
+
+## 10. Security Logging and Detection
+
+Secure coding includes creating the evidence defenders need.
+
+Log security-relevant events:
+
+- Login success and failure
+- MFA enrollment and disablement
+- Password reset requests and completion
+- Session revocation
+- Role changes
+- Permission changes
+- API key creation and use
+- OAuth app approvals
+- Data exports
+- Webhook failures
+- Package publish events
+- CI/CD workflow changes
+
+Avoid logging:
+
+- Passwords
+- Session cookies
+- MFA codes
+- API tokens
+- Full payment details
+- Sensitive personal data unless there is a clear need and protection
+
+## 11. Threat Modeling
+
+Threat modeling identifies what can go wrong before code is shipped.
+
+Use **STRIDE**:
+
+| Letter | Threat | Question |
+|--------|--------|----------|
+| S | Spoofing | Can someone pretend to be another user or service? |
+| T | Tampering | Can someone modify data, code, or configuration? |
+| R | Repudiation | Can someone deny performing an action? |
+| I | Information disclosure | Can sensitive data leak? |
+| D | Denial of service | Can the system be made unavailable? |
+| E | Elevation of privilege | Can someone gain more access than intended? |
+
+Apply STRIDE to:
+
+- Authentication flows
+- Admin panels
+- Data export features
+- Webhooks
+- AI agent tools
+- CI/CD workflows
+- Package publishing
+- Third-party integrations
+
+## Secure Coding Checklist
+
+- [ ] Validate input server-side.
+- [ ] Encode output by context.
+- [ ] Use parameterized queries.
+- [ ] Enforce authorization on the server.
+- [ ] Store secrets outside code.
+- [ ] Use least-privilege tokens.
+- [ ] Scan for secrets before commit.
+- [ ] Review dependency changes.
+- [ ] Protect CI/CD workflows and runners.
+- [ ] Log security events.
+- [ ] Threat model sensitive workflows.
+
+## Practical Lab Ideas
+
+1. Add server-side validation to an API route.
+2. Fix an XSS bug by using contextual output encoding.
+3. Replace a vulnerable SQL query with a parameterized query.
+4. Add object-level authorization to an endpoint.
+5. Run a secret scanner on a sample repository.
+6. Create an SBOM and inspect transitive dependencies.
+7. Harden a CI workflow so untrusted PRs cannot access secrets.
+8. Threat model a package publishing workflow.
 
 ## Key Takeaways
 
-1. **Validate all input server-side**: Allow-lists over block-lists.
-2. **Encode all output**: Context-aware encoding prevents XSS.
-3. **Parameterize all queries**: The only reliable SQLi defense.
-4. **Never hardcode secrets**: Use secrets managers and pre-commit hooks.
-5. **Scan dependencies continuously**: Automate in CI/CD.
-6. **Fail securely**: Generic errors to users, detailed logs server-side.
-7. **Threat model early**: STRIDE during design, not after deployment.
+1. **Secure coding includes the build and release path**.
+2. **Authorization must be server-side and object-aware**.
+3. **Secrets need lifecycle management, not just hiding**.
+4. **Dependencies and extensions are attack surface**.
+5. **CI/CD deserves the same security attention as production**.
+6. **Good logs make response possible**.
+7. **Threat modeling catches missing controls before attackers do**.

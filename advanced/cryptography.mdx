@@ -1,154 +1,221 @@
 ---
 title: "Cryptography"
-description: "Encryption, hashing, digital signatures, TLS handshakes, key exchange, certificate chains, and post-quantum cryptography."
+description: "Understand encryption, hashing, digital signatures, TLS, key exchange, certificate chains, password hashing, signing, provenance, and post-quantum cryptography."
 ---
 
 # Cryptography
 
-Cryptography is the mathematical foundation that makes digital security possible. Every time you visit a website over HTTPS, send an encrypted message, or log in with a password, cryptography is working behind the scenes.
+Cryptography is the mathematical foundation for confidentiality, integrity, authentication, and non-repudiation. It protects HTTPS, password storage, encrypted messaging, disk encryption, software updates, package signatures, and cloud secrets.
+
+This module focuses on what security practitioners and developers need to know: which primitives solve which problems, where they fail, and how they support modern defenses such as signed releases and package provenance.
 
 ## Symmetric Encryption
 
-In symmetric encryption, the **same key** is used for both encrypting and decrypting data.
+In symmetric encryption, the same secret key encrypts and decrypts data.
 
-| Algorithm | Key Size | Status | Use Case |
-|-----------|----------|--------|----------|
-| **AES-256** | 256 bits | Industry standard | File/disk encryption, VPNs, TLS |
-| **ChaCha20-Poly1305** | 256 bits | Modern alternative | Mobile/IoT (faster in software) |
-| **3DES** | 168 bits | Deprecated | Legacy systems only |
-| **DES** | 56 bits | Broken | Never use |
+| Algorithm | Status | Common use |
+|-----------|--------|------------|
+| **AES-GCM** | Standard modern choice | TLS, file encryption, disk encryption |
+| **ChaCha20-Poly1305** | Modern alternative | Mobile, software-only environments, WireGuard |
+| **3DES** | Deprecated | Legacy systems only |
+| **DES** | Broken | Never use |
 
-### The Key Distribution Problem
+Symmetric encryption is fast, but it creates a key distribution problem: both sides need the same key without exposing it to attackers.
 
-Symmetric encryption is fast, but has a fundamental challenge: **how do you securely share the key?** If you send it over the same channel as the data, an attacker who intercepts the channel gets both. This is why asymmetric encryption was invented.
+## Asymmetric Encryption
 
-## Asymmetric Encryption (Public Key Cryptography)
+Asymmetric cryptography uses a key pair:
 
-Uses a **mathematically linked pair of keys**: a Public Key (shared openly) and a Private Key (kept secret). Data encrypted with the public key can only be decrypted with the private key.
+- **Public key**: Shared openly.
+- **Private key**: Kept secret.
 
-| Algorithm | Based On | Key Size | Status |
-|-----------|----------|----------|--------|
-| **RSA** | Integer factorization | 2048-4096 bits | Widely used, being phased out |
-| **ECDSA/ECDH** | Elliptic Curve math | 256-384 bits | Preferred (same security, smaller keys)|
-| **Ed25519** | Edwards-curve | 256 bits | Modern, fast; used in SSH, Signal, WireGuard |
+Data encrypted with one key can only be decrypted with the matching key. In practice, asymmetric cryptography is used for key exchange, digital signatures, identity, and certificate-based trust.
 
-### The Hybrid Approach
+| Algorithm | Based on | Typical use |
+|-----------|----------|-------------|
+| **RSA** | Integer factorization | Legacy encryption and signatures |
+| **ECDSA / ECDH** | Elliptic curves | Signatures and key exchange |
+| **Ed25519** | Edwards curves | SSH, modern signatures, developer tooling |
 
-In practice, modern systems use **both**: asymmetric encryption to securely exchange a symmetric session key, then symmetric encryption (AES/ChaCha20) for the actual data. Best of both worlds.
+## Hybrid Encryption
 
-## The TLS 1.3 Handshake
+Most real systems use both symmetric and asymmetric cryptography:
 
-TLS powers HTTPS. The TLS 1.3 handshake completes in a **single round trip**:
+1. Use asymmetric cryptography to authenticate and establish a shared secret.
+2. Derive symmetric session keys.
+3. Use fast symmetric encryption for bulk data.
+
+This is how TLS, secure messaging protocols, and many encrypted storage systems work.
+
+## TLS 1.3
+
+TLS powers HTTPS and many other encrypted protocols. TLS 1.3 is the modern baseline.
 
 <Steps>
   <Step title="Client Hello">
-    Browser sends supported cipher suites, TLS version, random number, and its Diffie-Hellman key share.
+    The client sends supported cipher suites, protocol version, random data, and a key share.
   </Step>
   <Step title="Server Hello">
-    Server selects cipher suite, sends its key share and digital certificate (signed by a Certificate Authority).
+    The server selects parameters, sends its key share, and presents a certificate.
   </Step>
-  <Step title="Key Derivation">
-    Both sides independently compute the same shared secret via Diffie-Hellman, without transmitting it.
+  <Step title="Key Agreement">
+    Both sides compute the same shared secret without sending the secret itself.
   </Step>
   <Step title="Encrypted Communication">
-    All subsequent data encrypted with derived symmetric keys (AES-256-GCM or ChaCha20-Poly1305).
+    The session uses derived symmetric keys to protect application data.
   </Step>
 </Steps>
 
-<Note>
-TLS 1.3 removed insecure cipher suites (RSA key exchange, CBC mode, SHA-1) and introduced 0-RTT resumption for repeat connections. If your server still supports TLS 1.0/1.1, it is vulnerable to known attacks.
-</Note>
-
-## Diffie-Hellman Key Exchange
-
-Allows two parties to establish a shared secret over an insecure channel without transmitting the secret itself.
-
-**Simplified analogy**: Alice and Bob each pick a private color, agree on a shared base color, each mix their private color with the base and exchange results. Each mixes the received color with their private color, arriving at the same final color. An eavesdropper cannot reverse-engineer the private colors from the intermediate mixtures.
-
-In practice, this uses modular exponentiation (classic DH) or elliptic curve point multiplication (ECDH).
+TLS protects traffic in transit. It does not prove the website is safe, and it does not protect data after it reaches a compromised endpoint.
 
 ## Hashing
 
-A **one-way** function that produces a fixed-size output from any input.
+A hash function produces a fixed-size output from any input. Secure hashes are one-way and collision-resistant.
 
-### Properties of Secure Hash Functions
+### Properties
 
-1. **Deterministic**: Same input → same hash
-2. **One-way**: Cannot reverse hash to recover input
-3. **Avalanche effect**: Tiny input change → completely different hash
-4. **Collision resistant**: Infeasible to find two inputs producing the same hash
+1. **Deterministic**: Same input produces the same hash.
+2. **One-way**: You cannot recover the input from the hash.
+3. **Avalanche effect**: A tiny input change produces a very different output.
+4. **Collision resistance**: It should be infeasible to find two inputs with the same hash.
 
 ### Algorithm Comparison
 
-| Algorithm | Output | Status | Use Case |
-|-----------|--------|--------|----------|
-| **MD5** | 128 bits | **Broken** | Never use for security |
-| **SHA-1** | 160 bits | **Broken** | Never use for security |
-| **SHA-256** | 256 bits | Secure | File integrity, blockchain, signatures |
-| **bcrypt** | 184 bits | Secure | Password storage |
-| **Argon2** | Variable | **Best for passwords** | Winner of Password Hashing Competition (2015) |
+| Algorithm | Status | Use |
+|-----------|--------|-----|
+| **MD5** | Broken | Never use for security |
+| **SHA-1** | Broken | Never use for security |
+| **SHA-256 / SHA-384** | Secure | File integrity, signatures, certificates |
+| **bcrypt** | Secure | Password hashing |
+| **Argon2id** | Preferred for passwords | Password hashing with memory hardness |
 
-### Password Hashing
+## Password Hashing
 
-Passwords must be hashed with a **slow, salted algorithm**:
+Passwords should never be stored in plaintext. They should be processed with a slow, salted password hashing algorithm.
 
-- **Salt**: Random value added before hashing, which ensures identical passwords produce different hashes.
-- **Work factor**: Deliberately slow (~100ms per hash), making brute-force impractical.
+Key terms:
 
-```
-password = "hunter2"
+- **Salt**: Random data added to each password before hashing.
+- **Work factor**: A cost setting that makes guesses expensive.
+- **Memory hardness**: A design that makes GPU and ASIC cracking harder.
+
+```python
+password = "example passphrase"
 salt = random_bytes(16)
-hash = argon2id(password, salt, time_cost=3, memory_cost=65536)
-stored = salt + hash
+hash_value = argon2id(password, salt, time_cost=3, memory_cost=65536)
+stored_value = salt + hash_value
 ```
 
 <Warning>
-If a database stores passwords as unsalted MD5 or SHA-256, the system is critically vulnerable. Attackers can crack most passwords in minutes using rainbow tables or GPU brute force.
+Do not use plain SHA-256, MD5, or SHA-1 for password storage. Fast hashes are good for file integrity, but they are bad for passwords because attackers can guess too quickly.
 </Warning>
 
 ## Digital Signatures
 
-Combine hashing + asymmetric encryption for **authentication** and **integrity**.
+Digital signatures prove integrity and origin when the private key is protected.
 
 <Steps>
   <Step title="Sign">
-    Sender hashes the document (SHA-256), encrypts the hash with their Private Key. The encrypted hash = digital signature.
+    The sender hashes the content and signs the hash with a private key.
   </Step>
   <Step title="Verify">
-    Recipient decrypts the signature with the sender's Public Key, independently hashes the document. If both hashes match → authentic and unaltered.
+    The recipient checks the signature with the public key and recomputes the hash.
   </Step>
 </Steps>
 
-### Certificate Chains
+Signatures are used in TLS certificates, software updates, Git commits, package registries, container images, mobile apps, and firmware.
 
-Digital certificates are signed by Certificate Authorities (CAs). Your browser trusts a website because it traces a chain of trust back to a Root CA pre-installed in the OS/browser.
+## Certificate Chains
 
+Browsers trust a website certificate because it chains back to a trusted root certificate authority.
+
+```text
+Root CA
+  -> Intermediate CA
+      -> Website certificate
 ```
-Root CA (self-signed, in your OS)
-  └── Intermediate CA (signed by Root)
-       └── Website Certificate (signed by Intermediate)
-```
+
+Certificate chains solve part of the trust problem, but they do not solve every trust problem. A valid certificate only says the connection belongs to a domain. It does not say the service is ethical, safe, or free of malware.
+
+## Code Signing and Software Provenance
+
+Supply chain attacks often target the gap between "this software came from somewhere" and "this software is safe to run." Cryptography helps, but only if signing keys, build systems, and release processes are protected.
+
+### What Signing Can Prove
+
+- A package, binary, commit, or container image was signed by a specific key.
+- Content has not changed since it was signed.
+- A release came from a controlled workflow, if provenance is configured.
+
+### What Signing Cannot Prove Alone
+
+- The maintainer account was not compromised.
+- The signed code is free of malware.
+- The build system was not tampered with.
+- The signing key was not stolen.
+
+### Practical Controls
+
+- Require signed commits or signed releases for critical projects.
+- Use short-lived signing credentials where possible.
+- Protect signing keys with hardware-backed storage or managed signing services.
+- Generate SBOMs for releases.
+- Use provenance systems such as Sigstore and SLSA-inspired build attestations.
+- Verify signatures in CI/CD before deployment.
+
+<Tip>
+In a supply chain incident, cryptography helps answer "what changed" and "who signed it." Logs, review, endpoint telemetry, and incident response are still needed to answer "was the signer compromised?"
+</Tip>
+
+## Key Management
+
+Strong algorithms fail if keys are mishandled.
+
+Good key management:
+
+- Generate keys with secure randomness.
+- Store private keys in a password manager, hardware security module, cloud KMS, or secret manager.
+- Rotate keys after exposure or on a planned schedule.
+- Scope keys to the smallest necessary use.
+- Separate development, staging, and production keys.
+- Revoke keys that are unused or exposed.
+- Log key use where possible.
+
+Bad key management:
+
+- Hardcoding secrets in source code.
+- Sharing private keys over chat or email.
+- Reusing one key across unrelated systems.
+- Keeping long-lived tokens on developer laptops without monitoring.
 
 ## Post-Quantum Cryptography
 
-Quantum computers will eventually break RSA and Elliptic Curve cryptography using Shor's algorithm. Data captured today could be decrypted later ("harvest now, decrypt later").
+Large-scale quantum computers could eventually break RSA and elliptic curve cryptography. This creates a "harvest now, decrypt later" concern for data that must stay confidential for many years.
 
-### NIST Post-Quantum Standards (2024)
+NIST has standardized post-quantum algorithms for future migration:
 
 | Algorithm | Type | Purpose |
 |-----------|------|---------|
-| **ML-KEM (Kyber)** | Lattice-based | Key exchange |
-| **ML-DSA (Dilithium)** | Lattice-based | Digital signatures |
-| **SLH-DSA (SPHINCS+)** | Hash-based | Signatures (stateless) |
+| **ML-KEM** | Lattice-based | Key establishment |
+| **ML-DSA** | Lattice-based | Digital signatures |
+| **SLH-DSA** | Hash-based | Digital signatures |
 
-<Note>
-The quantum threat is not imminent (breaking RSA-2048 requires ~4,000+ stable qubits; current quantum computers have ~1,000), but migration takes years. Organizations with sensitive data should plan now.
-</Note>
+Migration will take time because protocols, hardware, software libraries, certificates, and interoperability all need updates.
+
+## Practical Lab Ideas
+
+1. Hash a file with SHA-256, change one byte, and compare the new hash.
+2. Store a password with Argon2id and inspect the salt and cost settings.
+3. Create an Ed25519 key pair and sign a file.
+4. Verify a signed Git commit or release artifact.
+5. Inspect a website certificate chain in your browser.
+6. Generate a small SBOM and discuss what it does and does not prove.
 
 ## Key Takeaways
 
-1. **Symmetric = fast, asymmetric = solves key distribution**: Modern systems use both.
-2. **TLS 1.3 is the baseline**: Disable TLS 1.0/1.1.
-3. **Never MD5 or SHA-1 for security**: SHA-256 for integrity, Argon2 for passwords.
-4. **Salt + slow hashing for passwords**: Never store plaintext.
-5. **Watch quantum developments**: Post-quantum standards exist; plan migration.
+1. **Use the right primitive for the job**.
+2. **Fast hashes are not password hashes**.
+3. **TLS protects connections, not compromised endpoints**.
+4. **Digital signatures protect integrity only if keys and workflows are protected**.
+5. **Software provenance matters in supply chain defense**.
+6. **Post-quantum migration is a planning problem, not a panic problem**.

@@ -1,147 +1,172 @@
 ---
 title: "Safe Browsing"
-description: "Navigate the internet securely, HTTPS, DNS security, browser extensions, cookie tracking, and malvertising defense."
+description: "Browse safely with HTTPS awareness, DNS security, link verification, extension hygiene, download safety, cookie controls, and malvertising defense."
 ---
 
 # Safe Browsing
 
-Your web browser is the most frequently used application on your computer, and therefore the most targeted. It is the gateway between you and the internet, and every website you visit, every extension you install, and every link you click represents a potential attack vector.
+Your browser is one of the most targeted applications on your device. It handles passwords, cookies, files, payments, cloud apps, work portals, school platforms, and developer dashboards. Safe browsing means reducing what untrusted websites, ads, extensions, and downloads can do to you.
 
-Safe browsing is not about paranoia; it is about developing informed habits that dramatically reduce your exposure to threats.
+The goal is not paranoia. The goal is a repeatable set of habits that prevents common attacks and makes suspicious activity easier to notice.
 
-## Understanding HTTPS (and Its Limitations)
+## Understanding HTTPS and Its Limits
 
 ### What HTTPS Does
 
-When you see the padlock icon (🔒) and `https://` in your browser's address bar, it means the connection between your browser and the website is encrypted using **TLS (Transport Layer Security)**.
+When a site uses `https://`, your browser uses TLS to protect the connection between you and that site.
 
-HTTPS provides three guarantees:
-1. **Encryption**: Data in transit is encrypted, your ISP, Wi-Fi operator, or an attacker on the same network cannot read the content.
-2. **Integrity**: Data cannot be tampered with in transit without detection.
-3. **Authentication**: The website's identity is verified by a Certificate Authority (CA) that issued the site's TLS certificate.
+HTTPS provides:
 
-### What HTTPS Does NOT Do
+1. **Encryption**: Other people on the network cannot read the content of the connection.
+2. **Integrity**: Traffic cannot be modified in transit without detection.
+3. **Server authentication**: The site presents a certificate that links the connection to a domain.
+
+### What HTTPS Does Not Do
 
 <Warning>
-HTTPS does NOT mean a website is safe, legitimate, or trustworthy. It only means the *connection* is encrypted. A phishing website can (and frequently does) use HTTPS to securely steal your password. In fact, over **80% of phishing sites now use HTTPS** (Anti-Phishing Working Group, 2023).
+HTTPS does not prove that a site is safe, honest, or legitimate. A phishing site can use HTTPS. A malicious download site can use HTTPS. The padlock protects the connection, not your judgment.
 </Warning>
 
-Think of it this way: HTTPS is like a sealed envelope. It guarantees that nobody can read the letter while it is being delivered. But it says nothing about the intentions of the person who wrote the letter.
-
-### Certificate Transparency
-
-Modern browsers use **Certificate Transparency (CT)** logs, public, append-only records of all TLS certificates issued. This helps detect rogue or misissued certificates. If a Certificate Authority is compromised and issues a fake certificate for `google.com`, CT logs make it publicly visible and detectable.
+Before entering credentials, check the actual domain, not just the padlock.
 
 ## DNS Security
 
-**DNS (Domain Name System)** is the phone book of the internet; it translates human-readable domains (`google.com`) to IP addresses (`142.250.80.46`). DNS is critical to your browsing experience, and it is often the weakest link.
+**DNS** translates names such as `example.com` into IP addresses. If DNS is manipulated, you can be sent to the wrong destination even when you type the right name.
 
 ### DNS Attacks
 
-- **DNS Spoofing/Poisoning**: An attacker injects false DNS records into a resolver's cache, redirecting users to malicious sites even when they type the correct URL.
-- **DNS Hijacking**: An attacker gains control of the DNS server itself (or your router's DNS settings), redirecting all traffic through their infrastructure.
+- **DNS spoofing or poisoning**: False DNS records redirect users to malicious destinations.
+- **DNS hijacking**: A router, endpoint, or resolver is configured to use attacker-controlled DNS.
+- **Typosquatting**: Attackers register lookalike domains that rely on user mistakes.
 
-### Protective DNS Solutions
+### Protective DNS Options
 
-- **DNS-over-HTTPS (DoH)**: Encrypts DNS queries inside HTTPS, preventing ISPs and network operators from seeing or tampering with your DNS requests. Supported by Firefox, Chrome, Edge, and Brave.
-- **DNS-over-TLS (DoT)**: Similar to DoH but uses a dedicated TLS connection on port 853.
-- **Recommended DNS providers**: Cloudflare (`1.1.1.1`), Google Public DNS (`8.8.8.8`), Quad9 (`9.9.9.9` - also blocks known malicious domains).
+- **DNS-over-HTTPS (DoH)**: Encrypts DNS queries inside HTTPS.
+- **DNS-over-TLS (DoT)**: Encrypts DNS queries using TLS on a dedicated port.
+- **Filtering DNS providers**: Providers such as Quad9 can block known malicious domains.
 
 <Tip>
-Switching your DNS provider from your ISP's default to Cloudflare or Quad9 is one of the simplest and most effective security improvements you can make. It takes 2 minutes, costs nothing, and provides both privacy and protection against known malicious domains.
+Changing DNS is helpful, but it is not a complete security solution. You still need MFA, browser updates, link verification, and extension hygiene.
 </Tip>
 
 ## Spotting Malicious Links
 
-Before clicking any link, train yourself to analyze it:
+Before clicking a link, slow down and verify it.
 
 ### The Hover Test
 
-**Always hover your mouse over a link** (without clicking) to preview the actual destination URL in the bottom-left corner of your browser.
+On desktop, hover over a link without clicking. Your browser shows the real destination in the bottom corner. On mobile, long-press carefully to preview the URL without opening it.
 
 ### Common Deception Techniques
 
-| Technique | Example | What to Look For |
-|-----------|---------|-----------------|
-| **Typosquatting** | `paypa1.com` (number 1 instead of letter l) | Character substitutions in domain names |
-| **Subdomain abuse** | `login.paypal.com.evil-site.com` | The actual domain is `evil-site.com`, not `paypal.com` |
-| **URL shorteners** | `bit.ly/3xK9mT` | The real destination is hidden; use URL expander tools |
-| **Homograph attacks** | `аpple.com` (Cyrillic "а" instead of Latin "a") | Characters from different alphabets that look identical |
-| **Path manipulation** | `evil-site.com/paypal.com/login` | The path looks like a legitimate domain, but the actual host is `evil-site.com` |
+| Technique | Example | What to check |
+|-----------|---------|---------------|
+| **Typosquatting** | `paypa1.com` | Character substitutions |
+| **Subdomain abuse** | `login.paypal.com.evil-site.com` | The real domain before the first single slash |
+| **URL shorteners** | `bit.ly/example` | Expand or verify before opening |
+| **Homograph attacks** | Lookalike letters from other alphabets | Copy and inspect the domain if it looks strange |
+| **Path manipulation** | `evil-site.com/paypal.com/login` | The host is still `evil-site.com` |
+| **QR phishing** | QR code on a poster, email, or invoice | Treat QR codes like links and verify the opened domain |
 
 ### Verification Tools
 
-- **VirusTotal** (`virustotal.com`): Scan URLs and files against 70+ antivirus engines.
-- **URLScan.io**: Visualizes what a URL actually does when visited (redirects, scripts, requests).
-- **Google Safe Browsing** (`transparencyreport.google.com`): Check if a URL is flagged as dangerous.
+- **VirusTotal**: Scans URLs and files across many engines.
+- **URLScan.io**: Shows redirects, scripts, requests, and screenshots.
+- **Google Safe Browsing Transparency Report**: Checks whether a URL is known to be dangerous.
 
-## Browser Extensions: Power and Risk
+## Browser and Editor Extensions
 
-Browser extensions have access to incredibly sensitive data; they can read every page you visit, modify page content, access your cookies, and even intercept form data (including passwords).
+Extensions are powerful. A browser extension may read pages, change content, access cookies, or intercept forms. An editor extension may read project files, run commands, access terminals, or interact with repositories.
 
-### The Risk
-
-In 2023, researchers discovered that **multiple popular Chrome extensions with millions of users** were secretly exfiltrating browsing history, search queries, and personal data to third-party servers.
+Recent supply chain incidents involving developer tooling show that extensions should be treated as software, not decoration.
 
 ### Extension Safety Rules
 
-1. **Minimize**: Only install extensions you actively use. Uninstall everything else.
-2. **Verify permissions**: Be skeptical of extensions requesting "Read and change all your data on all websites." This permission grants full access to every page.
-3. **Official stores only**: Only install from Chrome Web Store, Firefox Add-ons, or equivalent official stores.
-4. **Check reputation**: Look at download count, reviews, and developer history before installing.
-5. **Review periodically**: Audit your installed extensions quarterly and remove any you no longer use.
+1. **Install less**: Keep only extensions you actively use.
+2. **Check permissions**: Be skeptical of broad permissions such as reading all websites, running shell commands, or accessing every repository.
+3. **Prefer trusted publishers**: Verify the publisher, project history, reviews, and update cadence.
+4. **Avoid lookalikes**: Check names carefully. Typosquatted extensions are common.
+5. **Audit quarterly**: Remove anything unused, abandoned, or unfamiliar.
+6. **Separate work and personal profiles**: Do not mix high-risk browsing with work accounts and developer tools.
+7. **For teams, use an allowlist**: Organizations should centrally manage approved browser and IDE extensions.
 
-### Recommended Security Extensions
+### Warning Signs
 
-| Extension | Purpose |
-|-----------|---------|
-| **uBlock Origin** | Ad and tracker blocker (also blocks malvertising) |
-| **HTTPS Everywhere** | Forces HTTPS connections where available (built into most modern browsers now) |
-| **Privacy Badger** | Blocks invisible trackers (developed by the EFF) |
-| **Bitwarden** | Password manager browser integration |
+- A simple extension asks for broad file, shell, cookie, or account access.
+- The publisher is new, renamed, or hard to verify.
+- The extension recently changed ownership.
+- Reviews mention unexpected network activity or popups.
+- A new update requests much broader permissions than before.
 
-## Cookies and Tracking
+## Download Safety
 
-### What Cookies Are
+Malware often arrives as a download that appears useful, urgent, or familiar.
 
-**Cookies** are small data files stored by websites in your browser. They serve legitimate purposes (keeping you logged in, remembering preferences) but are also used extensively for tracking.
+### Safer Download Habits
 
-### Types of Cookies
+- Download software from the official vendor site or official app store.
+- Avoid cracked software, unofficial installers, and "free premium" tools.
+- Verify checksums or signatures when vendors provide them.
+- Be careful with archives such as `.zip`, `.rar`, `.7z`, and disk images.
+- Treat unexpected documents with macros as suspicious.
+- Do not run scripts copied from a random website without understanding them.
 
-- **First-party cookies**: Set by the website you are visiting. Generally necessary and benign (session cookies, login tokens).
-- **Third-party cookies**: Set by domains *other* than the one you are visiting (ad networks, analytics services). These enable cross-site tracking, following you across the internet to build advertising profiles.
+<Warning>
+For developers, do not blindly run install commands from an issue comment, chat message, or unknown repository. Commands such as `curl ... | sh` can execute anything the remote server returns.
+</Warning>
 
-### Browser Fingerprinting
+## Cookies, Sessions, and Tracking
 
-Even without cookies, websites can identify you through **browser fingerprinting**: collecting your screen resolution, installed fonts, browser plugins, timezone, language settings, and hardware specifications to create a unique "fingerprint." The EFF's Panopticlick research found that **84% of browser fingerprints are unique**.
+Cookies are small pieces of data stored by websites. They can keep you logged in, remember preferences, or track behavior across sites.
 
-<Note>
-Major browsers (Safari, Firefox, Brave) now block third-party cookies by default. Chrome plans to phase them out by 2025. However, browser fingerprinting remains an active tracking technique that is harder to prevent.
-</Note>
+### Session Cookies
+
+A session cookie can prove you are already logged in. If malware steals that cookie, an attacker may bypass the login screen and MFA prompts. This is why device security matters even when your password and MFA are strong.
+
+### Tracking and Fingerprinting
+
+Websites can track users with third-party cookies, scripts, advertising IDs, and browser fingerprinting. Browser fingerprinting uses details such as screen size, fonts, timezone, plugins, language, and device characteristics to identify a browser.
+
+Good habits:
+
+- Use a reputable browser with tracking protection.
+- Clear cookies for sites you no longer use.
+- Avoid installing many unnecessary extensions.
+- Use separate browser profiles for work, personal, banking, and testing when practical.
 
 ## Malvertising
 
-**Malvertising** (malicious advertising) is the use of legitimate ad networks to deliver malware. Attackers buy ad space on reputable websites, and the ad itself contains malicious code that can infect your device, sometimes without you even clicking on it (known as a **drive-by download**).
+**Malvertising** is malicious advertising delivered through legitimate ad networks. It can redirect users to scams, fake updates, phishing pages, or malware.
 
-### Why Ad Blockers Are a Security Tool
+### Why Ad Blockers Are Security Tools
 
-Using a reputable ad blocker like **uBlock Origin** is not just about avoiding annoying ads:
-- It blocks malvertising attacks at the network level
-- It reduces your exposure to tracking scripts
-- It prevents drive-by downloads from malicious ads
-- It also significantly improves page load performance
+A reputable content blocker such as uBlock Origin can:
+
+- Block known malicious ad domains.
+- Reduce tracking scripts.
+- Prevent some drive-by download paths.
+- Improve page load performance.
 
 ### Drive-By Downloads
 
-A **drive-by download** occurs when visiting a webpage automatically triggers the download and execution of malicious code, without any user interaction. These attacks exploit vulnerabilities in browsers, browser plugins (like outdated Flash or Java), or the operating system itself.
+A **drive-by download** happens when visiting a page triggers a download or exploit attempt without clear user intent. Modern browsers are much better at stopping this than older browsers, but keeping the browser and operating system updated remains essential.
 
-**Defense**: Keep your browser and OS updated, use an ad blocker, and disable unnecessary browser plugins.
+## Safe Login Checklist
+
+Use this checklist before entering a password, MFA code, recovery code, or token:
+
+- Is the domain exactly correct?
+- Did I navigate there myself, or did a message send me here?
+- Is the request expected and consistent with normal workflow?
+- Is the site asking for more access than it needs?
+- Is there a safer verification channel, such as opening the app directly?
+- Am I on a trusted device without suspicious extensions?
 
 ## Key Takeaways
 
-1. **HTTPS ≠ safe**: It only means the connection is encrypted. Phishing sites use HTTPS too.
-2. **Switch your DNS**: Use Cloudflare (`1.1.1.1`) or Quad9 (`9.9.9.9`) for privacy and security.
-3. **Hover before clicking**: Always verify the actual destination URL.
-4. **Minimize extensions**: Every extension is a potential attack vector. Only keep what you actively use.
-5. **Use an ad blocker**: uBlock Origin blocks malvertising, tracking, and drive-by downloads.
-6. **Be aware of tracking**: Third-party cookies and browser fingerprinting follow you across the web.
+1. **HTTPS protects the connection, not the site**.
+2. **Verify domains before logging in**.
+3. **Extensions are part of your attack surface**.
+4. **Treat downloads and install commands with caution**.
+5. **Session cookies can be stolen, so device hygiene still matters**.
+6. **Use content blocking and tracking protection to reduce exposure**.
