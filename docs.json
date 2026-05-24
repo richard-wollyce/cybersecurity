@@ -36,6 +36,12 @@
         "default": true,
         "groups": [
           {
+            "group": "Start",
+            "pages": [
+              "index"
+            ]
+          },
+          {
             "group": "Essentials",
             "pages": [
               "essentials/welcome",

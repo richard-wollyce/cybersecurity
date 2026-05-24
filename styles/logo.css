@@ -1,26 +1,86 @@
-/* Constrain header logos to a consistent height without editing SVGs */
-
-/* Targets common header/logo selectors; uses !important to override theme defaults. */
-header img,
-header svg,
+/* Constrain header logo images without resizing Mintlify UI icons. */
+header img[src*="/logo/"],
 .logo img,
-.logo svg,
-.navbar img,
-.navbar svg,
-.mint-nav img,
-.mint-nav svg {
+.navbar img[src*="/logo/"],
+.mint-nav img[src*="/logo/"] {
   height: 48px !important;
   max-height: 48px !important;
   width: auto !important;
 }
 
-/* Ensure embedded raster inside SVG scales proportionally */
-svg image {
-  width: 100% !important;
-  height: auto !important;
+img[alt*="logo"] {
+  max-height: 48px !important;
 }
 
-/* Optional – slightly reduce large SVG viewBox if a consumer ignores height */
-img[alt*="logo"], svg[aria-label*="logo"] {
-  max-height: 48px !important;
+.rtc-home {
+  min-height: calc(100vh - 96px);
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 6rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.rtc-home h1 {
+  margin: 0;
+  font-size: clamp(2.25rem, 7vw, 4.5rem);
+  line-height: 1;
+}
+
+.rtc-home-description {
+  margin: 1.25rem 0 0;
+  max-width: 620px;
+  font-size: 1.2rem;
+  line-height: 1.7;
+}
+
+.rtc-home-actions {
+  margin-top: 1.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.875rem;
+}
+
+.rtc-home-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none !important;
+  border: 1px solid transparent;
+}
+
+.rtc-home-button-primary {
+  background: #1e40af;
+  color: #ffffff !important;
+}
+
+.rtc-home-button-primary:hover {
+  background: #2146c0;
+}
+
+.rtc-home-button-secondary {
+  border-color: #1e40af;
+  color: #ffffff !important;
+  background: transparent;
+}
+
+.rtc-home-button-secondary:hover {
+  background: #101011;
+  color: #ffffff !important;
+}
+
+.rtc-home-eyebrow {
+  margin: 2rem 0 0.75rem;
+  letter-spacing: 0.21em;
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: var(--primary-color, #fafafa8e);
 }
