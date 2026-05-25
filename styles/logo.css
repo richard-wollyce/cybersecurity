@@ -70,13 +70,13 @@ img[alt*="logo"] {
 /* Light mode (default) */
 .rtc-home-button-secondary {
   border-color: #1e40af;
-  color: #141414 !important;
+  color: #252525 !important;
   background: transparent;
 }
 
 .rtc-home-button-secondary:hover {
   background: #1e40af;
-  color: #141414 !important;
+  color: #ffffff !important;
 }
 
 /* Dark mode override */
@@ -92,6 +92,14 @@ html.dark .rtc-home-button-secondary:hover {
 }
 
 .rtc-home-eyebrow {
+  margin: 2rem 0 0.75rem;
+  letter-spacing: 0.21em;
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: var(--primary-color, #252525);
+}
+
+html.dark .rtc-home-eyebrow {
   margin: 2rem 0 0.75rem;
   letter-spacing: 0.21em;
   font-size: 0.875rem;
