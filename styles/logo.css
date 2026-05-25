@@ -70,7 +70,7 @@ img[alt*="logo"] {
 /* Light mode (default) */
 .rtc-home-button-secondary {
   border-color: #1e40af;
-  color: #252525 !important;
+  color: #1e40af !important;
   background: transparent;
 }
 
