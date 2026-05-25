@@ -62,7 +62,13 @@
               "advanced/penetration-testing",
               "advanced/cypherpunks"
             ]
-          }
+          },
+	   {
+	    "group": "Workshop",
+	    "pages": [
+	      "workshop/get-in-touch"
+	    ]
+	   }
         ]
       },
       {
