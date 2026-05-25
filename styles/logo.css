@@ -59,14 +59,14 @@ img[alt*="logo"] {
 }
 
 .rtc-home-button-primary {
-  background: #1e40af;
-  color: #ffffff !important;
-}
-
-.rtc-home-button-primary:hover {
   border-color: #1e40af;
   color: #1e40af !important;
   background: transparent;
+}
+
+.rtc-home-button-primary:hover {
+  background: #1e40af;
+  color: #ffffff !important;
 }
 
 /* Light mode (default) */
@@ -82,6 +82,17 @@ img[alt*="logo"] {
 }
 
 /* Dark mode override */
+html.dark .rtc-home-button-primary {
+  border-color: #1e40af;
+  color: #ffffff !important;
+  background: transparent;
+}
+
+html.dark .rtc-home-button-primary:hover {
+  background: #1e40af;
+  color: #ffffff !important;
+}
+
 html.dark .rtc-home-button-secondary {
   border-color: #1e40af;
   color: #ffffff !important;
@@ -89,7 +100,7 @@ html.dark .rtc-home-button-secondary {
 }
 
 html.dark .rtc-home-button-secondary:hover {
-  background: #101011;
+  background: #1e40af;
   color: #ffffff !important;
 }
 
