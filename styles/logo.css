@@ -55,6 +55,7 @@ img[alt*="logo"] {
   font-weight: 600;
   text-decoration: none !important;
   border: 1px solid transparent;
+  transition: all 0.2s ease-in-out;
 }
 
 .rtc-home-button-primary {
@@ -66,13 +67,26 @@ img[alt*="logo"] {
   background: #2146c0;
 }
 
+/* Light mode (default) */
 .rtc-home-button-secondary {
+  border-color: #1e40af;
+  color: #141414 !important;
+  background: transparent;
+}
+
+.rtc-home-button-secondary:hover {
+  background: #1e40af;
+  color: #141414 !important;
+}
+
+/* Dark mode override */
+html.dark .rtc-home-button-secondary {
   border-color: #1e40af;
   color: #ffffff !important;
   background: transparent;
 }
 
-.rtc-home-button-secondary:hover {
+html.dark .rtc-home-button-secondary:hover {
   background: #101011;
   color: #ffffff !important;
 }
