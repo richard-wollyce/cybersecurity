@@ -64,7 +64,9 @@ img[alt*="logo"] {
 }
 
 .rtc-home-button-primary:hover {
-  background: #2146c0;
+  border-color: #1e40af;
+  color: #1e40af !important;
+  background: transparent;
 }
 
 /* Light mode (default) */
