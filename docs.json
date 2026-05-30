@@ -15,6 +15,16 @@
   "styles": [
     "/styles/logo.css"
   ],
+  "redirects": [
+    {
+      "source": "/pt-br",
+      "destination": "/pt-br/essentials/essentials-overview"
+    },
+    {
+      "source": "/pt-br/",
+      "destination": "/pt-br/essentials/essentials-overview"
+    }
+  ],
   "navigation": {
     "global": {
       "anchors": [
@@ -59,8 +69,10 @@
               "advanced/cryptography",
               "advanced/web-vulnerabilities",
               "advanced/secure-coding-practices",
+              "advanced/ai-security",
               "advanced/penetration-testing",
-              "advanced/cypherpunks"
+              "advanced/cypherpunks",
+              "advanced/github-issue"
             ]
           },
 	   {
@@ -92,8 +104,10 @@
               "pt-br/advanced/cryptography",
               "pt-br/advanced/web-vulnerabilities",
               "pt-br/advanced/secure-coding-practices",
+              "pt-br/advanced/ai-security",
               "pt-br/advanced/penetration-testing",
-              "pt-br/advanced/cypherpunks"
+              "pt-br/advanced/cypherpunks",
+              "pt-br/advanced/github-issue"
             ]
           }
         ]
