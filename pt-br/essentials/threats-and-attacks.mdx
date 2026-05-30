@@ -79,6 +79,37 @@ Ataques de engenharia social exploram confiança, urgência, medo e vontade de a
 | **Rootkit** | Esconde-se profundamente no SO para manter acesso persistente e indetectável | Sony BMG rootkit (2005), instalado via CDs de música |
 | **Malware sem arquivo (Fileless)** | Opera inteiramente na memória, não deixando arquivos em disco | Ataques baseados em PowerShell que evadem antivírus |
 
+### A Cadeia de Ataque de Malware do Usuário Comum
+
+Para os usuários do dia a dia, o malware não surge magicamente em uma máquina. Ele segue uma cadeia específica de eventos que combina engenharia social, ações do usuário e cargas técnicas (payloads). Reconhecer essa cadeia permite interromper a ameaça em qualquer uma de suas etapas.
+
+<Steps>
+  <Step title="1. O Vetor (Como ele chega)">
+    O atacante precisa encontrar um meio de colocar o arquivo malicioso ao seu alcance. Os métodos mais comuns incluem:
+    - **Anúncios Falsos em Mecanismos de Busca (Typosquatting)**: Atacantes compram anúncios patrocinados para softwares populares gratuitos (como VLC, Zoom, Notepad++ ou WinRAR). Ao clicar no anúncio, o usuário é direcionado para uma página idêntica à legítima, que baixa um instalador malicioso em vez do real.
+    - **Anexos de Phishing**: E-mails com cobranças falsas, detalhes de envio de encomendas ou documentos urgentes. O anexo costuma ser um arquivo `.zip` contendo um script malicioso ou um executável disfarçado de PDF (por exemplo, `fatura_documento.pdf.exe`).
+    - **Softwares Piratas e Cheats de Jogos**: Sites que oferecem chaves "gratuitas", programas crackeados ou trapaças para jogos eletrônicos são um dos vetores mais frequentes para a distribuição de malwares de alto risco.
+  </Step>
+  <Step title="2. O Gatilho (Quando o usuário instala)">
+    Sistemas de segurança como firewalls integrados, navegadores e sistemas operacionais geralmente emitem avisos ao tentar rodar um download não reconhecido. Para ter sucesso, o atacante depende que o usuário ignore esses alertas:
+    - **Extensões Ocultas**: O Windows esconde extensões de arquivos por padrão. O usuário clica duas vezes em `documento.pdf` sem saber que o nome completo do arquivo é `documento.pdf.exe`.
+    - **Confiança Manipulada**: As instruções de download ou o e-mail instruem explicitamente a "desativar o antivírus" ou clicar em "Executar assim mesmo" nos alertas do Windows SmartScreen, alegando que os avisos são "falsos positivos".
+    - **Ativação de Macros**: Um arquivo malicioso do Word ou Excel solicita que o usuário clique em "Habilitar Edição" ou "Habilitar Conteúdo" para visualizar o documento, executando silenciosamente um script prejudicial em segundo plano.
+  </Step>
+  <Step title="3. Execução Silenciosa e Persistência">
+    Após a execução do arquivo, o malware pode exibir uma mensagem de erro falsa (como "Arquivo corrompido") para fazer o usuário acreditar que nada aconteceu. Em segundo plano, o ataque avança:
+    - **Estabelecendo Persistência**: O malware copia a si mesmo para diretórios ocultos (como `AppData`) e se registra na inicialização do sistema para rodar automaticamente toda vez que o computador for ligado.
+    - **Evasão**: O programa verifica se está rodando em uma sandbox ou máquina virtual (ambientes de testes de pesquisadores de segurança) e encerra suas atividades caso se sinta observado.
+  </Step>
+  <Step title="4. Ações sobre Objetivos (O que acontece a seguir?)">
+    Malwares modernos voltados para usuários comuns raramente chamam a atenção; eles são projetados para roubar o máximo de informações possível antes de serem detectados:
+    - **Carga de Infostealer (Ladrão de Informações)**: Varre os bancos de dados dos navegadores em busca de credenciais salvas, dados de cartões de crédito, carteiras de criptomoedas e informações de preenchimento automático.
+    - **Sequestro de Sessão Ativa (Bypass de MFA)**: Esta é a ameaça mais crítica hoje. O malware rouba os **cookies de sessão ativa** dos navegadores. Ao enviar esses cookies para o atacante, este pode importá-los em seu próprio navegador e acessar as contas de e-mail, GitHub ou bancos do usuário imediatamente, **ignorando completamente a Autenticação de Múltiplos Fatores (MFA)**, pois aquela sessão já havia sido autorizada.
+    - **Comando e Controle (C2)**: O malware compacta todas as credenciais coletadas, cookies e detalhes do sistema e os transmite para o servidor C2 controlado pelo atacante.
+    - **Desdobramentos**: O atacante pode vender os acessos para "Initial Access Brokers" (corretores de acesso inicial), que posteriormente implantam Ransomware na rede da empresa onde o usuário trabalha, ou usar as contas roubadas para enviar novas mensagens de phishing para a lista de contatos.
+  </Step>
+</Steps>
+
 ### Ransomware: Uma Categoria Especial
 
 O ransomware merece atenção especial por ser o tipo mais devastador financeiramente:

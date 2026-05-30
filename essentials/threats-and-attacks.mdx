@@ -81,6 +81,37 @@ Do not rely only on bad grammar as a phishing signal. Modern attackers can write
 | **Infostealer** | Searches for passwords, cookies, tokens, SSH keys, and wallet data | Account takeover and supply chain compromise |
 | **Fileless malware** | Runs mostly in memory using trusted system tools | Harder detection and fewer disk artifacts |
 
+### The Daily User Malware Attack Chain
+
+For everyday users, malware does not just magically appear on a machine. It follows a specific chain of events that combines social engineering, user actions, and technical payloads. Recognizing this chain allows you to interrupt the threat at any stage.
+
+<Steps>
+  <Step title="1. The Vector (How it arrives)">
+    The attacker must find a way to place the malicious file where you can access it. Common methods include:
+    - **Search Engine Ad Hijacking (Typosquatting)**: Attackers buy sponsored search ads for popular free software (like VLC, Zoom, Notepad++, or WinRAR). Clicking the ad takes you to a cloned, lookalike website that downloads a malicious installer instead of the real one.
+    - **Phishing Attachments**: Emails with fake billing invoices, shipping details, or urgent documents. The attachment is often a `.zip` archive containing a malicious script or an executable disguised as a PDF (e.g., `invoice_document.pdf.exe`).
+    - **Cracked Software and Game Cheats**: Websites offering "free" keys, cracked programs, or video game cheats are one of the most common vectors for delivering high-risk malware.
+  </Step>
+  <Step title="2. The Trigger (When the user installs it)">
+    Security systems like built-in firewalls, web browsers, and operating systems will usually warn you when you try to run an unrecognized download. To succeed, the attacker relies on you to bypass these warnings:
+    - **Disguised Extensions**: Windows hides file extensions by default. You double-click `document.pdf` unaware that its full name is `document.pdf.exe`.
+    - **Social Engineered Trust**: The download instructions or email will explicitly tell you to "disable your antivirus" or click "Run anyway" on Windows SmartScreen alerts, claiming the warnings are "false positives".
+    - **Enabling Macros**: A malicious Word or Excel file asks you to "Enable Editing" or "Enable Content" to view the document, which immediately executes a hidden malicious script in the background.
+  </Step>
+  <Step title="3. Silent Execution and Persistence">
+    Once you run the file, it may show a fake error message (like "File Corrupted") to make you think nothing happened. In the background, it begins executing:
+    - **Establishing Persistence**: The malware copies itself into hidden directories (like `AppData`) and adds itself to the system's startup registry so that it automatically runs every time you turn on your computer.
+    - **Evasion**: It checks if it is running in a sandbox or virtual machine (used by security researchers) and stops if it feels observed.
+  </Step>
+  <Step title="4. Action on Objectives (What happens next?)">
+    Modern user-targeted malware is rarely loud; it is designed to steal as much as possible before it is caught:
+    - **The Infostealer Payload**: It searches your browser databases for saved credentials, credit card details, cryptocurrency wallet files, and autofill information.
+    - **Active Session Hijacking (The MFA Bypass)**: This is the most critical threat. The malware steals your active browser **session cookies**. By sending these cookies back to the attacker, they can paste them into their own browser and log into your email, GitHub, or banking accounts immediately, **completely bypassing Multi-Factor Authentication (MFA)** because the session was already authorized.
+    - **Command and Control (C2)**: The malware packages all your harvested credentials, cookies, and system details into a compressed archive and transmits it to the attacker's C2 server.
+    - **The Follow-Up**: The attacker sells your access to "Initial Access Brokers" who may deploy Ransomware across your company network, or they use your accounts to launch spear-phishing campaigns against your contacts.
+  </Step>
+</Steps>
+
 ## Ransomware and Data Extortion
 
 Ransomware is malware or an attack operation that prevents access to systems or data until a ransom is demanded. Modern ransomware often includes **data extortion**, where attackers steal data first and threaten to leak it.
